@@ -1,0 +1,6 @@
+*.o
+*.txt
+*.exe
+*.bmp
+*.sw*
+Makefile
