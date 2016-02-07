@@ -1,0 +1,16 @@
+./a.exe < CGL_4_B-in1.txt
+./a.exe < CGL_4_B-in2.txt
+./a.exe < CGL_4_B-in3.txt
+./a.exe < CGL_4_B-in4.txt
+./a.exe < CGL_4_B-in5.txt
+./a.exe < CGL_4_B-in6.txt
+./a.exe < CGL_4_B-in7.txt
+./a.exe < CGL_4_B-in8.txt
+./a.exe < CGL_4_B-in9.txt
+./a.exe < CGL_4_B-in10.txt
+./a.exe < CGL_4_B-in11.txt
+./a.exe < CGL_4_B-in12.txt
+./a.exe < CGL_4_B-in13.txt
+./a.exe < CGL_4_B-in14.txt
+./a.exe < CGL_4_B-in15.txt
+./a.exe < CGL_4_B-in16.txt
