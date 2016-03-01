@@ -20,6 +20,7 @@ void release(node* n)
 
 node* insert(node* n, int key)
 {
+  //@comment at leaf node
   if(n == NULL){
     n = new node;
     n->key = key;
@@ -52,55 +53,103 @@ bool search(node* n, const int val)
     return true;
 }
 
-void erase(node* n, const int val)
+node* getMin(node* target)
+{
+  while(target->l != NULL)
+    target = target->l;
+  return target;
+}
+
+node* find_delete_node(node* n)
+{
+  node* target = n;
+  while(target->r != NULL)
+    target = target->r;
+
+  //@comment at leaf node. This node will be deleted
+  if(target->l == NULL){
+    target = getMin(target->p);
+    target->p->r == target ? target->p->r = NULL : target->p->l = NULL;
+    return target;
+  }
+
+  while(target->l != NULL && target->r == NULL)
+    target = target->l;
+
+  return find_delete_node(target);
+}
+
+void change_root(node* root, node* target)
+{
+  root->key = target->key;
+  root->l = target->l;
+  root->r = target->r;
+
+  target->l->p = root;
+  target->r->p = root;
+}
+
+void remove_node(node* n, const int& val)
+{
+  if(n->l == NULL && n->r == NULL){
+    //@comment deleted node is NOT root
+    if(n->p != NULL)
+      n->p->r == n ? n->p->r = NULL : n->p->l = NULL;
+    delete n;
+    return;
+  }
+  if(n->l != NULL && n->r != NULL) {
+    node* d_node = find_delete_node(n->r);
+    n->key = d_node->key;
+    delete d_node;
+    return;
+  }
+
+  //@comment node has left child
+  if(n->l != NULL) {
+    //@comment node is root, then left child become root
+    if(n->p == NULL)
+      change_root(n, n->l);
+
+    else if(n->p->l == n){
+      n->l->p = n->p;
+      n->p->l = n->l;
+    }
+    else{
+      n->r->p = n->p;
+      n->p->r = n->l;
+    }
+  }
+  //@comment node has right chiled
+  else if(n->r != NULL){
+    if(n->p == NULL)
+      change_root(n, n->r);
+
+    else if(n->p->l == n){
+      n->l->p = n->p;
+      n->p->l = n->r;
+    }
+    else{
+      n->r->p = n->p;
+      n->p->r = n->r;
+    }
+  }
+  delete n;
+}
+
+void erase(node* n, const int& val)
 {
   if(n == NULL)
     return;
-
+  //@comment search target node
   if(n->key > val)
     erase(n->l, val);
-
   else if(n->key < val)
     erase(n->r, val);
+
   //@comment target node
-  else{
-    //@comment leaf node
-    if(n->l == NULL && n->r == NULL){
-      if(n->p != NULL)
-        n->p->key > n->key ? n->p->l = NULL : n->p->r = NULL;
-    }
-    else if(n->l == NULL) {
-      if(n->p != NULL){
-        n->p->key > n->key ? n->p->l = n->r : n->p->r = n->r;
-        n->r->p = n->p;
-      }
-      else{
-        n->key = n->r->key;
-        erase(n->r, n->r->key);
-        return;
-      }
-    }else if(n->r == NULL){
-      if(n->p != NULL){
-        n->p->key > n->key ? n->p->l = n->l : n->p->r = n->l;
-        n->l->p = n->p;
-      }
-      else{
-        int tmp = n->l->key;
-        erase(n->l, n->l->key);
-        n->key = tmp;
-        return;
-      }
-    }
-    //@comment deleted node has two children
-    else{
-      int tmp = n->r->key;
-      //@comment delete right node
-      erase(n->r, tmp);
-      n->key = tmp;
-      return;
-    }
-    delete n;
-  }
+  else
+    remove_node(n, val);
 }
 
 void mid_search(node* n)
