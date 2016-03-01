@@ -85,8 +85,12 @@ void change_root(node* root, node* target)
   root->l = target->l;
   root->r = target->r;
 
-  target->l->p = root;
-  target->r->p = root;
+  if(target->l != NULL)
+    target->l->p = root;
+  if(target->r != NULL)
+    target->r->p = root;
+
+  delete target;
 }
 
 void remove_node(node* n, const int& val)
@@ -108,9 +112,10 @@ void remove_node(node* n, const int& val)
   //@comment node has left child
   if(n->l != NULL) {
     //@comment node is root, then left child become root
-    if(n->p == NULL)
+    if(n->p == NULL){
       change_root(n, n->l);
-
+      return;
+    }
     else if(n->p->l == n){
       n->l->p = n->p;
       n->p->l = n->l;
@@ -122,9 +127,10 @@ void remove_node(node* n, const int& val)
   }
   //@comment node has right chiled
   else if(n->r != NULL){
-    if(n->p == NULL)
+    if(n->p == NULL){
       change_root(n, n->r);
-
+      return;
+    }
     else if(n->p->l == n){
       n->l->p = n->p;
       n->p->l = n->r;
