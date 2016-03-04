@@ -121,7 +121,7 @@ void remove_node(node* n, const int& val)
       n->p->l = n->l;
     }
     else{
-      n->r->p = n->p;
+      n->l->p = n->p;
       n->p->r = n->l;
     }
   }
@@ -132,7 +132,7 @@ void remove_node(node* n, const int& val)
       return;
     }
     else if(n->p->l == n){
-      n->l->p = n->p;
+      n->r->p = n->p;
       n->p->l = n->r;
     }
     else{
