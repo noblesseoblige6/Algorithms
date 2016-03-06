@@ -60,23 +60,19 @@ node* getMin(node* target)
   return target;
 }
 
-node* find_delete_node(node* n)
+node* find_delete_node(node* target)
 {
-  node* target = n;
-  while(target->r != NULL)
+  if(target->r != NULL)
     target = target->r;
 
+  target = getMin(target);
   //@comment at leaf node. This node will be deleted
-  if(target->l == NULL){
-    target = getMin(target->p);
-    target->p->r == target ? target->p->r = NULL : target->p->l = NULL;
+  if(target->r == NULL && target->l == NULL){
+    target->p->l == target ? target->p->l = NULL : target->p->r = NULL;
     return target;
   }
 
-  while(target->l != NULL && target->r == NULL)
-    target = target->l;
-
-  return find_delete_node(target);
+  return find_delete_node(target->r);
 }
 
 void change_root(node* root, node* target)
@@ -103,7 +99,7 @@ void remove_node(node* n, const int& val)
     return;
   }
   if(n->l != NULL && n->r != NULL) {
-    node* d_node = find_delete_node(n->r);
+    node* d_node = find_delete_node(n);
     n->key = d_node->key;
     delete d_node;
     return;
