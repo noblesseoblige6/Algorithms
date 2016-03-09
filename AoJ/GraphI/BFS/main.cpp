@@ -3,28 +3,47 @@
 using namespace std;
 
 const float kINF = 10000;
-int BFS(const vector<vector<int> >& ver, vector<int>& dis, const int& idx, const int& distance)
+void BFS(const vector<vector<int> >& ver, vector<int>& dis, const int& idx)
 {
-  queue<int> q;
-  for(int i = 0; i < ver[idx].size(); ++i)
-    q.push(ver[idx][i]);
+  queue<int> ver_q;
+  queue<int> dis_q;
 
-  while(!q.empty()){
-    int tmp_dis = BFS(ver, dis, q.front(), distance+1);
-    if(tmp_dis < dis[q.front()])
-      dis[q.front()] = tmp_dis;
-    q.pop();
+  //@commnet initialize queues with 1
+  dis[idx] = 0;
+  for(int i = 0; i < ver[idx].size(); ++i)
+    if(dis[ver[idx][i]] == kINF){
+      ver_q.push(ver[idx][i]);
+      dis_q.push(dis[idx]+1);
+    }
+
+  while(!ver_q.empty()){
+    int id = ver_q.front();
+
+    if(dis_q.front() < dis[id])
+      dis[id] = dis_q.front();
+
+    ver_q.pop();
+    dis_q.pop();
+
+    for(int i = 0; i < ver[id].size(); ++i)
+      if(dis[ver[id][i]] == kINF){
+        ver_q.push(ver[id][i]);
+        dis_q.push(dis[id]+1);
+      }
   }
-  return distance;
 }
 
 vector<int> min_distance(const vector<vector<int> >& ver, const int& idx)
 {
   vector<int> distances(ver.size(), kINF);
-  distances[idx] = BFS(ver, distances, idx, 0);
+
+  BFS(ver, distances, idx);
+
+  //@comment change kINF to -1
   for(vector<int>::iterator itr = distances.begin(); itr != distances.end(); ++itr)
     if(*itr == kINF)
       *itr = -1;
+
   return distances;
 }
 
