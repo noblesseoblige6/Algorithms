@@ -8,11 +8,11 @@ int DFS(const vector<vector<int> >& ver, const int& ver_id, vector<int>& labels,
 {
   stack<int> s;
   for(int i = ver[ver_id].size()-1; i >= 0; --i)
+    if(labels[ver[ver_id][i]] == kNULL)
       s.push(ver[ver_id][i]);
 
   while(!s.empty()){
-    if(labels[s.top()] == kNULL)
-      labels[s.top()] = DFS(ver, s.top(), labels, label);
+    labels[s.top()] = DFS(ver, s.top(), labels, label);
     s.pop();
   }
   return label;
@@ -21,9 +21,17 @@ int DFS(const vector<vector<int> >& ver, const int& ver_id, vector<int>& labels,
 vector<int> findConnectedComponents(const vector<vector<int> >& ver)
 {
   vector<int> nodes_label(ver.size());
-  for(int i = 0; i < ver.size(); ++i)
+  int tmp_label = 1;
+  nodes_label[0] = tmp_label;
+  nodes_label[0] = DFS(ver, 0, nodes_label, tmp_label++);
+
+  for(int i = 1; i < ver.size(); ++i){
     if(nodes_label[i] == kNULL)
-      nodes_label[i] = DFS(ver, i, nodes_label, i+1);
+      nodes_label[i] = DFS(ver, i, nodes_label, tmp_label++);
+  }
+
+  for(int i = 0; i < ver.size(); ++i)
+    cout<<i<<" "<<nodes_label[i]<<endl;
   return nodes_label;
 }
 
@@ -51,7 +59,7 @@ int main()
   //   }
   // cout<<endl;
   // }
-  //
+
   int nChecks;
   cin>>nChecks;
 
