@@ -20,7 +20,7 @@ class vec2{
     }
 };
 
-vec2 vec2::operator+(const vec2& b) const 
+vec2 vec2::operator+(const vec2& b) const
 {
   vec2 res;
   res.x = this->x + b.x;
@@ -76,7 +76,7 @@ vec2 normalize(vec2 a)
 
 double dot(vec2 a, vec2 b)
 {
-  return a.x*b.x + a.y*b.y; 
+  return a.x*b.x + a.y*b.y;
 }
 
 
@@ -89,10 +89,11 @@ bool intersectLP(vec2 a, vec2 b, vec2 p)
 {
   if(a == p){return true;}
   if(b == p){return true;}
-  return cross(b - a, p - a) == 0 
+  return cross(b - a, p - a) == 0
     && norm(b-a) >= norm(p-a)
     && dot(b-a, p-a) > 0;
 }
+
 bool intersectLL(vec2 p1, vec2 p2, vec2 p3, vec2 p4)
 {
   vec2 line1 = p2 - p1;
@@ -128,8 +129,8 @@ double findConvexArea(const vector<vec2>& polygon)
     double area = 0.0;
     for(int i = 1; i < polygon.size()-1; ++i){
       vec2 a = polygon[i] - polygon[0];
-      vec2 b = polygon[(i+1)] - polygon[0];
-      area += abs(cross(a, b))*0.5 < 0.0 ? eps : abs(cross(a, b))*0.5;
+      vec2 b = polygon[i+1] - polygon[0];
+      area += abs(cross(a, b))*0.5 < eps ? 0.0 : abs(cross(a, b))*0.5;
     }
     return area;
 }
@@ -171,12 +172,12 @@ vector<double> findConvexCut(const vector<vec2>& convex, const vector<pair<vec2,
         np = (i+1)%size;
         //@comment avoid miss judge that the same point is intersection
         if(cConvex.size() > 0)
-          if(tmp == cConvex.back()) 
+          if(tmp == cConvex.back())
             continue;
         cConvex.push_back(tmp);
       }
     }
-    
+
     //@comment no intersections
     if(cConvex.size() == 0){
       res.push_back(0.0);
@@ -186,11 +187,11 @@ vector<double> findConvexCut(const vector<vec2>& convex, const vector<pair<vec2,
     if(isIntersec){
      vec2 a = cConvex[1] - lines[k].first;
      vec2 b = lines[k].second - lines[k].first;
-     res.push_back(cross(b, a) > 0 ? findConvexArea(convex) : 0.0); 
+     res.push_back(cross(b, a) > 0 ? findConvexArea(convex) : 0.0);
      continue;
     }
 
-    //@comment determine if the area is on left-side 
+    //@comment determine if the area is on left-side
     vec2 base = lines[k].second - lines[k].first;
     bool isLeft;
     double cp = cross(base, convex[np]-cConvex.back());
@@ -213,13 +214,13 @@ int main(){
   cin>>count;
   for(int i = 0; i < count; i++){
     cin>>p.x>>p.y;
-    convex.push_back(p);  
+    convex.push_back(p);
   }
   cin>>count;
   for(int i = 0; i < count; i++){
     cin>>points.first.x>>points.first.y;
     cin>>points.second.x>>points.second.y;
-    lines.push_back(points);  
+    lines.push_back(points);
   }
   cout << fixed;
   vector<double> res = findConvexCut(convex, lines);

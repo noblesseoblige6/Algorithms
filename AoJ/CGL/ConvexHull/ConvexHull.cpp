@@ -17,8 +17,8 @@ class vec2{
     vec2(const vec2& v) : x(v.x), y(v.y){};
     ~vec2(){};
     vec2& operator=(const vec2&);
-    vec2 operator+(vec2);
-    vec2 operator-(vec2);
+    vec2 operator+(const vec2&) const;
+    vec2 operator-(const vec2&) const;
     vec2 operator*(float);
     bool operator==(vec2);
     bool operator !=(vec2);
@@ -31,7 +31,7 @@ vec2& vec2::operator=(const vec2& b)
   return *this;
 }
 
-vec2 vec2::operator+(vec2 b)
+vec2 vec2::operator+(const vec2& b) const
 {
   vec2 res;
   res.x = this->x + b.x;
@@ -39,7 +39,7 @@ vec2 vec2::operator+(vec2 b)
   return res;
 }
 
-vec2 vec2::operator-(vec2 b)
+vec2 vec2::operator-(const vec2& b) const
 {
   vec2 res;
   res.x = this->x - b.x;
@@ -71,8 +71,7 @@ bool ascendy(const vec2& a, const vec2& b)
 
 bool descendy(const vec2& a, const vec2& b)
 {
-  if(a.y == b.y){return a.x < b.x;}
-  return a.y < b.y;
+  return a.y == b.y ? a.x < b.x : a.y < b.y;
 }
 
 bool ascendx(const vec2& a, const vec2& b)
@@ -155,7 +154,7 @@ bool intersectLP(vec2 a, vec2 b, vec2 p)
     && norm(b-a) >= norm(p-a)
     && dot(b-a, p-a) > 0;
 }
-int intersectLL(vec2 p1, vec2 p2, vec2 p3, vec2 p4)
+int intersectLL(const vec2& p1, const vec2& p2, const vec2 &p3, const vec2& p4)
 {
   vec2 line1 = p2 - p1, line2 = p4 - p3;
   if(intersectLP(p1, p2, p3) || intersectLP(p1, p2, p4)){return 1;}
@@ -175,7 +174,8 @@ vector<vec2> convexHull(vector<vec2>& points)
   cout<<endl<<endl;
 
   //@comment sort the points by y-axis
-  sort(points.begin(), points.end(), descendy);
+  // sort(points.begin(), points.end(), descendy);
+  // sort(points.begin(), points.end(), ascendy);
 
   for(int i = 0; i < points.size(); ++i)
     cout<<"After:"<<points[i].x<<" "<<points[i].y<<endl;
