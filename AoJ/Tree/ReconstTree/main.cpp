@@ -62,6 +62,7 @@ int main()
     cin>>p;
     mid_order[i] = p-1;
   }
+
   vector<int> post;
   reconstTree(pre_order, mid_order, post);
 
