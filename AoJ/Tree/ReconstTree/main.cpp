@@ -1,22 +1,21 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
+const int N_MAX = 41;
 struct node
 {
   int p, l, r;
   node() : p(-1), l(-1), r(-1){}
 };
 
-void dfs(const int& n, const vector<node>& nodes)
+void dfs(const int& n, const vector<node>& nodes, vector<int>& post)
 {
   if(n == -1)
     return;
 
-  dfs(nodes[n].l, nodes);
-  dfs(nodes[n].r, nodes);
-
-  cout<<n+1<<" ";
+  dfs(nodes[n].l, nodes, post);
+  dfs(nodes[n].r, nodes, post);
+  post.push_back(n+1);
 }
 
 int trackTree(int& pre_idx, const int& l, const int& r, const vector<int>& pre, const vector<int>& mid, vector<node>& tree)
@@ -38,15 +37,14 @@ int trackTree(int& pre_idx, const int& l, const int& r, const vector<int>& pre, 
   return id;
 }
 
-void reconstTree(const vector<int>& pre, const vector<int>& mid)
+void reconstTree(const vector<int>& pre, const vector<int>& mid, vector<int>& post)
 {
   int n = pre.size();
-  vector<node> tree(n);
+  vector<node> tree(N_MAX);
 
   int idx = 0;
   int root = trackTree(idx, 0, n, pre, mid, tree);
-  dfs(root, tree);
-  cout<<endl;
+  dfs(root, tree, post);
 }
 
 int main()
@@ -64,7 +62,11 @@ int main()
     cin>>p;
     mid_order[i] = p-1;
   }
+  vector<int> post;
+  reconstTree(pre_order, mid_order, post);
 
-  reconstTree(pre_order, mid_order);
+  for(int i = 0; i < n; ++i)
+    i != n-1 ? cout<<post[i]<<" " : cout<<post[i]<<endl;
+
   return 0;
 }
