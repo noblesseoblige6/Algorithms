@@ -14,6 +14,7 @@ int main()
         spaces[*i] = count;
       count++;
     }
+
     for(int i = pattern.size()-1; i < str.size(); ){
       int start = i;
       for(int j = 0; j < pattern.size(); ++j){
