@@ -47,14 +47,14 @@ double dot(vec2 a, vec2 b)
 }
 double cross(vec2 a, vec2 b)
 {
-  return a.x*b.y - a.y*b.x; 
+  return a.x*b.y - a.y*b.x;
 }
 
 bool intersectLP(vec2 a, vec2 b, vec2 p)
 {
    if(a == p){return true;}
   if(b == p){return true;}
-  return cross(b - a, p - a) == 0 
+  return cross(b - a, p - a) == 0
     && norm(b-a) >= norm(p-a)
     && dot(b-a, p-a) > 0;
 }

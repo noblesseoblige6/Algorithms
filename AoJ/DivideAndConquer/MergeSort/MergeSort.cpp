@@ -33,7 +33,7 @@ vector<int> parseAndMerge(vector<int>& in, int l, int r)
 
 vector<int> mergeSort(vector<int>& in)
 {
-  //@comment To avoid refering to out of the index, 
+  //@comment To avoid refering to out of the index,
   //the size of vector should subtracte 1
   return parseAndMerge(in, 0, in.size()-1);
 }

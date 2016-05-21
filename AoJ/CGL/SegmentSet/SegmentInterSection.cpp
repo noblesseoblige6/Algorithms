@@ -4,7 +4,7 @@ class Segment
 {
   public:
     pair<int, int> s;
-    pair<int, int> e; 
+    pair<int, int> e;
     Segment(){};
     ~Segment(){};
     Segment(int x1, int y1, int x2, int y2)
@@ -13,6 +13,7 @@ class Segment
       e = make_pair(x2, y2);
     }
 };
+
 bool descendY(Segment seg1, Segment seg2)
 {
   //@commnet If y-coordinates of the start points are the same,
@@ -54,7 +55,7 @@ int segmentIntersection(vector<Segment>& segments)
       segStack.push_back(segments[i]);
     }
   }
-return interCount;
+  return interCount;
 }
 
 int main(int argc, char* argv[])
@@ -68,7 +69,7 @@ int main(int argc, char* argv[])
     cin>>x1>>y1>>x2>>y2;
     if(y1 <= y2){in.push_back(Segment(x1, y1, x2, y2));}
     else{in.push_back(Segment(x2, y2, x1, y1));}
-  } 
+  }
   cout<<segmentIntersection(in)<<endl;
   return 0;
 }
