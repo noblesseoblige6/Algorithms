@@ -112,12 +112,14 @@ struct Point
   }
 };
 
-int segmentIntersection(vector<Point>& p, vector<vec2>& s, vector<vec2>& e)
+int segmentIntersection(const vector<Point>& p, const vector<vec2>& s, const vector<vec2>& e)
 {
-  sort(p.begin(), p.end());
   int nIntersec = 0;
-  set<Point> tree;
 
+  //@comment Sort decsendly by y-axis
+  sort(p.begin(), p.end());
+
+  set<Point> tree;
   vector<Point> h_points;
   for(int i = 0; i < p.size(); ++i){
     int id = p[i].id;
@@ -125,26 +127,25 @@ int segmentIntersection(vector<Point>& p, vector<vec2>& s, vector<vec2>& e)
     if(s[id].y == e[id].y){
       h_points.push_back(p[i]);
     }else if(s[id] == p[i].p){
-      //@comment insert point into tree
       tree.insert(p[i]);
     }
   }
 
   for(int i = 0; i < h_points.size(); ++i){
     int id = h_points[i].id;
+    vector<Point> passedPoints;
     set<Point>::iterator begin = tree.lower_bound(*tree.begin());
     set<Point>::iterator end = tree.upper_bound(h_points[i]);
-    vector<Point> removedPoints;
     for(set<Point>::iterator it = begin; it != end; ++it){
       int tmpIdx = it->id;
       if(e[tmpIdx].y < e[id].y)
-        removedPoints.push_back(Point(s[tmpIdx], tmpIdx));
+        passedPoints.push_back(Point(s[tmpIdx], tmpIdx));
       else if(intersectLL(s[tmpIdx], e[tmpIdx], s[id], e[id]))
         nIntersec++;
     }
 
-    for(int i = 0; i < removedPoints.size(); ++i)
-      tree.erase(removedPoints[i]);
+    //@comment After searching, remove passed points
+    tree.erase(passedPoints.begin(), passedPoints.end());
   }
   return nIntersec;
 }
