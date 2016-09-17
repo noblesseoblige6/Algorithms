@@ -17,6 +17,20 @@ struct Segment
 
   Segment() : p(NULL), l(NULL), r(NULL), start(-1), end(-1), min(INI_VAL){};
 };
+
+void release(Segment* s)
+{
+  if(s == NULL)
+    return;
+
+  if(s->l != NULL)
+    release(s->l);
+  if(s->r != NULL)
+    release(s->r);
+
+  delete s;
+}
+
 Segment* ComposeTree(int s, int e, vector<Segment*>& arr)
 {
   if(s == e-1)
@@ -131,5 +145,6 @@ int main()
     }
   }
 
+  release(seg);
   return 0;
 }
