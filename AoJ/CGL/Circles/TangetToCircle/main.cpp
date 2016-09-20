@@ -61,7 +61,7 @@ int CircleIntersection(int x1, int y1, int r1, int x2, int y2, int r2)
 }
 void CircleTangent(const Circle& cir, const Point& point, Point& p1, Point& p2)
 {
-  // Translate second circle
+  // Translate point
   Point p = Point(point.x - cir.x, point.y - cir.y);
 
   double c = p.x*p.x + p.y*p.y;
@@ -89,7 +89,7 @@ void CircleTangent(const Circle& cir, const Point& point, Point& p1, Point& p2)
   p2.y += cir.y;
 }
 
-void FindTanget(int x, int y, int r, int px, int py)
+void FindTangetToCircle(int x, int y, int r, int px, int py)
 {
   Point p(px, py);
 
@@ -113,6 +113,6 @@ int main()
   cin >> px >> py;
   cin >> x >> y >> r;
 
-  FindTanget(x, y, r, px, py);
+  FindTangetToCircle(x, y, r, px, py);
   return 0;
 }
