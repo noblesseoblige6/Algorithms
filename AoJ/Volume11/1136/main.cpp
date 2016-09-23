@@ -1,53 +1,98 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int Plus = 1;
-const int Minus = -1;
-
 double Cross(int xa, int ya, int xb, int yb)
 {
   return xa*yb - xb*ya;
 }
 
-bool IsSameDisplacement(const vector<int>& a, const vector<pair<int, int> >& b)
+void FindDisplacement(const vector<pair<int, int> >& s, vector<int>& d)
 {
-
+  int n = s.size();
+  for(int i = 1; i < n; ++i)
+  {
+    pair<int, int> v(s[i].first - s[i-1].first, s[i].second - s[i-1].second);
+    d.push_back(abs(v.first+v.second));
+  }
 }
 
-bool IsSameDirection(const vector<int>& a, const vector<pair<int, int> >& b)
+void FindDirection(const vector<pair<int, int> >& s, vector<int>& d)
 {
+  int n = s.size();
+  pair<int, int> v1;
+  pair<int, int> v2;
+  for(int i = 2; i < n; ++i)
+  {
+    v1 = pair<int, int>(s[i-1].first - s[i-2].first, s[i-1].second - s[i-2].second);
+    v2 = pair<int, int>(s[i].first - s[i-1].first, s[i].second - s[i-1].second);
 
+    d.push_back(Cross(v1.first, v1.second, v2.first, v2.second));
+  }
 }
 
-bool IsSame(const vector<int>& a, const vector<int>& b, const vector<pair<int, int> >& c)
+bool IsSameDispAndDirec(const vector<int>& a, const vector<int>& b, const vector<pair<int, int> >& c)
 {
- return IsSameDisplacement(a, c) && IsSameDirection(b, c);
-}
+  vector<int> disp;
+  vector<int> direc;
 
+  FindDisplacement(c, disp);
+  FindDirection(c, direc);
+
+  bool isSame = true;
+  for(int i = 0; i < disp.size(); ++i)
+  {
+    if(a[i] != disp[i])
+    {
+      isSame = false;
+      break;
+    }
+  }
+  if(isSame)
+  {
+    for(int i = 0; i < direc.size(); ++i)
+    {
+      if(b[i] != direc[i])
+      {
+        isSame = false;
+        break;
+      }
+    }
+    return isSame;
+  }
+
+  return false;
+}
+bool IsSame(const vector<int>& direc, const vector<int>& disp, const vector<pair<int, int> >& c)
+{
+  if(IsSameDispAndDirec(direc, disp, c))
+  {
+    return true;
+  }
+
+  vector<pair<int, int> > rc;
+  copy(c.rbegin(), c.rend(), back_inserter(rc));
+
+  if(IsSameDispAndDirec(direc, disp, rc))
+  {
+    return true;
+  }
+  return false;
+}
 
 void FindSameSegment(const vector<vector<pair<int, int> > >& set, vector<int>& ids)
 {
   int n = set.size();
   vector<int> disp;
   vector<int> dirc;
-  for(int i = 1; i < n; ++i)
-  {
-    pair<int, int> v(set[0][i].first - set[0][i-1].first, set[0][i].second - set[0][i-1].second);
-    disp.push_back(sqrt(v.first*v.first + v.second*v.second));
-  }
 
-  pair<int, int> v1;
-  pair<int, int> v2;
-  for(int i = 2; i < n; ++i)
-  {
-    v1 = pair<int, int>(set[0][i-1].first - set[0][i-2].first, set[0][i-1].second - set[0][i-2].second);
-    v2 = pair<int, int>(set[0][i].first - set[0][i-1].first, set[0][i].second - set[0][i-1].second);
-
-    dirc.push_back(Cross(v1.first, v1.second, v2.first, v2.second));
-  }
+  FindDisplacement(set[0], disp);
+  FindDirection(set[0], dirc);
 
   for(int i = 1; i < n; ++i)
   {
+    if(set[0].size() != set[i].size())
+      continue;
+
     if(IsSame(disp, dirc, set[i]))
     {
       ids.push_back(i);
