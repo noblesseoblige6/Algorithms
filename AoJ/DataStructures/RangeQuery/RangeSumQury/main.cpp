@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#define INI_VAL 2147483647
+#define INI_VAL 0
 #define PrintDebug cout<<"TEST"<<endl;
 
 using namespace std;
@@ -13,9 +13,9 @@ struct Segment
 
   int start;
   int end;
-  int min;
+  int val;
 
-  Segment() : p(NULL), l(NULL), r(NULL), start(-1), end(-1), min(INI_VAL){};
+  Segment() : p(NULL), l(NULL), r(NULL), start(-1), end(-1), val(INI_VAL){};
 };
 
 void release(Segment* s)
@@ -61,21 +61,21 @@ void UpdateSegmentTree(Segment* s, int val)
   if(s == NULL)
     return;
 
-  int minl, minr;
-  minl = minr = INI_VAL;
+  int vall, valr;
+  vall = valr = INI_VAL;
 
   if(s->l != NULL)
-    minl = s->l->min;
+    vall = s->l->val;
   if(s->r != NULL)
-    minr = s->r->min;
+    valr = s->r->val;
 
-  s->min = minl + minr;
+  s->val = vall + valr;
   UpdateSegmentTree(s->p, val);
 }
 
 void Update(int id, int val, vector<Segment*>& arr)
 {
-  arr[id]->min += val;
+  arr[id]->val += val;
 
   UpdateSegmentTree(arr[id]->p, val);
 }
@@ -89,7 +89,7 @@ int FindMin(const int& a, const int& b, const Segment* s)
 {
   // segment is in range
   if(s->start == a && s->end == b)
-    return s->min;
+    return s->val;
 
   Segment* cl = s->l;
   Segment* cr = s->r;
@@ -115,7 +115,7 @@ int FindMin(const int& a, const int& b, const Segment* s)
                 FindMin(cr->start, b, cr);
   }
 
-  return s->min;
+  return s->val;
 }
 
 int main()
@@ -133,15 +133,17 @@ int main()
     // cin >> o >> x >> y;
     scanf("%d %d %d", &o, &x, &y);
 
+    // Input index starts from 1, so decrement
+    x= x-1;
     if(o == 0){
       Update(x, y, arr);
       // for(int i = 0; i < arr.size(); ++i)
-      //   cout<<arr[i]->min<<" ";
+      //   cout<<arr[i]->val<<" ";
       // cout<<endl;
     }
     else if(o == 1){
       // cout << findMin(x, y, seg) << endl;
-      printf("%d\n", FindMin(x, y+1, seg));
+      printf("%d\n", FindMin(x, y, seg));
     }
   }
 
