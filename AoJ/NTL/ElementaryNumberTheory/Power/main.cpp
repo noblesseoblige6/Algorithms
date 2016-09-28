@@ -11,7 +11,7 @@ ull Power(int x, int n)
   if(n > 0)
   {
     tmp = Power(x, n/2);
-    tmp = n % 2 == 0 ? (tmp*tmp)%D : (((tmp*tmp)%D)*x)%D;
+    tmp = n % 2 == 0 ? (tmp*tmp)%D : (((tmp*tmp)%D)*x%D)%D;
   }
 
   return tmp;
