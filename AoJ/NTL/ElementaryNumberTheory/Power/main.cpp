@@ -5,13 +5,22 @@ typedef unsigned long long ull;
 
 const ull D = 1000000007;
 
+ull Power(int x, int n)
+{
+  ull tmp = 1;
+  if(n > 0)
+  {
+    tmp = Power(x, n/2);
+    tmp = n % 2 == 0 ? (tmp*tmp)%D : (((tmp*tmp)%D)*x)%D;
+  }
+
+  return tmp;
+}
+
 int main()
 {
-  ull e, p;
-  cin >> e >> p;
-  ull res = 1;
-  for(int i = 0; i < p; ++i)
-    res *= e;
-  cout<<res%D<<endl;
+  ull x, n ;
+  cin >> x >> n;
+  cout<<Power(x, n)<<endl;
   return 0;
 }
