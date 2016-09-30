@@ -5,7 +5,7 @@ typedef unsigned long long ull;
 
 const ull D = 1000000007;
 
-ull Power(int x, int n)
+ull Power(ull x, ull n)
 {
   ull tmp = 1;
   if(n > 0)
