@@ -1,7 +1,21 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void Factorize(int n, vector<int>& primes, vector<int>& primeList)
+typedef unsigned long long ull;
+
+ull Power(ull x, ull n)
+{
+  ull tmp = 1;
+  if(n > 0)
+  {
+    tmp = Power(x, n/2);
+    tmp = n % 2 == 0 ? (tmp*tmp) : (tmp*tmp)*x;
+  }
+
+  return tmp;
+}
+
+void Factorize(int n, vector<int>& primes)
 {
   int nSq = sqrt(n);
   int d = 2;
@@ -11,18 +25,15 @@ void Factorize(int n, vector<int>& primes, vector<int>& primeList)
     {
       n /= d;
 
-      if(primes[d] == 0)
-        primeList.push_back(d);
       primes[d]++;
       continue;
     }
     d++;
   }
+
   if(n != 1)
   {
-    if(primes[d] == 0)
-      primeList.push_back(d);
-    primes[d]++;
+    primes[n]++;
   }
 }
 
@@ -33,27 +44,27 @@ int main()
   cin >> n;
 
   vector<int> lcm(1001, 0);
-  vector<int> primeList;
   for(int i = 0; i < n; ++i)
   {
     cin >> x;
 
     vector<int> cm(1001, 0);
-    Factorize(x, cm, primeList);
+    Factorize(x, cm);
 
-    for(int j = 0; j < primeList.size(); ++j)
+    for(int j = 0; j < 1001; ++j)
     {
-      int idx = primeList[j];
-      lcm[idx] = max(lcm[idx], cm[idx]);
+      lcm[j] = max(lcm[j], cm[j]);
     }
   }
 
-  int res = 1;
-  for(int i = 0; i < primeList.size(); ++i)
+  ull res = 1;
+  for(int i = 1; i < 1001; ++i)
   {
-    int idx = primeList[i];
-    cout<<idx<<endl;
-    res *= pow(idx, lcm[idx]);
+    if(lcm[i] != 0)
+    {
+      // cout<<i<<" "<<lcm[i]<<" "<<pow((double)i, (double)lcm[i])<<" "<<res<<endl;
+      res *= Power(i, lcm[i]);
+    }
   }
   cout<<res<<endl;
 
