@@ -43,6 +43,7 @@ int main()
   int n, x;
   cin >> n;
 
+  // number of power
   vector<int> lcm(1001, 0);
   for(int i = 0; i < n; ++i)
   {
@@ -62,7 +63,6 @@ int main()
   {
     if(lcm[i] != 0)
     {
-      // cout<<i<<" "<<lcm[i]<<" "<<pow((double)i, (double)lcm[i])<<" "<<res<<endl;
       res *= Power(i, lcm[i]);
     }
   }
