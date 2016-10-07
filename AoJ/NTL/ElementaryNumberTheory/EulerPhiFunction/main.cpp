@@ -28,8 +28,11 @@ int  PhiFunc(int n)
 
   double count = 1;
   for(int i = 0; i < primes.size(); ++i)
+  {
+    cout<< primes[i]<<endl;
     count *= (1.0-1.0/primes[i]);
-  count *= n;
+  }
+    count *= n;
 
   return (int)count;
 }
