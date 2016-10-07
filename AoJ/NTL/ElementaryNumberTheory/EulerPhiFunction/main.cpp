@@ -21,28 +21,27 @@ void Factorize(ull n, vector<ull>& primes)
     primes.push_back(n);
 }
 
-int  PhiFunc(int n)
+ull PhiFunc(ull n)
 {
   vector<ull> primes;
   Factorize(n, primes);
 
-  double count = 1;
-  for(int i = 0; i < primes.size(); ++i)
+  double count = (1.0-1.0/primes[0]);
+  for(int i = 1; i < primes.size(); ++i)
   {
-    cout<< primes[i]<<endl;
-    count *= (1.0-1.0/primes[i]);
+    if(primes[i-1] != primes[i])
+      count *= (1.0-1.0/primes[i]);
   }
     count *= n;
 
-  return (int)count;
+  return (ull)count;
 }
 
 int main()
 {
-  int n;
+  ull n;
   cin >> n;
-
-  cout <<PhiFunc(n) << endl;
+  printf("%llu\n", PhiFunc(n));
 
   return 0;
 }
