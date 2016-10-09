@@ -26,6 +26,7 @@ ull PhiFunc(ull n)
   vector<ull> primes;
   Factorize(n, primes);
 
+  //@comment First prime is multiplied
   double count = (1.0-1.0/primes[0]);
   for(int i = 1; i < primes.size(); ++i)
   {
