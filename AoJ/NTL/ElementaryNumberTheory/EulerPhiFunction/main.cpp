@@ -27,13 +27,12 @@ ull PhiFunc(ull n)
   Factorize(n, primes);
 
   //@comment First prime is multiplied
-  double count = (1.0-1.0/primes[0]);
+  double count = n * (1.0-(1.0/primes[0]));
   for(int i = 1; i < primes.size(); ++i)
   {
     if(primes[i-1] != primes[i])
-      count *= (1.0-1.0/primes[i]);
+      count *= (1.0-(1.0/primes[i]));
   }
-    count *= n;
 
   return (ull)count;
 }
