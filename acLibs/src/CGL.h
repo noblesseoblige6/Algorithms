@@ -1,4 +1,5 @@
-﻿#include "Vec.h"
+﻿#pragma once
+#include "Vec.h"
 #include "Constant.h"
 
 namespace acLib
@@ -7,6 +8,7 @@ namespace acLib
     {
         using namespace acLib::vec;
         using namespace acLib::constant;
+
         class CGL
         {
         public:
@@ -24,6 +26,24 @@ namespace acLib
                 Vec2 n = Vec2::normalize(p1 - p0);
 
                 return (-v + n * 2 * Vec2::dot(v, n)) + p0;
+            }
+
+            static Vec2 Reflect(const Vec2& in, const Vec2& normal)
+            {
+                return Vec2::normalize(in - normal*(2.0*Vec2::dot(in, normal)));
+            }
+
+            static Vec3 Reflection(const Vec3& p0, const Vec3& p1, const Vec3& p2)
+            {
+                Vec3 v = p2 - p0;
+                Vec3 n = Vec3::normalize(p1 - p0);
+
+                return (-v + n * 2 * Vec3::dot(v, n)) + p0;
+            }
+
+            static Vec3 Reflect(const Vec3& in, const Vec3& normal)
+            {
+                return Vec3::normalize(in - normal*(2.0*Vec3::dot(in, normal)));
             }
 
             //@comment intersect segment and point
@@ -66,34 +86,19 @@ namespace acLib
             }
 
             //@comment Find orthonormal basis whose one basis is composed of source vector.
-            static void OrthonormalBasis(const Vec3& src, Vec3& res1, Vec3&res2)
+            static void OrthonormalBasis(const Vec3& normal, Vec3& tangent, Vec3& binormal)
             {
                 //@comment find arbitrarily vector
-                Vec3 v;
-                for (int i = 0; i < 3; ++i)
+                if (fabs(normal.x) > fabs(normal.y))
                 {
-                    if (i == 0)
-                    {
-                        v = Vec3(1.0, 0.0, 0.0);
-                    }
-                    else if (i == 1)
-                    {
-                        v = Vec3(0.0, 1.0, 0.0);
-                    }
-                    else if (i == 2)
-                    {
-                        v = Vec3(0.0, 0.0, 1.0);
-                    }
-
-                    //@comment source and arbitrarily vectors are different
-                    if (1.0-abs(Vec3::dot(src, v)) > kEps)
-                    {
-                        break;
-                    }
+                    tangent = Vec3::normalize(Vec3::cross(Vec3(0, 1, 0), normal));
+                }
+                else
+                {
+                    tangent = Vec3::normalize(Vec3::cross(Vec3(1, 0, 0), normal));
                 }
 
-                res1 = Vec3::normalize(Vec3::cross(src, v));
-                res2 = Vec3::normalize(Vec3::cross(res1, src));
+                binormal = Vec3::normalize(Vec3::cross(normal, tangent));
             }
 
             //@comment Find orthonormal basis from arbitrarily three vectors by gram–schmidt orthogonalization
@@ -133,6 +138,49 @@ namespace acLib
                 }
 
                 return true;
+            }
+
+            static Vec3 RotateX(const Vec3& vec, const double deg)
+            {
+                double c = cos(DEG2RAD(deg));
+                double s = sin(DEG2RAD(deg));
+
+                Vec3 res = Vec3(vec.x,
+                    vec.y * c + vec.z * -s,
+                    vec.y * s + vec.z * c);
+
+                return res;
+            }
+
+            static Vec3 RotateY(const Vec3& vec, const double deg)
+            {
+                double c = cos(DEG2RAD(deg));
+                double s = sin(DEG2RAD(deg));
+
+                Vec3 res = Vec3(vec.x * c + vec.z * s,
+                    vec.y,
+                    vec.x*-s + vec.z * c);
+
+                return res;
+            }
+
+            static Vec3 RotateZ(const Vec3& vec, const double deg)
+            {
+                double c = cos(DEG2RAD(deg));
+                double s = sin(DEG2RAD(deg));
+
+                Vec3 res = Vec3(vec.x * c + vec.y * -s,
+                    vec.x * s + vec.y * c,
+                    vec.z);
+
+                return res;
+            }
+
+            static Vec3 RotateXYZ(const Vec3& vec, const Vec3& degs)
+            {
+                Vec3 res = RotateX(RotateY(RotateZ(vec, degs.z), degs.y), degs.x);
+
+                return res;
             }
         };
     }
