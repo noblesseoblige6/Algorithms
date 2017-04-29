@@ -11,6 +11,14 @@ namespace acLib
     {
         using namespace std;
         using namespace acLib::constant;
+        
+        enum VEC_INDEX
+        {
+            X,
+            Y,
+            Z,
+            W
+        };
 
         struct Vec2
         {
@@ -202,6 +210,101 @@ namespace acLib
             double x;
             double y;
             double z;
+        };
+
+        struct Vec4
+        {
+        public:
+            static Vec4 ZERO;
+            static Vec4 ONE;
+
+            Vec4();
+            Vec4(double _v);
+            Vec4(double _x, double _y, double _z, double _w);
+            Vec4(const Vec4& vec);
+            ~Vec4();
+
+            Vec4 operator+(const Vec4& v) const;
+            Vec4 operator-(const Vec4& v) const;
+            Vec4 operator*(const double s) const;
+            Vec4 operator*(const Vec4& v) const;
+            Vec4 operator/(const double s) const;
+
+            const Vec4& operator+=(const Vec4& v);
+            const Vec4& operator-=(const Vec4& v);
+            const Vec4& operator*=(const double s);
+            const Vec4& operator/=(const double s);
+
+            bool operator==(const Vec4& v) const;
+            bool operator<(const Vec4& v) const;
+            bool operator<=(const Vec4& v) const;
+            Vec4 operator-() const;
+
+            double norm() const;
+            double normSq() const;
+
+            const Vec4& normalized();
+            const Vec4& transform(const acLib::mat::Mat44& mat);
+
+            double operator[](const int& idx) const;
+
+            friend Vec4 operator+ (const double s, const Vec4& v)
+            {
+                Vec4 res(v);
+                res = res + s;
+                return res;
+            }
+
+            friend Vec4 operator- (const double s, const Vec4& v)
+            {
+                Vec4 res(v);
+                res = res - s;
+                return res;
+            }
+
+            friend Vec4 operator* (const double s, const Vec4& v)
+            {
+                Vec4 res(v);
+                res = res*s;
+                return res;
+            }
+
+
+            friend ostream& operator<<(ostream& os, const Vec4& v)
+            {
+                os << v.x << " " << v.y << " " << v.z<<" "<<v.w;
+                return os;
+            }
+
+            static Vec4 normalize(Vec4 a)
+            {
+                Vec4 res;
+                double len = a.norm();
+                if (len != 0.0) {
+                    res = a / len;
+                }
+                else {
+                    res = Vec4::ZERO;
+                }
+
+                return res;
+            }
+
+            static double dot(const Vec4& a, const Vec4& b)
+            {
+                return a.x*b.x + a.y*b.y + a.z * b.z + a.w * b.w;
+            }
+
+            static bool approxEqual(const Vec4& v1, const Vec4& v2, const double err = kEps)
+            {
+                return abs(v1.x - v2.x) < err && abs(v1.y - v2.y) < err && abs(v1.z - v2.z) < err && abs(v1.w - v2.w) < err;
+            }
+
+        public:
+            double x;
+            double y;
+            double z;
+            double w;
         };
     }
 }
