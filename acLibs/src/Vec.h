@@ -222,6 +222,7 @@ namespace acLib
             Vec4(double _v);
             Vec4(double _x, double _y, double _z, double _w);
             Vec4(const Vec4& vec);
+            Vec4(const Vec3& vec, double _w);
             ~Vec4();
 
             Vec4 operator+(const Vec4& v) const;
