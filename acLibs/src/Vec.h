@@ -37,6 +37,8 @@ namespace acLib
 
             const Vec2& operator+=(const Vec2& v);
             const Vec2& operator-=(const Vec2& v);
+            const Vec2& operator*=(const Vec2& v);
+
             const Vec2& operator*=(const double s);
             const Vec2& operator/=(const double s);
 
@@ -129,6 +131,7 @@ namespace acLib
 
             const Vec3& operator+=(const Vec3& v);
             const Vec3& operator-=(const Vec3& v);
+            const Vec3& operator*=(const Vec3& v);
             const Vec3& operator*=(const double s);
             const Vec3& operator/=(const double s);
 
@@ -233,6 +236,7 @@ namespace acLib
 
             const Vec4& operator+=(const Vec4& v);
             const Vec4& operator-=(const Vec4& v);
+            const Vec4& operator*=(const Vec4& v);
             const Vec4& operator*=(const double s);
             const Vec4& operator/=(const double s);
 
