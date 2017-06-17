@@ -43,6 +43,7 @@ namespace acLib
             const Vec2& operator/=(const double s);
 
             bool operator==(const Vec2& v) const;
+            bool operator!=(const Vec2& v) const;
             bool operator<(const Vec2& v) const;
             bool operator<=(const Vec2& v) const;
 
@@ -136,6 +137,7 @@ namespace acLib
             const Vec3& operator/=(const double s);
 
             bool operator==(const Vec3& v) const;
+            bool operator!=(const Vec3& v) const;
             bool operator<(const Vec3& v) const;
             bool operator<=(const Vec3& v) const;
             Vec3 operator-() const;
@@ -241,6 +243,7 @@ namespace acLib
             const Vec4& operator/=(const double s);
 
             bool operator==(const Vec4& v) const;
+            bool operator!=(const Vec4& v) const;
             bool operator<(const Vec4& v) const;
             bool operator<=(const Vec4& v) const;
             Vec4 operator-() const;

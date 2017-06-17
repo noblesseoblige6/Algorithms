@@ -102,6 +102,12 @@ bool Vec2::operator==(const Vec2& v) const
 {
     return (x == v.x && y == v.y);
 }
+
+bool Vec2::operator!=(const Vec2& v) const
+{
+    return !(*this == v);
+}
+
 bool Vec2::operator<(const Vec2& v) const
 {
     if (y == v.y)
@@ -237,6 +243,12 @@ bool Vec3::operator==(const Vec3& v) const
 {
     return (x == v.x && y == v.y && z == v.z);
 }
+
+bool Vec3::operator!=(const Vec3& v) const
+{
+    return !(*this == v);
+}
+
 bool Vec3::operator<(const Vec3& v) const
 {
     if (y == v.y)
@@ -432,6 +444,12 @@ bool Vec4::operator==(const Vec4& v) const
 {
     return (x == v.x && y == v.y && z == v.z);
 }
+
+bool Vec4::operator!=(const Vec4& v) const
+{
+    return !(*this == v);
+}
+
 bool Vec4::operator<(const Vec4& v) const
 {
     if (y == v.y)
