@@ -140,6 +140,15 @@ namespace acLib
                 return true;
             }
 
+            static double GeometoryTerm(const Vec3& p1, const Vec3& p2)
+            {
+                Vec dir = p1 - p2;
+                const double rSq = dir.normSq();
+                dir.normalized();
+
+                return Vec3::dot(p1, dir)*Vec3::dot(p2, -dir) / rSq;
+            }
+
             static Vec3 RotateX(const Vec3& vec, const double deg)
             {
                 double c = cos(DEG2RAD(deg));
