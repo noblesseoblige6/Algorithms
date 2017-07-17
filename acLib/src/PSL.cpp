@@ -60,7 +60,7 @@ namespace acLib
                 m_cumulativeDensity.end(),
                 val);
 
-            const int offset = max(0, (int)(itr - m_cumulativeDensity.begin())-1);
+            const int offset = max(0, (int)(itr - m_cumulativeDensity.begin()) - 1);
 
             double du = MathUtility::Lerp(val, m_cumulativeDensity[offset], m_cumulativeDensity[offset + 1]);
 
@@ -88,6 +88,50 @@ namespace acLib
             }
 
             return  offset;
+        }
+
+        // ProbabilityDensity2D Class
+        ProbabilityDensity2D::ProbabilityDensity2D(const vector<vector<double>>& func)
+        {
+            const int numU = func.size();
+            const int numV = func[0].size();
+
+            m_conditinalDensity.resize(numV);
+            for (int v = 0; v < numV; ++v)
+            {
+                vector<double> tmp(numU);
+                for (int u = 0; u < numU; ++u)
+                {
+                    tmp[u] = func[u][v];
+                }
+
+                m_conditinalDensity[v] = ProbabilityDensity1D(tmp);
+            }
+
+            vector<double> marginalFunc(numV);
+            for (int v = 0; v < numV; ++v)
+            {
+                marginalFunc[v] = m_conditinalDensity[v].GetFuncIntegrated();
+            }
+            m_marginalDensity = ProbabilityDensity1D(marginalFunc);
+        }
+
+        ProbabilityDensity2D::~ProbabilityDensity2D()
+        {}
+
+        Vec2 ProbabilityDensity2D::SampleContinuous(const Vec2& val, double* pdf) const
+        {
+            Vec2 uv;
+            double uPdf, vPdf;
+
+            uv.y = m_marginalDensity.SampleContinuous(val.y, &vPdf);
+
+            const int v = (int)MathUtility::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize() - 1);
+            uv.x = m_conditinalDensity[v].SampleContinuous(val.x, &uPdf);
+
+            *pdf = uPdf * vPdf;
+
+            return uv;
         }
     }
 }
