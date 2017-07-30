@@ -28,9 +28,9 @@ namespace acLib
             double SampleContinuous(const double val, double* pdf = NULL) const ;
             double SampleDiscrete(const double val, double* pdf = NULL) const ;
 
-            int GetFuncSize() const { return m_func.size(); }
-            double GetFunc(const int index) { return m_func[index]; }
-            double GetCumulativeDensity(const int index) {return m_cumulativeDensity[index];}
+            int GetFuncSize() const { return (int)m_func.size(); }
+            double GetFunc(const int index) const { return m_func[index]; }
+            double GetCumulativeDensity(const int index) const {return m_cumulativeDensity[index];}
             double GetFuncIntegrated() const { return m_funcIntegrated; }
 
         protected:
@@ -48,6 +48,7 @@ namespace acLib
             ~ProbabilityDensity2D();
 
             Vec2 SampleContinuous(const Vec2& val, double* pdf = NULL) const;
+            double FindConditinalPdf(const Vec2& uv) const;
 
         protected:
             vector<ProbabilityDensity1D> m_conditinalDensity;

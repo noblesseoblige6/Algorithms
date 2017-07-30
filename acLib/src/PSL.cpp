@@ -25,7 +25,7 @@ namespace acLib
         {
             copy(func.begin(), func.end(), back_inserter(m_func));
 
-            const int size = m_func.size();
+            const int size = (int)m_func.size();
 
             m_cumulativeDensity.resize(size);
 
@@ -36,18 +36,18 @@ namespace acLib
                 m_cumulativeDensity[i] = m_cumulativeDensity[i - 1] + m_func[i];
             }
 
-            // normalize
-            for (int i = 0; i < size; ++i)
-            {
-                m_cumulativeDensity[i] /= m_cumulativeDensity.back();
-            }
-
             // integrate func
             m_funcIntegrated = 0.0;
             const double delta = 1.0 / size;
             for (int i = 1; i < size; ++i)
             {
                 m_funcIntegrated += m_func[i] * delta;
+            }
+
+            // normalize
+            for (int i = 0; i < size; ++i)
+            {
+                m_cumulativeDensity[i] /= m_cumulativeDensity.back();
             }
         }
 
@@ -78,7 +78,7 @@ namespace acLib
                 m_cumulativeDensity.end(),
                 val);
 
-            const int offset = max(0, itr - m_cumulativeDensity.begin());
+            const int offset = max(0, (int)(itr - m_cumulativeDensity.begin()));
 
             double du = MathUtility::Lerp(val, m_cumulativeDensity[offset], m_cumulativeDensity[offset + 1]);
 
@@ -93,8 +93,8 @@ namespace acLib
         // ProbabilityDensity2D Class
         ProbabilityDensity2D::ProbabilityDensity2D(const vector<vector<double>>& func)
         {
-            const int numU = func.size();
-            const int numV = func[0].size();
+            const int numU = (int)func.size();
+            const int numV = (int)func[0].size();
 
             m_conditinalDensity.resize(numV);
             for (int v = 0; v < numV; ++v)
@@ -108,10 +108,18 @@ namespace acLib
                 m_conditinalDensity[v] = ProbabilityDensity1D(tmp);
             }
 
-            vector<double> marginalFunc(numV);
+            vector<double> marginalFunc(numV, 0.0);
             for (int v = 0; v < numV; ++v)
             {
+                #if 0
                 marginalFunc[v] = m_conditinalDensity[v].GetFuncIntegrated();
+                #else
+                for (int u = 0; u < numU; ++u)
+                {
+                    marginalFunc[v] += m_conditinalDensity[v].GetFunc(u);
+                }
+                marginalFunc[v] /= numU;
+                #endif
             }
             m_marginalDensity = ProbabilityDensity1D(marginalFunc);
         }
@@ -129,9 +137,35 @@ namespace acLib
             const int v = (int)MathUtility::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize() - 1);
             uv.x = m_conditinalDensity[v].SampleContinuous(val.x, &uPdf);
 
+            //@comment each probability is independent
             *pdf = uPdf * vPdf;
 
             return uv;
+        }
+
+        // @comment find conditional probability density
+        double ProbabilityDensity2D::FindConditinalPdf(const Vec2& uv) const
+        {
+            const int x = MathUtility::Clamp((int)(uv.x * m_conditinalDensity[0].GetFuncSize()), 0, m_conditinalDensity[0].GetFuncSize() - 1);
+            const int y = MathUtility::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize()-1);
+
+            #if 0
+            const double denominator = m_conditinalDensity[y].GetFuncIntegrated() * m_marginalDensity.GetFuncIntegrated();
+            if (denominator == 0.0)
+            {
+                return 0.0;
+            }
+
+            return (m_conditinalDensity[y].GetFunc(x) * m_marginalDensity.GetFunc(y)) / denominator;
+            #else
+             const double denominator = m_conditinalDensity[y].GetFuncIntegrated();
+            if (denominator == 0.0)
+            {
+                return 0.0;
+            }
+
+            return m_marginalDensity.GetFuncIntegrated() / denominator;
+            #endif
         }
     }
 }
