@@ -1,4 +1,7 @@
 ﻿#pragma once
+#include <vector>
+#include <algorithm>
+
 #include "Vec.h"
 #include "Constant.h"
 
@@ -6,6 +9,8 @@ namespace acLib
 {
     namespace cgl
     {
+        using namespace std;
+
         using namespace acLib::vec;
         using namespace acLib::constant;
 
@@ -85,6 +90,86 @@ namespace acLib
                 }
             }
 
+            static void FindConvexHull(vector<Vec2>& points, vector<Vec2>& res)
+            {
+                const int size = points.size();
+
+                //@comment sort the vertices by y-axis
+                sort(points.begin(), points.end());
+
+                //@comment add first two vertices to create vector
+                vector<Vec2> rSide;
+                rSide.push_back(points[0]);
+                rSide.push_back(points[1]);
+
+                //@comment Search right-hand side
+                for (int i = 2; i < size; ++i)
+                {
+                    for (int n = rSide.size() - 1; n >= 1; --n)
+                    {
+                        const Vec2 &a = rSide[n] - rSide[n - 1];
+                        const Vec2 &b = points[i] - rSide[n];
+
+                        //@comment omit vertices which is not on the right side
+                        if (Vec2::cross(a, b) > 0)
+                        {
+                            rSide.pop_back();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    rSide.push_back(points[i]);
+                }
+
+                //@comment add last two vertices to create vector
+                vector<Vec2> lSide;
+                lSide.push_back(points[size - 1]);
+                lSide.push_back(points[size - 2]);
+
+                //@comment Search left-hand side
+                for (int i = size - 3; i >= 0; --i)
+                {
+                    for (int n = lSide.size() - 1; n >= 1; --n)
+                    {
+                        const Vec2 &a = lSide[n] - lSide[n - 1];
+                        const Vec2 &b = points[i] - lSide[n];
+
+                        //@comment omit the vertex which is not on the left side
+                        if (Vec2::cross(a, b) > 0)
+                        {
+                            lSide.pop_back();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    lSide.push_back(points[i]);
+                }
+
+                //@comment merge right and left side convexes
+                res.reserve(rSide.size() + lSide.size() - 2);
+                for (int i = 0; i < rSide.size(); ++i)
+                {
+                    res.push_back(rSide[i]);
+                }
+                //@comment omit first and last vertices
+                for (int i = 1; i < lSide.size() - 1; ++i)
+                {
+                    res.push_back(lSide[i]);
+                }
+
+                //@comment convert CW to CCW
+                for (int i = 1; i <= res.size() / 2; ++i)
+                {
+                    Vec2 tmp = res[i];
+                    res[i] = res[res.size() - i];
+                    res[res.size() - i] = tmp;
+                }
+            }
+
             //@comment Find orthonormal basis whose one basis is composed of source vector.
             static void OrthonormalBasis(const Vec3& normal, Vec3& tangent, Vec3& binormal)
             {
@@ -114,9 +199,9 @@ namespace acLib
                     for (int j = 0; j < i; ++j)
                     {
                         Vec3& tmp = *u[j];
-                         sum = sum + Vec3::dot(a[i], tmp)*tmp;
+                        sum = sum + Vec3::dot(a[i], tmp)*tmp;
                     }
-                    v[i] = a[i] -sum;
+                    v[i] = a[i] - sum;
                     res = Vec3::normalize(v[i]);
                 }
             }
@@ -127,11 +212,11 @@ namespace acLib
 
                 for (int i = 0; i < 3; ++i)
                 {
-                    if (1.0- v[i].norm() >= kEps)
+                    if (1.0 - v[i].norm() >= kEps)
                     {
                         return false;
                     }
-                    if (abs(Vec3::dot(v[i], v[(i+1)%3])) >= kEps)
+                    if (abs(Vec3::dot(v[i], v[(i + 1) % 3])) >= kEps)
                     {
                         return false;
                     }
