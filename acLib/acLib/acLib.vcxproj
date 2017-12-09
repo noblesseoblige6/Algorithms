@@ -151,6 +151,7 @@
     <ClInclude Include="..\src\Constant.h" />
     <ClInclude Include="..\src\Mat.h" />
     <ClInclude Include="..\src\PSL.h" />
+    <ClInclude Include="..\src\Segment.h" />
     <ClInclude Include="..\src\Util.h" />
     <ClInclude Include="..\src\Vec.h" />
   </ItemGroup>
@@ -160,6 +161,7 @@
     </ClCompile>
     <ClCompile Include="..\src\Mat.cpp" />
     <ClCompile Include="..\src\PSL.cpp" />
+    <ClCompile Include="..\src\Segment.cpp" />
     <ClCompile Include="..\src\Util .cpp" />
     <ClCompile Include="..\src\Vec.cpp" />
   </ItemGroup>

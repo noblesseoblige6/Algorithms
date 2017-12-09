@@ -23,6 +23,9 @@ namespace acLib
         struct Vec2
         {
         public:
+            static const Vec2 ZERO;
+            static const Vec2 ONE;
+
             Vec2();
             Vec2(double _v);
             Vec2(double _x, double _y);
@@ -49,7 +52,7 @@ namespace acLib
 
             Vec2 operator-() const;
 
-            double norm();
+            double norm() const;
             const Vec2& normalized();
 
             friend Vec2 operator+ (const double s, const Vec2& v)

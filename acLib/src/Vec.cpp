@@ -126,7 +126,7 @@ Vec2 Vec2::operator-() const
     return res;
 }
 
-double Vec2::norm()
+double Vec2::norm() const
 {
     return sqrt(x*x + y*y);
 }
@@ -136,6 +136,9 @@ const Vec2& Vec2::normalized()
     *this /= this->norm();
     return *this;
 }
+
+const Vec2 Vec2::ZERO = Vec2(0.0, 0.0);
+const Vec2 Vec2::ONE = Vec2(1.0, 1.0);
 
 Vec3::Vec3() :x(0), y(0), z(0) {}
 Vec3::Vec3(double _v) : x(_v), y(_v), z(_v)

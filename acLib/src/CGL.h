@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "Vec.h"
+#include "Segment.h"
 #include "Constant.h"
 
 namespace acLib
@@ -12,6 +13,7 @@ namespace acLib
         using namespace std;
 
         using namespace acLib::vec;
+        using namespace acLib::segment;
         using namespace acLib::constant;
 
         class CGL
@@ -51,43 +53,20 @@ namespace acLib
                 return Vec3::normalize(in - normal*(2.0*Vec3::dot(in, normal)));
             }
 
-            //@comment intersect segment and point
-            static bool IntersectLP(Vec2 ss, Vec2 se, Vec2 p)
+            static double FindConvexArea(const vector<Vec2>& polygon)
             {
-                //@comment point is on segment start point or end point
-                if (ss == p || se == p)
+                double area = 0.0;
+
+                for (int i = 1; i < (int)(polygon.size() - 1); ++i)
                 {
-                    return true;
+                    Vec2 a = polygon[i] - polygon[0];
+                    Vec2 b = polygon[i + 1] - polygon[0];
+
+                    double tmpArea = abs(Vec2::cross(a, b)) * 0.5;
+                    area += tmpArea < kEps ? 0.0 : tmpArea;
                 }
 
-                return Vec2::cross(se - ss, p - ss) == 0
-                    && (se - ss).norm() >= (p - ss).norm()
-                    && Vec2::dot(se - ss, p - ss) > 0;
-            }
-
-            //@comment intersect segments
-            static int IntersectLL(const Vec2& p1, const Vec2& p2, const Vec2 &p3, const Vec2& p4)
-            {
-                Vec2 line1 = p2 - p1, line2 = p4 - p3;
-
-                if (IntersectLP(p1, p2, p3) || IntersectLP(p1, p2, p4))
-                {
-                    return 1;
-                }
-                else if (IntersectLP(p3, p4, p1) || IntersectLP(p3, p4, p2))
-                {
-                    return 2;
-                }
-                else if ((Vec2::cross(line1, p3 - p1)*Vec2::cross(line1, p4 - p1) < 0) &&
-                    (Vec2::cross(line2, p1 - p3)*Vec2::cross(line2, p2 - p3) < 0))
-                {
-                    return 3;
-                }
-                else
-                {
-                    //@comment no intersection
-                    return 0;
-                }
+                return area;
             }
 
             static void FindConvexHull(vector<Vec2>& points, vector<Vec2>& res)
@@ -151,23 +130,72 @@ namespace acLib
 
                 //@comment merge right and left side convexes
                 res.reserve(rSide.size() + lSide.size() - 2);
-                for (int i = 0; i < rSide.size(); ++i)
+                for (int i = 0; i < (int)rSide.size(); ++i)
                 {
                     res.push_back(rSide[i]);
                 }
                 //@comment omit first and last vertices
-                for (int i = 1; i < lSide.size() - 1; ++i)
+                for (int i = 1; i < (int)(lSide.size() - 1); ++i)
                 {
                     res.push_back(lSide[i]);
                 }
 
                 //@comment convert CW to CCW
-                for (int i = 1; i <= res.size() / 2; ++i)
+                for (int i = 1; i <= (int)(res.size() / 2); ++i)
                 {
                     Vec2 tmp = res[i];
                     res[i] = res[res.size() - i];
                     res[res.size() - i] = tmp;
                 }
+            }
+
+            static double FindConvexCut(vector<Vec2>& points, const Segment& segment)
+            {
+                vector<Vec2> convex;
+                FindConvexHull(points, convex);
+
+                //@comment find far points to create a segment
+                Vec2 dir = Vec2::normalize(segment.m_end - segment.m_start);
+
+                const int scale = 100000;
+                Vec2 end = dir * scale + segment.m_start;
+                Vec2 start = dir * -scale + segment.m_start;
+
+                //@comment find two intersections
+                Vec2 cutSegment = Vec2::normalize(end - start);
+                vector<Vec2> cutConvex;
+                cutConvex.reserve(convex.size());
+
+                //@comment For detection second inter.occurs last segment, loop one more
+                const int size = convex.size();
+                for (int i = 0; i < size; ++i)
+                {
+                    Vec2 tmp = Vec2::normalize(convex[i] - start);
+
+                    //@comment determine if i-th vertex is on left-hand side by edge and cutting segment
+                    if (Vec2::cross(cutSegment, tmp) >= 0)
+                    {
+                        cutConvex.push_back(convex[i]);
+                    }
+
+                    //@comment check if an intersection occurs with cutting segment
+                    const Segment seg1(convex[i], convex[(i + 1) % size]);
+                    const Segment seg2(start, end);
+                    if (Segment::Intersect(seg1, seg2))
+                    {
+                        Vec2 tmp = Segment::CrossPoint(seg1, seg2);
+
+                        //@comment avoid miss judge that the same point is intersection
+                        if (tmp == convex[i] || tmp == convex[(i + 1) % size])
+                        {
+                            continue;
+                        }
+
+                        cutConvex.push_back(tmp);
+                    }
+                }
+
+                return FindConvexArea(cutConvex);
             }
 
             //@comment Find orthonormal basis whose one basis is composed of source vector.
