@@ -137,70 +137,53 @@ double findConvexArea(const vector<vec2>& polygon)
 
 vector<double> findConvexCut(const vector<vec2>& convex, const vector<pair<vec2, vec2> >& lines)
 {
-  const int upper_x = 10000;
-  const int upper_y = 10000;
   vector<double> res;
-  for(int k = 0; k < lines.size(); ++k){
-    //@comment find far points
-    double slope, intercept;
-    vec2 max, min;
-    if(lines[k].first.x - lines[k].second.x == 0){
-      max = vec2(lines[k].first.x,  upper_y);
-      min = vec2(lines[k].first.x,  -upper_y);
-    }else{
-      slope = (lines[k].first.y - lines[k].second.y)/(lines[k].first.x - lines[k].second.x);
-      intercept = lines[k].first.y - slope*lines[k].first.x;
-      max = vec2(upper_x,  slope*upper_x+intercept);
-      min= vec2(-upper_x,  slope*-upper_x+intercept);
-    }
+  res.reserve(lines.size());
+
+  for(int k = 0; k < lines.size(); ++k)
+  {
+    //@comment find far points to create a segment
+    vec2 dir = normalize(lines[k].second - lines[k].first);
+
+    const int scale = 100000;
+    vec2 end = dir * scale  + lines[k].first;
+    vec2 start = dir * -scale + lines[k].first;
 
     //@comment find two intersections
-    int np, size = convex.size();
-    vector<vec2> cConvex;
-    vec2 tmp;
-    bool isIntersec = false;
+    vec2 segment = normalize(end - start);
+    vector<vec2> cutConvex;
+    cutConvex.reserve(convex.size());
+
     //@comment For detection second inter.occurs last segment, loop one more
-    for(int i = 0; i < size; ++i){
-      if(isIntersec){
-        cConvex.push_back(convex[i]);
+    const int size = convex.size();
+    for(int i = 0; i < size; ++i)
+    {
+      vec2 tmp = normalize(convex[i] - start);
+
+      //@comment determine if i-th vertex is on left-hand side by edge and cutting segment
+      if(cross(segment, tmp) >= 0)
+      {
+        cutConvex.push_back(convex[i]);
       }
-      if(intersectLL(convex[i], convex[(i+1)%size], min, max)){
-        tmp = findCrossPoint(convex[i], convex[(i+1)%size], min, max);
+
+      //@comment check if an intersection occurs with cutting segment
+      if(intersectLL(convex[i], convex[(i+1)%size], start, end))
+      {
+        vec2 tmp = findCrossPoint(convex[i], convex[(i+1)%size], start, end);
+        
         //@comment avoid miss judge that the same point is intersection
-        if(tmp == convex[(i+1)%size]) continue;
-        isIntersec = !isIntersec;
-        np = (i+1)%size;
-        //@comment avoid miss judge that the same point is intersection
-        if(cConvex.size() > 0)
-          if(tmp == cConvex.back())
-            continue;
-        cConvex.push_back(tmp);
+        if(tmp == convex[i] || tmp == convex[(i+1)%size]) 
+        {
+          continue;
+        }
+
+        cutConvex.push_back(tmp);
       }
     }
 
-    //@comment no intersections
-    if(cConvex.size() == 0){
-      res.push_back(0.0);
-      continue;
-    }
-    //@comment one intersection
-    if(isIntersec){
-     vec2 a = cConvex[1] - lines[k].first;
-     vec2 b = lines[k].second - lines[k].first;
-     res.push_back(cross(b, a) > 0 ? findConvexArea(convex) : 0.0);
-     continue;
-    }
-
-    //@comment determine if the area is on left-side
-    vec2 base = lines[k].second - lines[k].first;
-    bool isLeft;
-    double cp = cross(base, convex[np]-cConvex.back());
-    if(cp == 0){isLeft = dot(base, convex[np]-cConvex.back()) > 0;}
-    else{isLeft= cp < 0;}
-
-    if(isLeft){res.push_back(findConvexArea(cConvex));}
-    else{res.push_back(findConvexArea(convex)-findConvexArea(cConvex));}
+    res.push_back(findConvexArea(cutConvex));
   }
+
   return res;
 }
 
