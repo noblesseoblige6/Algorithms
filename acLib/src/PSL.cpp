@@ -3,13 +3,13 @@
 #include <algorithm>
 #include <iterator>
 
-#include "Utility.h"
+#include "Util.h"
 
 namespace acLib
 {
     namespace psl
     {
-        using namespace acLib::utility;
+        using namespace acLib::util;
 
         PSL::PSL()
         {
@@ -19,6 +19,19 @@ namespace acLib
         PSL::~PSL()
         {
         }
+
+        double PSL::PDFSolidAngleToArea(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal)
+        {
+            const Vec3 vector = nowPoint - nextPoint;
+            return pdf * Vec::dot(Vec::normalize(vector), nextNormal) / vector.normSq();
+        }
+
+        double PSL::PDFAreaToSolidAngle(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal)
+        {
+            const Vec3 vector = nowPoint - nextPoint;
+            return pdf * vector.normSq() / Vec::dot(Vec::normalize(vector), nextNormal);
+        }
+
 
         // ProbabilityDensity1D Class
         ProbabilityDensity1D::ProbabilityDensity1D(const vector<double>& func)
@@ -62,7 +75,7 @@ namespace acLib
 
             const int offset = max(0, (int)(itr - m_cumulativeDensity.begin()) - 1);
 
-            double du = MathUtility::Lerp(val, m_cumulativeDensity[offset], m_cumulativeDensity[offset + 1]);
+            double du = MathUtil::Lerp(val, m_cumulativeDensity[offset], m_cumulativeDensity[offset + 1]);
 
             if (pdf)
             {
@@ -80,7 +93,7 @@ namespace acLib
 
             const int offset = max(0, (int)(itr - m_cumulativeDensity.begin()));
 
-            double du = MathUtility::Lerp(val, m_cumulativeDensity[offset], m_cumulativeDensity[offset + 1]);
+            double du = MathUtil::Lerp(val, m_cumulativeDensity[offset], m_cumulativeDensity[offset + 1]);
 
             if (pdf)
             {
@@ -134,7 +147,7 @@ namespace acLib
 
             uv.y = m_marginalDensity.SampleContinuous(val.y, &vPdf);
 
-            const int v = (int)MathUtility::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize() - 1);
+            const int v = (int)MathUtil::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize() - 1);
             uv.x = m_conditinalDensity[v].SampleContinuous(val.x, &uPdf);
 
             //@comment each probability is independent
@@ -146,8 +159,8 @@ namespace acLib
         // @comment find conditional probability density
         double ProbabilityDensity2D::FindConditinalPdf(const Vec2& uv) const
         {
-            const int x = MathUtility::Clamp((int)(uv.x * m_conditinalDensity[0].GetFuncSize()), 0, m_conditinalDensity[0].GetFuncSize() - 1);
-            const int y = MathUtility::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize()-1);
+            const int x = MathUtil::Clamp((int)(uv.x * m_conditinalDensity[0].GetFuncSize()), 0, m_conditinalDensity[0].GetFuncSize() - 1);
+            const int y = MathUtil::Clamp((int)(uv.y * m_marginalDensity.GetFuncSize()), 0, m_marginalDensity.GetFuncSize()-1);
 
             #if 0
             const double denominator = m_conditinalDensity[y].GetFuncIntegrated() * m_marginalDensity.GetFuncIntegrated();

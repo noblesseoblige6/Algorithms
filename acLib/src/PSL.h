@@ -16,6 +16,8 @@ namespace acLib
         public:
             PSL();
             ~PSL();
+            static double PDFSolidAngleToArea(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal);
+            static double PDFAreaToSolidAngle(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal);
         };
 
         class ProbabilityDensity1D
