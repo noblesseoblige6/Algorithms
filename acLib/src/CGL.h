@@ -253,16 +253,18 @@ namespace acLib
                 return true;
             }
 
-            static double GeometoryTerm(const Vec3& p1, const Vec3& p2, const Vec3& n1, const Vec3& n2)
+            static double GeometoryTerm(const Vec3& point1, const Vec3& point2, const Vec3& normal1, const Vec3& normal2)
             {
-                Vec dir = p2 - p1;
+                Vec dir = point2 - point1;
 
-                double rSq = dir.normSq();
-                rSq = rSq <= kEps ? kEps : rSq;
+                const double rSq = dir.normSq();
+                if(rSq == 0.0)
+                {
+                    return 0.0;
+                }
 
                 dir.normalized();
-
-                return Vec3::dot(n1, dir)*Vec3::dot(n2, -dir) / rSq;
+                return (std::max(Vec3::dot(normal1, dir), 0.0)*std::max(Vec3::dot(normal2, -dir), 0.0)) / rSq;
             }
 
             static Vec3 RotateX(const Vec3& vec, const double deg)
