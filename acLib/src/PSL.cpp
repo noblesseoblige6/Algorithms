@@ -23,13 +23,13 @@ namespace acLib
         double PSL::PDFSolidAngleToArea(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal)
         {
             const Vec3 vector = nowPoint - nextPoint;
-            return pdf * Vec::dot(Vec::normalize(vector), nextNormal) / vector.normSq();
+            return pdf * std::max(Vec::dot(Vec::normalize(vector), nextNormal), 0.0) / vector.normSq();
         }
 
         double PSL::PDFAreaToSolidAngle(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal)
         {
             const Vec3 vector = nowPoint - nextPoint;
-            return pdf * vector.normSq() / Vec::dot(Vec::normalize(vector), nextNormal);
+            return pdf * vector.normSq() / std::max(Vec::dot(Vec::normalize(vector), nextNormal), 0.0);
         }
 
 
