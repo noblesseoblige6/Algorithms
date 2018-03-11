@@ -14,12 +14,12 @@ return sqrt(a.x*a.x + a.y*a.y);
 
 double dot(Point a, Point b)
 {
-  return a.x*b.x + a.y*b.y; 
+  return a.x*b.x + a.y*b.y;
 }
 
 double cross_z(Point a, Point b)
 {
-  return a.x*b.y - a.y*b.x; 
+  return a.x*b.y - a.y*b.x;
 }
 
 int judge_wise(Point p0,Point p1,Point p2)
@@ -40,7 +40,7 @@ int judge_wise(Point p0,Point p1,Point p2)
     else{return 5;}
     }
   }
-} 
+}
 
 int main(){
   Point p1;
@@ -57,7 +57,7 @@ int main(){
     p3.push_back(tmp);
   }
   for(int i = 0; i < count; i++){
-    int res = judge_wise(p1, p2, p3[i]); 
+    int res = judge_wise(p1, p2, p3[i]);
     switch(res){
       case 1:
         cout<<"COUNTER_CLOCKWISE"<<endl;

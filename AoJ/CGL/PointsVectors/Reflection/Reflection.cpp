@@ -31,7 +31,7 @@ Point normalize(Point a)
 
 double dot(Point a, Point b)
 {
-  return a.x*b.x + a.y*b.y; 
+  return a.x*b.x + a.y*b.y;
 }
 
 Point reflect(Point p0,Point p1,Point p2)
@@ -64,8 +64,8 @@ int main(){
     p3.push_back(tmp);
   }
   for(int i = 0; i < count; i++){
-    Point res = reflect(p1, p2, p3[i]); 
-    cout<<endl<<fixed<<setprecision(8)<<res.x<<" "<<res.y<<endl; 
+    Point res = reflect(p1, p2, p3[i]);
+    cout<<endl<<fixed<<setprecision(8)<<res.x<<" "<<res.y<<endl;
   }
   return 0;
 }

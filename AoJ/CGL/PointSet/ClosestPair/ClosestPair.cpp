@@ -63,7 +63,7 @@ bool ascendy(const vec2& a, const vec2& b)
   return a.y > b.y;
 }
 
-bool descendy(const vec2& a,const vec2& b) 
+bool descendy(const vec2& a,const vec2& b)
 {
   if(a.y == b.y){return a.x < b.x;}
   return a.y < b.y;
@@ -75,7 +75,7 @@ bool ascendx(const vec2& a, const vec2& b)
   return a.x > b.x;
 }
 
-bool descendx(const vec2& a,const vec2& b) 
+bool descendx(const vec2& a,const vec2& b)
 {
   if(a.x == b.x){return a.y < b.y;}
   return a.x < b.x;
@@ -109,7 +109,7 @@ vec2 normalize(vec2 a)
 
 double dot(vec2 a, vec2 b)
 {
-  return a.x*b.x + a.y*b.y; 
+  return a.x*b.x + a.y*b.y;
 }
 
 double cross(vec2 a, vec2 b)
@@ -140,7 +140,7 @@ vec2 past(vector<vec2>& vec, int idx)
 bool intersectLP(vec2 a, vec2 b, vec2 p)
 {
   if(a == p || b == p){return true;}
-  return cross(b - a, p - a) == 0 
+  return cross(b - a, p - a) == 0
     && norm(b-a) >= norm(p-a)
     && dot(b-a, p-a) > 0;
 }
@@ -149,7 +149,7 @@ int intersectLL(vec2 p1, vec2 p2, vec2 p3, vec2 p4)
   vec2 line1 = p2 - p1, line2 = p4 - p3;
   if(intersectLP(p1, p2, p3) || intersectLP(p1, p2, p4)){return 1;}
   else if(intersectLP(p3, p4, p1) || intersectLP(p3, p4, p2)){return 2;}
-  else if((cross(line1, p3 - p1)*cross(line1, p4 - p1) < 0) && 
+  else if((cross(line1, p3 - p1)*cross(line1, p4 - p1) < 0) &&
       (cross(line2, p1 - p3)*cross(line2, p2 - p3) < 0)){return 3;}
   else{return 0;}
 }
