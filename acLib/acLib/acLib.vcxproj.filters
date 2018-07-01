@@ -15,25 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CGL.h">
+    <ClInclude Include="..\include\CGL.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Vec.h">
+    <ClInclude Include="..\include\Constant.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Constant.h">
+    <ClInclude Include="..\include\Mat.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Mat.h">
+    <ClInclude Include="..\include\PSL.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\PSL.h">
+    <ClInclude Include="..\include\Segment.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Util.h">
+    <ClInclude Include="..\include\Util.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Segment.h">
+    <ClInclude Include="..\include\Vec.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
