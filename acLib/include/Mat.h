@@ -90,7 +90,11 @@ namespace acLib
         public:
             static Mat44 IDENTITY;
             static Mat44 ZERO;
+        public:
+            static Mat44 CreateLookAt( const Vec3& eye, const Vec3& lookAt, const Vec3& up );
+            static Mat44 CreatePerspectiveFieldOfView( const double radian, const double aspect, const double near, const double far );
 
+        public:
             Mat44();
             Mat44(const double* row0, const double* row1, const double* row2, const double* row3);
             Mat44(const Vec4& row0, const Vec4& row1, const Vec4& row2, const Vec4& row3);

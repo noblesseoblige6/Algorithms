@@ -698,3 +698,50 @@ Mat44 Mat44::ZERO = Mat44(0.0, 0.0, 0.0, 0.0,
                           0.0, 0.0, 0.0, 0.0,
                           0.0, 0.0, 0.0, 0.0,
                           0.0, 0.0, 0.0, 0.0);
+
+Mat44 Mat44::CreateLookAt( const Vec3& eye, const Vec3& lookAt, const Vec3& up )
+{
+    Vec3 x, y, z;
+
+    z = eye - lookAt ;
+    x = Vec3::cross( up, z );
+    y = Vec3::cross( z, x );
+
+    x = x.normalized();
+    y = y.normalized();
+    z = z.normalized();
+
+    double tx, ty, tz;
+    tx = Vec3::dot( eye, x );
+    ty = Vec3::dot( eye, y );
+    tz = Vec3::dot( eye, z );
+
+    Mat44 mat = Mat44::IDENTITY;
+
+    mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
+    mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
+    mat.m[2][0] = z.x;  mat.m[2][1] = z.y;  mat.m[2][2] = z.z;
+    mat.m[3][0] = tx; mat.m[3][1] = ty; mat.m[3][2] = tz;
+
+    return mat;
+}
+
+Mat44 Mat44::CreatePerspectiveFieldOfView( const double radian, const double aspect, const double near, const double far )
+{
+    Mat44 mat = Mat44::IDENTITY;
+
+    double t = 1.0/tan( radian*0.5 );
+    double dis = far - near;
+
+    mat.m[0][0] = aspect * t;
+
+    mat.m[1][1] = t;
+
+    mat.m[2][2] = far/dis;
+    mat.m[2][3] = 1.0;
+
+    mat.m[3][3] = 0.0;
+    mat.m[3][2] = -(near*far)/dis;
+
+    return mat;
+}
