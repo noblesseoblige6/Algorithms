@@ -36,6 +36,9 @@
     <ClInclude Include="..\include\Vec.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\acLib_PCH.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -50,10 +53,10 @@
     <ClCompile Include="..\src\PSL.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Util .cpp">
+    <ClCompile Include="..\src\Segment.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Segment.cpp">
+    <ClCompile Include="..\src\acLib_PCH.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

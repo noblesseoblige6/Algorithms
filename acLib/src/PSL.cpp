@@ -1,15 +1,9 @@
-#include "PSL.h"
-
-#include <algorithm>
-#include <iterator>
-
-#include "Util.h"
-
 namespace acLib
 {
     namespace psl
     {
-        using namespace acLib::util;
+        using namespace util;
+        using namespace vec;
 
         PSL::PSL()
         {
@@ -23,13 +17,13 @@ namespace acLib
         double PSL::PDFSolidAngleToArea(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal)
         {
             const Vec3 vector = nowPoint - nextPoint;
-            return pdf * std::max(Vec::dot(Vec::normalize(vector), nextNormal), 0.0) / vector.normSq();
+            return pdf * std::max( Vec3::dot( Vec3::normalize(vector), nextNormal), 0.0) / vector.normSq();
         }
 
         double PSL::PDFAreaToSolidAngle(const double pdf, const Vec3& nowPoint, const Vec3& nextPoint, const Vec3& nextNormal)
         {
             const Vec3 vector = nowPoint - nextPoint;
-            return pdf * vector.normSq() / std::max(Vec::dot(Vec::normalize(vector), nextNormal), 0.0);
+            return pdf * vector.normSq() / std::max( Vec3::dot( Vec3::normalize(vector), nextNormal), 0.0);
         }
 
 

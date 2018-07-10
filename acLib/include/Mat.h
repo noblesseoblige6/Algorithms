@@ -1,79 +1,71 @@
 #pragma once
-#include <iostream>
-#include <cmath>
 
 namespace acLib
 {
-    namespace vec
-    {
-        struct Vec2;
-        struct Vec3;
-        struct Vec4;
-    }
+    using namespace std;
+    using namespace vec;
 
     namespace mat
     {
-        using namespace std;
-        using namespace acLib::vec;
-
-        struct Mat33
+        template<typename T>
+        struct mat33
         {
         public:
-            static Mat33 IDENTITY;
-            static Mat33 ZERO;
+            static mat33 IDENTITY;
+            static mat33 ZERO;
 
-            Mat33();
-            Mat33(const double* row0, const double* row1, const double* row2);
-            Mat33(const Vec3& row0, const Vec3& row1, const Vec3& row2);
-            Mat33(double m00, double m01, double m02,
-                double m10, double m11, double m12,
-                double m20, double m21, double m22);
-            Mat33(const Mat33& mat);
-            ~Mat33();
+            mat33();
+            mat33(const T* row0, const T* row1, const T* row2);
+            mat33(const vec3<T>& row0, const vec3<T>& row1, const vec3<T>& row2);
+            mat33(T m00, T m01, T m02,
+                  T m10, T m11, T m12,
+                  T m20, T m21, T m22);
+            mat33(const mat33& mat);
+            ~mat33();
 
-            Mat33 operator+(const double& v) const;
-            Mat33 operator+(const Mat33& mat) const;
-            Mat33 operator-(const double& v) const;
-            Mat33 operator-(const Mat33& mat) const;
-            Mat33 operator*(const double s) const;
-            Mat33 operator/(const double s) const;
+            mat33 operator+(const T& v) const;
+            mat33 operator+(const mat33& mat) const;
+            mat33 operator-(const T& v) const;
+            mat33 operator-(const mat33& mat) const;
+            mat33 operator*(const T s) const;
+            mat33 operator/(const T s) const;
 
-            const Mat33& operator=(const Mat33& mat);
+            const mat33& operator=(const mat33& mat);
 
-            bool operator==(const Mat33& mat) const;
-            bool operator!=(const Mat33& mat) const;
+            bool operator==(const mat33& mat) const;
+            bool operator!=(const mat33& mat) const;
 
-            Mat33 operator-() const;
+            mat33 operator-() const;
 
-            double Determinant() const;
-            Mat33 Inverse();
+            T Determinant() const;
+            mat33 Inverse();
 
-            Vec3 GetRow(const int row) const;
-            Vec3 GetColumn(const int column) const;
-            double GetElement(const int row, const int column) const;
+            vec3<T> GetRow(const int row) const;
+            vec3<T> GetColumn(const int column) const;
+            T GetElement(const int row, const int column) const;
 
-            friend Mat33 operator+ (const double s, const Mat33& mat)
+            friend mat33 operator+ (const T s, const mat33& mat)
             {
-                Mat33 res(mat);
+                mat33 res(mat);
                 res = res + s;
                 return res;
             }
 
-            friend Mat33 operator- (const double s, const Mat33& mat)
+            friend mat33 operator- (const T s, const mat33& mat)
             {
-                Mat33 res(mat);
+                mat33 res(mat);
                 res = res - s;
                 return res;
             }
 
-            friend Mat33 operator* (const double s, const Mat33& mat)
+            friend mat33 operator* (const T s, const mat33& mat)
             {
-                Mat33 res(mat);
+                mat33 res(mat);
                 res = res * s;
                 return res;
             }
 
-            friend ostream& operator<<(ostream& os, const Mat33& mat)
+            friend ostream& operator<<(ostream& os, const mat33& mat)
             {
                 os << mat.m[0][0] << " " << mat.m[0][1] << " " << mat.m[0][2] << endl;
                 os << mat.m[1][0] << " " << mat.m[1][1] << " " << mat.m[1][2] << endl;
@@ -81,73 +73,75 @@ namespace acLib
 
                 return os;
             }
+
         public:
-            double m[3][3];
+            T m[3][3];
         };
 
-        struct Mat44
+        template<typename T>
+        struct mat44
         {
         public:
-            static Mat44 IDENTITY;
-            static Mat44 ZERO;
+            static mat44 IDENTITY;
+            static mat44 ZERO;
         public:
-            static Mat44 CreateLookAt( const Vec3& eye, const Vec3& lookAt, const Vec3& up );
-            static Mat44 CreatePerspectiveFieldOfView( const double radian, const double aspect, const double near, const double far );
+            static mat44<T> CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up );
+            static mat44<double> CreatePerspectiveFieldOfView( const T radian, const T aspect, const T near, const T far );
 
         public:
-            Mat44();
-            Mat44(const double* row0, const double* row1, const double* row2, const double* row3);
-            Mat44(const Vec4& row0, const Vec4& row1, const Vec4& row2, const Vec4& row3);
-            Mat44(double m00, double m01, double m02, double m03,
-                  double m10, double m11, double m12, double m13,
-                  double m20, double m21, double m22, double m23,
-                  double m30, double m31, double m32, double m33);
-            Mat44(const Mat44& mat);
-            ~Mat44();
+            mat44();
+            mat44(const T* row0, const T* row1, const T* row2, const T* row3);
+            mat44(const vec4<T>& row0, const vec4<T>& row1, const vec4<T>& row2, const vec4<T>& row3);
+            mat44(T m00, T m01, T m02, T m03,
+                  T m10, T m11, T m12, T m13,
+                  T m20, T m21, T m22, T m23,
+                  T m30, T m31, T m32, T m33);
+            mat44(const mat44& mat);
+            ~mat44();
 
-            Mat44 operator+(const double& v) const;
-            Mat44 operator+(const Mat44& mat) const;
-            Mat44 operator-(const double& v) const;
-            Mat44 operator-(const Mat44& mat) const;
-            Mat44 operator*(const double s) const;
-            Mat44 operator/(const double s) const;
+            mat44 operator+(const T& v) const;
+            mat44 operator+(const mat44& mat) const;
+            mat44 operator-(const T& v) const;
+            mat44 operator-(const mat44& mat) const;
+            mat44 operator*(const T s) const;
+            mat44 operator/(const T s) const;
 
-            const Mat44& operator=(const Mat44& mat);
+            const mat44& operator=(const mat44& mat);
 
-            bool operator==(const Mat44& mat) const;
-            bool operator!=(const Mat44& mat) const;
+            bool operator==(const mat44& mat) const;
+            bool operator!=(const mat44& mat) const;
 
-            Mat44 operator-() const;
+            mat44 operator-() const;
 
             double Determinant() const;
-            Mat44 Inverse();
+            mat44<double> Inverse();
 
-            Vec4 GetRow(const int row) const;
-            Vec4 GetColumn(const int column) const;
-            double GetElement(const int row, const int column) const;
+            vec4<T> GetRow(const int row) const;
+            vec4<T> GetColumn(const int column) const;
+            T GetElement(const int row, const int column) const;
 
-            friend Mat44 operator+ (const double s, const Mat44& mat)
+            friend mat44 operator+ (const T s, const mat44& mat)
             {
-                Mat44 res(mat);
+                mat44 res(mat);
                 res = res + s;
                 return res;
             }
 
-            friend Mat44 operator- (const double s, const Mat44& mat)
+            friend mat44 operator- (const T s, const mat44& mat)
             {
-                Mat44 res(mat);
+                mat44 res(mat);
                 res = res - s;
                 return res;
             }
 
-            friend Mat44 operator* (const double s, const Mat44& mat)
+            friend mat44 operator* (const T s, const mat44& mat)
             {
-                Mat44 res(mat);
+                mat44 res(mat);
                 res = res * s;
                 return res;
             }
 
-            friend ostream& operator<<(ostream& os, const Mat44& mat)
+            friend ostream& operator<<(ostream& os, const mat44& mat)
             {
                 os << mat.m[0][0] << " " << mat.m[0][1] << " " << mat.m[0][2] << " " << mat.m[0][3] << endl;
                 os << mat.m[1][0] << " " << mat.m[1][1] << " " << mat.m[1][2] << " " << mat.m[1][3] << endl;
@@ -156,8 +150,19 @@ namespace acLib
 
                 return os;
             }
+
         public:
-            double m[4][4];
+            T m[4][4];
         };
     }
 }
+
+typedef acLib::mat::mat33<int>  Mat33i;
+typedef acLib::mat::mat33<float>  Mat33f;
+typedef acLib::mat::mat33<double> Mat33d;
+typedef acLib::mat::mat33<double> Mat33;
+
+typedef acLib::mat::mat44<int>  Mat44i;
+typedef acLib::mat::mat44<float>  Mat44f;
+typedef acLib::mat::mat44<double> Mat44d;
+typedef acLib::mat::mat44<double> Mat44;

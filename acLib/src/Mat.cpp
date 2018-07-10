@@ -1,747 +1,824 @@
-#include "Mat.h"
-#include "Vec.h"
-
-using namespace acLib::mat;
-using namespace acLib::vec;
-
-Mat33::Mat33()
+namespace acLib
 {
-    *this = Mat33::IDENTITY;
-}
+    using namespace vec;
 
-Mat33::Mat33(const double* row0, const double* row1, const double* row2)
-{
-    m[0][0] = row0[0];
-    m[0][1] = row0[1];
-    m[0][2] = row0[2];
-
-    m[1][0] = row1[0];
-    m[1][1] = row1[1];
-    m[1][2] = row1[2];
-
-    m[2][0] = row2[0];
-    m[2][1] = row2[1];
-    m[2][2] = row2[2];
-}
-
-Mat33::Mat33(const Vec3& row0, const Vec3& row1, const Vec3& row2)
-{
-    m[0][0] = row0.x;
-    m[0][1] = row0.y;
-    m[0][2] = row0.z;
-
-    m[1][0] = row1.x;
-    m[1][1] = row1.y;
-    m[1][2] = row1.z;
-
-    m[2][0] = row2.x;
-    m[2][1] = row2.y;
-    m[2][2] = row2.z;
-}
-
-Mat33::Mat33(double m00, double m01, double m02,
-             double m10, double m11, double m12,
-             double m20, double m21, double m22)
-{
-    m[0][0] = m00;
-    m[0][1] = m01;
-    m[0][2] = m02;
-
-    m[1][0] = m10;
-    m[1][1] = m11;
-    m[1][2] = m12;
-
-    m[2][0] = m20;
-    m[2][1] = m21;
-    m[2][2] = m22;
-}
-
-Mat33::Mat33(const Mat33& mat)
-{
-    *this = mat;
-}
-
-Mat33::~Mat33()
-{}
-
-const Mat33& Mat33::operator=(const Mat33& mat)
-{
-    m[0][0] = mat.m[0][0];
-    m[0][1] = mat.m[0][1];
-    m[0][2] = mat.m[0][2];
-
-    m[1][0] = mat.m[1][0];
-    m[1][1] = mat.m[1][1];
-    m[1][2] = mat.m[1][2];
-
-    m[2][0] = mat.m[2][0];
-    m[2][1] = mat.m[2][1];
-    m[2][2] = mat.m[2][2];
-
-    return *this;
-}
-
-Mat33 Mat33::operator+(const double& v) const
-{
-    Mat33 res;
-    res.m[0][0] = m[0][0] + v;
-    res.m[0][1] = m[0][1] + v;
-    res.m[0][2] = m[0][2] + v;
-
-    res.m[1][0] = m[1][0] + v;
-    res.m[1][1] = m[1][1] + v;
-    res.m[1][2] = m[1][2] + v;
-
-    res.m[2][0] = m[2][0] + v;
-    res.m[2][1] = m[2][1] + v;
-    res.m[2][2] = m[2][2] + v;
-
-    return res;
-}
-
-Mat33 Mat33::operator+(const Mat33& mat) const
-{
-    Mat33 res;
-    res.m[0][0] = m[0][0] + mat.m[0][0];
-    res.m[0][1] = m[0][1] + mat.m[0][1];
-    res.m[0][2] = m[0][2] + mat.m[0][2];
-
-    res.m[1][0] = m[1][0] + mat.m[1][0];
-    res.m[1][1] = m[1][1] + mat.m[1][1];
-    res.m[1][2] = m[1][2] + mat.m[1][2];
-
-    res.m[2][0] = m[2][0] + mat.m[2][0];
-    res.m[2][1] = m[2][1] + mat.m[2][1];
-    res.m[2][2] = m[2][2] + mat.m[2][2];
-
-    return res;
-}
-
-Mat33 Mat33::operator-(const double& v) const
-{
-    Mat33 res;
-    res.m[0][0] = m[0][0] - v;
-    res.m[0][1] = m[0][1] - v;
-    res.m[0][2] = m[0][2] - v;
-
-    res.m[1][0] = m[1][0] - v;
-    res.m[1][1] = m[1][1] - v;
-    res.m[1][2] = m[1][2] - v;
-
-    res.m[2][0] = m[2][0] - v;
-    res.m[2][1] = m[2][1] - v;
-    res.m[2][2] = m[2][2] - v;
-
-    return res;
-}
-
-Mat33 Mat33::operator-(const Mat33& mat) const
-{
-    Mat33 res;
-    res.m[0][0] = m[0][0] - mat.m[0][0];
-    res.m[0][1] = m[0][1] - mat.m[0][1];
-    res.m[0][2] = m[0][2] - mat.m[0][2];
-
-    res.m[1][0] = m[1][0] - mat.m[1][0];
-    res.m[1][1] = m[1][1] - mat.m[1][1];
-    res.m[1][2] = m[1][2] - mat.m[1][2];
-
-    res.m[2][0] = m[2][0] - mat.m[2][0];
-    res.m[2][1] = m[2][1] - mat.m[2][1];
-    res.m[2][2] = m[2][2] - mat.m[2][2];
-
-    return res;
-}
-
-Mat33 Mat33::operator*(const double s) const
-{
-    Mat33 res;
-    res.m[0][0] = m[0][0] * s;
-    res.m[0][1] = m[0][1] * s;
-    res.m[0][2] = m[0][2] * s;
-
-    res.m[1][0] = m[1][0] * s;
-    res.m[1][1] = m[1][1] * s;
-    res.m[1][2] = m[1][2] * s;
-
-    res.m[2][0] = m[2][0] * s;
-    res.m[2][1] = m[2][1] * s;
-    res.m[2][2] = m[2][2] * s;
-
-    return res;
-}
-
-Mat33 Mat33::operator/(const double s) const
-{
-    Mat33 res;
-    res.m[0][0] = m[0][0] / s;
-    res.m[0][1] = m[0][1] / s;
-    res.m[0][2] = m[0][2] / s;
-
-    res.m[1][0] = m[1][0] / s;
-    res.m[1][1] = m[1][1] / s;
-    res.m[1][2] = m[1][2] / s;
-
-    res.m[2][0] = m[2][0] / s;
-    res.m[2][1] = m[2][1] / s;
-    res.m[2][2] = m[2][2] / s;
-
-    return res;
-}
-
-bool Mat33::operator==(const Mat33& mat) const
-{
-    return (m[0][0] == mat.m[0][0] && m[0][1] == mat.m[0][1] && m[0][2] == mat.m[0][2]) &&
-        (m[1][0] == mat.m[1][0] && m[1][1] == mat.m[1][1] && m[1][2] == mat.m[1][2]) &&
-        (m[2][0] == mat.m[2][0] && m[2][1] == mat.m[2][1] && m[2][2] == mat.m[2][2]);
-}
-
-bool Mat33::operator!=(const Mat33& mat) const
-{
-    return !(*this == mat);
-}
-
-Mat33 Mat33::operator-() const
-{
-    Mat33 res(*this);
-    res = -1.0 * res;
-    return res;
-}
-
-double Mat33::Determinant() const
-{
-    double det = m[0][0] * m[1][1] * m[2][2]
-               + m[0][1] * m[1][2] * m[2][0]
-               + m[0][2] * m[1][0] * m[2][1]
-               - m[0][2] * m[1][1] * m[2][0]
-               - m[0][1] * m[1][0] * m[2][2]
-               - m[0][0] * m[1][2] * m[2][1];
-
-    return det;
-}
-
-Mat33 Mat33::Inverse()
-{
-    Mat33 res;
-
-    double det = Determinant();
-    if (det == 0.0)
+    namespace mat
     {
-        return *this;
-    }
 
-    res.m[0][0] = (m[1][1] * m[2][2] - m[1][2] * m[2][1]) / det;
-    res.m[1][0] = (m[1][2] * m[2][0] - m[1][0] * m[2][2]) / det;
-    res.m[2][0] = (m[1][0] * m[2][1] - m[1][1] * m[2][0]) / det;
-
-    res.m[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) / det;
-    res.m[1][1] = (m[0][0] * m[2][2] - m[0][2] * m[2][0]) / det;
-    res.m[2][1] = (m[0][1] * m[2][0] - m[0][0] * m[2][1]) / det;
-
-    res.m[0][2] = (m[0][1] * m[1][2] - m[0][2] * m[1][1]) / det;
-    res.m[1][2] = (m[0][2] * m[1][0] - m[0][0] * m[1][2]) / det;
-    res.m[2][2] = (m[0][0] * m[1][1] - m[0][1] * m[1][0]) / det;
-
-    return res;
-}
-
-Vec3 Mat33::GetRow(const int row) const
-{
-    return Vec3(m[row][0], m[row][1], m[row][2]);
-}
-
-Vec3 Mat33::GetColumn(const int column) const
-{
-    return Vec3(m[0][column], m[1][column], m[2][column]);
-}
-
-double Mat33::GetElement(const int row, const int column) const
-{
-    return m[row][column];
-}
-
-Mat33 Mat33::IDENTITY = Mat33(1.0, 0.0, 0.0,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0);
-
-Mat33 Mat33::ZERO = Mat33(0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0);
-
-
-Mat44::Mat44()
-{
-    *this = Mat44::IDENTITY;
-}
-
-Mat44::Mat44(const double* row0, const double* row1, const double* row2, const double* row3)
-{
-    m[0][0] = row0[0];
-    m[0][1] = row0[1];
-    m[0][2] = row0[2];
-    m[0][3] = row0[3];
-
-    m[1][0] = row1[0];
-    m[1][1] = row1[1];
-    m[1][2] = row1[2];
-    m[1][3] = row1[3];
-
-    m[2][0] = row2[0];
-    m[2][1] = row2[1];
-    m[2][2] = row2[2];
-    m[2][3] = row2[3];
-
-    m[3][0] = row3[0];
-    m[3][1] = row3[1];
-    m[3][2] = row3[2];
-    m[3][3] = row3[3];
-}
-
-Mat44::Mat44(const Vec4& row0, const Vec4& row1, const Vec4& row2, const Vec4& row3)
-{
-    m[0][0] = row0.x;
-    m[0][1] = row0.y;
-    m[0][2] = row0.z;
-    m[0][3] = row0.w;
-
-    m[1][0] = row1.x;
-    m[1][1] = row1.y;
-    m[1][2] = row1.z;
-    m[1][3] = row1.w;
-
-    m[2][0] = row2.x;
-    m[2][1] = row2.y;
-    m[2][2] = row2.z;
-    m[2][3] = row2.w;
-
-    m[3][0] = row3.x;
-    m[3][1] = row3.y;
-    m[3][2] = row3.z;
-    m[3][3] = row3.w;
-}
-
-Mat44::Mat44(double m00, double m01, double m02, double m03,
-             double m10, double m11, double m12, double m13,
-             double m20, double m21, double m22, double m23,
-             double m30, double m31, double m32, double m33)
-{
-    m[0][0] = m00;
-    m[0][1] = m01;
-    m[0][2] = m02;
-    m[0][3] = m03;
-
-    m[1][0] = m10;
-    m[1][1] = m11;
-    m[1][2] = m12;
-    m[1][3] = m13;
-
-    m[2][0] = m20;
-    m[2][1] = m21;
-    m[2][2] = m22;
-    m[2][3] = m23;
-
-    m[3][0] = m30;
-    m[3][1] = m31;
-    m[3][2] = m32;
-    m[3][3] = m33;
-}
-
-Mat44::Mat44(const Mat44& mat)
-{
-    *this = mat;
-}
-
-Mat44::~Mat44()
-{}
-
-const Mat44& Mat44::operator=(const Mat44& mat)
-{
-    m[0][0] = mat.m[0][0];
-    m[0][1] = mat.m[0][1];
-    m[0][2] = mat.m[0][2];
-    m[0][3] = mat.m[0][3];
-
-    m[1][0] = mat.m[1][0];
-    m[1][1] = mat.m[1][1];
-    m[1][2] = mat.m[1][2];
-    m[1][3] = mat.m[1][3];
-
-    m[2][0] = mat.m[2][0];
-    m[2][1] = mat.m[2][1];
-    m[2][2] = mat.m[2][2];
-    m[2][3] = mat.m[2][3];
-
-    m[3][0] = mat.m[3][0];
-    m[3][1] = mat.m[3][1];
-    m[3][2] = mat.m[3][2];
-    m[3][3] = mat.m[3][3];
-
-    return *this;
-}
-
-Mat44 Mat44::operator+(const double& v) const
-{
-    Mat44 res;
-    res.m[0][0] = m[0][0] + v;
-    res.m[0][1] = m[0][1] + v;
-    res.m[0][2] = m[0][2] + v;
-    res.m[0][3] = m[0][3] + v;
-
-    res.m[1][0] = m[1][0] + v;
-    res.m[1][1] = m[1][1] + v;
-    res.m[1][2] = m[1][2] + v;
-    res.m[1][3] = m[1][3] + v;
-
-    res.m[2][0] = m[2][0] + v;
-    res.m[2][1] = m[2][1] + v;
-    res.m[2][2] = m[2][2] + v;
-    res.m[2][3] = m[2][3] + v;
-
-    res.m[3][0] = m[3][0] + v;
-    res.m[3][1] = m[3][1] + v;
-    res.m[3][2] = m[3][2] + v;
-    res.m[3][3] = m[3][3] + v;
-
-    return res;
-}
-
-Mat44 Mat44::operator+(const Mat44& mat) const
-{
-    Mat44 res;
-    res.m[0][0] = m[0][0] + mat.m[0][0];
-    res.m[0][1] = m[0][1] + mat.m[0][1];
-    res.m[0][2] = m[0][2] + mat.m[0][2];
-    res.m[0][3] = m[0][3] + mat.m[0][3];
-
-    res.m[1][0] = m[1][0] + mat.m[1][0];
-    res.m[1][1] = m[1][1] + mat.m[1][1];
-    res.m[1][2] = m[1][2] + mat.m[1][2];
-    res.m[1][3] = m[1][3] + mat.m[1][3];
-
-    res.m[2][0] = m[2][0] + mat.m[2][0];
-    res.m[2][1] = m[2][1] + mat.m[2][1];
-    res.m[2][2] = m[2][2] + mat.m[2][2];
-    res.m[2][3] = m[2][3] + mat.m[2][3];
-
-    res.m[3][0] = m[3][0] + mat.m[3][0];
-    res.m[3][1] = m[3][1] + mat.m[3][1];
-    res.m[3][2] = m[3][2] + mat.m[3][2];
-    res.m[3][3] = m[3][3] + mat.m[3][3];
-
-    return res;
-}
-
-Mat44 Mat44::operator-(const double& v) const
-{
-    Mat44 res;
-    res.m[0][0] = m[0][0] - v;
-    res.m[0][1] = m[0][1] - v;
-    res.m[0][2] = m[0][2] - v;
-    res.m[0][3] = m[0][3] - v;
-
-    res.m[1][0] = m[1][0] - v;
-    res.m[1][1] = m[1][1] - v;
-    res.m[1][2] = m[1][2] - v;
-    res.m[1][3] = m[1][3] - v;
-
-    res.m[2][0] = m[2][0] - v;
-    res.m[2][1] = m[2][1] - v;
-    res.m[2][2] = m[2][2] - v;
-    res.m[2][3] = m[2][3] - v;
-
-    res.m[3][0] = m[3][0] - v;
-    res.m[3][1] = m[3][1] - v;
-    res.m[3][2] = m[3][2] - v;
-    res.m[3][3] = m[3][3] - v;
-    return res;
-}
-
-Mat44 Mat44::operator-(const Mat44& mat) const
-{
-    Mat44 res;
-    res.m[0][0] = m[0][0] - mat.m[0][0];
-    res.m[0][1] = m[0][1] - mat.m[0][1];
-    res.m[0][2] = m[0][2] - mat.m[0][2];
-    res.m[0][3] = m[0][3] - mat.m[0][3];
-
-    res.m[1][0] = m[1][0] - mat.m[1][0];
-    res.m[1][1] = m[1][1] - mat.m[1][1];
-    res.m[1][2] = m[1][2] - mat.m[1][2];
-    res.m[1][3] = m[1][3] - mat.m[1][3];
-
-    res.m[2][0] = m[2][0] - mat.m[2][0];
-    res.m[2][1] = m[2][1] - mat.m[2][1];
-    res.m[2][2] = m[2][2] - mat.m[2][2];
-    res.m[2][3] = m[2][3] - mat.m[2][3];
-
-    res.m[3][0] = m[3][0] - mat.m[3][0];
-    res.m[3][1] = m[3][1] - mat.m[3][1];
-    res.m[3][2] = m[3][2] - mat.m[3][2];
-    res.m[3][3] = m[3][3] - mat.m[3][3];
-
-    return res;
-}
-
-Mat44 Mat44::operator*(const double s) const
-{
-    Mat44 res;
-    res.m[0][0] = m[0][0] * s;
-    res.m[0][1] = m[0][1] * s;
-    res.m[0][2] = m[0][2] * s;
-    res.m[0][3] = m[0][3] * s;
-
-    res.m[1][0] = m[1][0] * s;
-    res.m[1][1] = m[1][1] * s;
-    res.m[1][2] = m[1][2] * s;
-    res.m[1][3] = m[1][3] * s;
-
-    res.m[2][0] = m[2][0] * s;
-    res.m[2][1] = m[2][1] * s;
-    res.m[2][2] = m[2][2] * s;
-    res.m[2][3] = m[2][3] * s;
-
-    res.m[3][0] = m[3][0] * s;
-    res.m[3][1] = m[3][1] * s;
-    res.m[3][2] = m[3][2] * s;
-    res.m[3][3] = m[3][3] * s;
-
-    return res;
-}
-
-Mat44 Mat44::operator/(const double s) const
-{
-    Mat44 res;
-    res.m[0][0] = m[0][0] / s;
-    res.m[0][1] = m[0][1] / s;
-    res.m[0][2] = m[0][2] / s;
-    res.m[0][3] = m[0][3] / s;
-
-    res.m[1][0] = m[1][0] / s;
-    res.m[1][1] = m[1][1] / s;
-    res.m[1][2] = m[1][2] / s;
-    res.m[1][3] = m[1][3] / s;
-
-    res.m[2][0] = m[2][0] / s;
-    res.m[2][1] = m[2][1] / s;
-    res.m[2][2] = m[2][2] / s;
-    res.m[2][3] = m[2][3] / s;
-
-    res.m[3][0] = m[3][0] / s;
-    res.m[3][1] = m[3][1] / s;
-    res.m[3][2] = m[3][2] / s;
-    res.m[3][3] = m[3][3] / s;
-
-    return res;
-}
-
-bool Mat44::operator==(const Mat44& mat) const
-{
-    return (m[0][0] == mat.m[0][0] && m[0][1] == mat.m[0][1] && m[0][2] == mat.m[0][2] && m[0][3] == mat.m[0][3]) &&
-           (m[1][0] == mat.m[1][0] && m[1][1] == mat.m[1][1] && m[1][2] == mat.m[1][2] && m[1][3] == mat.m[1][3]) &&
-           (m[2][0] == mat.m[2][0] && m[2][1] == mat.m[2][1] && m[2][2] == mat.m[2][2] && m[2][3] == mat.m[2][3]) &&
-           (m[3][0] == mat.m[3][0] && m[3][1] == mat.m[3][1] && m[3][2] == mat.m[3][2] && m[3][3] == mat.m[3][3]);
-}
-
-bool Mat44::operator!=(const Mat44& mat) const
-{
-    return !(*this == mat);
-}
-
-Mat44 Mat44::operator-() const
-{
-    Mat44 res(*this);
-    res = -1.0 * res;
-    return res;
-}
-
-double Mat44::Determinant() const
-{
-    const Vec4& row0 = GetRow(0);
-    const Vec4& row1 = GetRow(1);
-    const Vec4& row2 = GetRow(2);
-    const Vec4& row3 = GetRow(3);
-
-    const Mat33 A0(Vec3(row1[1], row1[2], row1[3]), 
-                   Vec3(row2[1], row2[2], row2[3]), 
-                   Vec3(row3[1], row3[2], row3[3]));
-
-    const Mat33 A1(Vec3(row0[1], row0[2], row0[3]), 
-                   Vec3(row2[1], row2[2], row2[3]), 
-                   Vec3(row3[1], row3[2], row3[3]));
-
-    const Mat33 A2(Vec3(row0[1], row0[2], row0[3]), 
-                   Vec3(row1[1], row1[2], row1[3]), 
-                   Vec3(row3[1], row3[2], row3[3]));
-
-    const Mat33 A3(Vec3(row0[1], row0[2], row0[3]), 
-                   Vec3(row1[1], row1[2], row1[3]), 
-                   Vec3(row2[1], row2[2], row2[3]));
-
-    return m[0][0]*A0.Determinant() - m[1][0]* A1.Determinant() + m[2][0]* A2.Determinant() - m[3][0]* A3.Determinant();
-}
-
-Mat44 Mat44::Inverse()
-{
-    Mat44 res;
-
-    double det = Determinant();
-    if (det == 0.0)
-    {
-        cerr << "Waring: No Inverse Matrix" << endl;
-        return *this;
-    }
-
-    const Vec4& row0 = GetRow(0);
-    const Vec4& row1 = GetRow(1);
-    const Vec4& row2 = GetRow(2);
-    const Vec4& row3 = GetRow(3);
-
-    Mat33 M[4][4];
-    M[0][0] = Mat33(Vec3(row1[1], row1[2], row1[3]), 
-                    Vec3(row2[1], row2[2], row2[3]), 
-                    Vec3(row3[1], row3[2], row3[3]));
-
-    M[0][1] = Mat33(Vec3(row1[0], row1[2], row1[3]), 
-                    Vec3(row2[0], row2[2], row2[3]), 
-                    Vec3(row3[0], row3[2], row3[3]));
-
-    M[0][2] = Mat33(Vec3(row1[0], row1[1], row1[3]), 
-                    Vec3(row2[0], row2[1], row2[3]), 
-                    Vec3(row3[0], row3[1], row3[3]));
-
-    M[0][3] = Mat33(Vec3(row1[0], row1[1], row1[2]), 
-                    Vec3(row2[0], row2[1], row2[2]), 
-                    Vec3(row3[0], row3[1], row3[2]));
-    
-    M[1][0] = Mat33(Vec3(row0[1], row0[2], row0[3]), 
-                    Vec3(row2[1], row2[2], row2[3]), 
-                    Vec3(row3[1], row3[2], row3[3]));
-
-
-    M[1][1] = Mat33(Vec3(row0[0], row0[2], row0[3]), 
-                    Vec3(row2[0], row2[2], row2[3]), 
-                    Vec3(row3[0], row3[2], row3[3]));
-
-    M[1][2] = Mat33(Vec3(row0[0], row0[1], row0[3]), 
-                    Vec3(row2[0], row2[1], row2[3]), 
-                    Vec3(row3[0], row3[1], row3[3]));
-    
-    M[1][3] = Mat33(Vec3(row0[0], row0[1], row0[2]), 
-                    Vec3(row2[0], row2[1], row2[2]), 
-                    Vec3(row3[0], row3[1], row3[2]));
-
-
-    M[2][0] = Mat33(Vec3(row0[1], row0[2], row0[3]), 
-                    Vec3(row1[1], row1[2], row1[3]), 
-                    Vec3(row3[1], row3[2], row3[3]));
-
-    M[2][1] = Mat33(Vec3(row0[0], row0[2], row0[3]), 
-                    Vec3(row1[0], row1[2], row1[3]), 
-                    Vec3(row3[0], row3[2], row3[3]));
-    
-    M[2][2] = Mat33(Vec3(row0[0], row0[1], row0[3]), 
-                    Vec3(row1[0], row1[1], row1[3]), 
-                    Vec3(row3[0], row3[1], row3[3]));
-    
-    M[2][3] = Mat33(Vec3(row0[0], row0[1], row0[2]), 
-                    Vec3(row1[0], row1[1], row1[2]), 
-                    Vec3(row3[0], row3[1], row3[2]));
-    
-    M[3][0] = Mat33(Vec3(row0[1], row0[2], row0[3]), 
-                    Vec3(row1[1], row1[2], row1[3]), 
-                    Vec3(row2[1], row2[2], row2[3]));
-
-    M[3][1] = Mat33(Vec3(row0[0], row0[2], row0[3]), 
-                    Vec3(row1[0], row1[2], row1[3]), 
-                    Vec3(row2[0], row2[2], row2[3]));
-    
-    M[3][2] = Mat33(Vec3(row0[0], row0[1], row0[3]), 
-                    Vec3(row1[0], row1[1], row1[3]), 
-                    Vec3(row2[0], row2[1], row2[3]));
-    
-    M[3][3] = Mat33(Vec3(row0[0], row0[1], row0[2]), 
-                    Vec3(row1[0], row1[1], row1[2]), 
-                    Vec3(row2[0], row2[1], row2[2]));
-
-    for (int i = 0; i < 4; ++i)
-    {
-        for (int j = 0; j < 4; ++j)
+        template<typename T>
+        mat33<T>::mat33()
         {
-            res.m[i][j] = pow(-1, i + j) * M[j][i].Determinant() / det;
+            *this = mat33<T>::IDENTITY;
         }
+
+        template<typename T>
+        mat33<T>::mat33( const T* row0, const T* row1, const T* row2 )
+        {
+            m[0][0] = row0[0];
+            m[0][1] = row0[1];
+            m[0][2] = row0[2];
+
+            m[1][0] = row1[0];
+            m[1][1] = row1[1];
+            m[1][2] = row1[2];
+
+            m[2][0] = row2[0];
+            m[2][1] = row2[1];
+            m[2][2] = row2[2];
+        }
+
+        template<typename T>
+        mat33<T>::mat33( const vec3<T>& row0, const vec3<T>& row1, const vec3<T>& row2 )
+        {
+            m[0][0] = row0.x;
+            m[0][1] = row0.y;
+            m[0][2] = row0.z;
+
+            m[1][0] = row1.x;
+            m[1][1] = row1.y;
+            m[1][2] = row1.z;
+
+            m[2][0] = row2.x;
+            m[2][1] = row2.y;
+            m[2][2] = row2.z;
+        }
+
+        template<typename T>
+        mat33<T>::mat33( T m00, T m01, T m02,
+            T m10, T m11, T m12,
+            T m20, T m21, T m22 )
+        {
+            m[0][0] = m00;
+            m[0][1] = m01;
+            m[0][2] = m02;
+
+            m[1][0] = m10;
+            m[1][1] = m11;
+            m[1][2] = m12;
+
+            m[2][0] = m20;
+            m[2][1] = m21;
+            m[2][2] = m22;
+        }
+
+        template<typename T>
+        mat33<T>::mat33( const mat33<T>& mat )
+        {
+            *this = mat;
+        }
+
+        template<typename T>
+        mat33<T>::~mat33()
+        {
+        }
+
+        template<typename T>
+        const mat33<T>& mat33<T>::operator=( const mat33<T>& mat )
+        {
+            m[0][0] = mat.m[0][0];
+            m[0][1] = mat.m[0][1];
+            m[0][2] = mat.m[0][2];
+
+            m[1][0] = mat.m[1][0];
+            m[1][1] = mat.m[1][1];
+            m[1][2] = mat.m[1][2];
+
+            m[2][0] = mat.m[2][0];
+            m[2][1] = mat.m[2][1];
+            m[2][2] = mat.m[2][2];
+
+            return *this;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator+( const T& v ) const
+        {
+            mat33 res;
+            res.m[0][0] = m[0][0] + v;
+            res.m[0][1] = m[0][1] + v;
+            res.m[0][2] = m[0][2] + v;
+
+            res.m[1][0] = m[1][0] + v;
+            res.m[1][1] = m[1][1] + v;
+            res.m[1][2] = m[1][2] + v;
+
+            res.m[2][0] = m[2][0] + v;
+            res.m[2][1] = m[2][1] + v;
+            res.m[2][2] = m[2][2] + v;
+
+            return res;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator+( const mat33<T>& mat ) const
+        {
+            mat33 res;
+            res.m[0][0] = m[0][0] + mat.m[0][0];
+            res.m[0][1] = m[0][1] + mat.m[0][1];
+            res.m[0][2] = m[0][2] + mat.m[0][2];
+
+            res.m[1][0] = m[1][0] + mat.m[1][0];
+            res.m[1][1] = m[1][1] + mat.m[1][1];
+            res.m[1][2] = m[1][2] + mat.m[1][2];
+
+            res.m[2][0] = m[2][0] + mat.m[2][0];
+            res.m[2][1] = m[2][1] + mat.m[2][1];
+            res.m[2][2] = m[2][2] + mat.m[2][2];
+
+            return res;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator-( const T& v ) const
+        {
+            mat33 res;
+            res.m[0][0] = m[0][0] - v;
+            res.m[0][1] = m[0][1] - v;
+            res.m[0][2] = m[0][2] - v;
+
+            res.m[1][0] = m[1][0] - v;
+            res.m[1][1] = m[1][1] - v;
+            res.m[1][2] = m[1][2] - v;
+
+            res.m[2][0] = m[2][0] - v;
+            res.m[2][1] = m[2][1] - v;
+            res.m[2][2] = m[2][2] - v;
+
+            return res;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator-( const mat33<T>& mat ) const
+        {
+            mat33 res;
+            res.m[0][0] = m[0][0] - mat.m[0][0];
+            res.m[0][1] = m[0][1] - mat.m[0][1];
+            res.m[0][2] = m[0][2] - mat.m[0][2];
+
+            res.m[1][0] = m[1][0] - mat.m[1][0];
+            res.m[1][1] = m[1][1] - mat.m[1][1];
+            res.m[1][2] = m[1][2] - mat.m[1][2];
+
+            res.m[2][0] = m[2][0] - mat.m[2][0];
+            res.m[2][1] = m[2][1] - mat.m[2][1];
+            res.m[2][2] = m[2][2] - mat.m[2][2];
+
+            return res;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator*( const T s ) const
+        {
+            mat33 res;
+            res.m[0][0] = m[0][0] * s;
+            res.m[0][1] = m[0][1] * s;
+            res.m[0][2] = m[0][2] * s;
+
+            res.m[1][0] = m[1][0] * s;
+            res.m[1][1] = m[1][1] * s;
+            res.m[1][2] = m[1][2] * s;
+
+            res.m[2][0] = m[2][0] * s;
+            res.m[2][1] = m[2][1] * s;
+            res.m[2][2] = m[2][2] * s;
+
+            return res;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator/( const T s ) const
+        {
+            mat33 res;
+            res.m[0][0] = m[0][0] / s;
+            res.m[0][1] = m[0][1] / s;
+            res.m[0][2] = m[0][2] / s;
+
+            res.m[1][0] = m[1][0] / s;
+            res.m[1][1] = m[1][1] / s;
+            res.m[1][2] = m[1][2] / s;
+
+            res.m[2][0] = m[2][0] / s;
+            res.m[2][1] = m[2][1] / s;
+            res.m[2][2] = m[2][2] / s;
+
+            return res;
+        }
+
+        template<typename T>
+        bool mat33<T>::operator==( const mat33<T>& mat ) const
+        {
+            return (m[0][0] == mat.m[0][0] && m[0][1] == mat.m[0][1] && m[0][2] == mat.m[0][2]) &&
+                   (m[1][0] == mat.m[1][0] && m[1][1] == mat.m[1][1] && m[1][2] == mat.m[1][2]) &&
+                   (m[2][0] == mat.m[2][0] && m[2][1] == mat.m[2][1] && m[2][2] == mat.m[2][2]);
+        }
+
+        template<typename T>
+        bool mat33<T>::operator!=( const mat33<T>& mat ) const
+        {
+            return !(*this == mat);
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::operator-() const
+        {
+            mat33 res( *this );
+            res = -1 * res;
+            return res;
+        }
+
+        template<typename T>
+        T mat33<T>::Determinant() const
+        {
+            T det = m[0][0] * m[1][1] * m[2][2]
+                + m[0][1] * m[1][2] * m[2][0]
+                + m[0][2] * m[1][0] * m[2][1]
+                - m[0][2] * m[1][1] * m[2][0]
+                - m[0][1] * m[1][0] * m[2][2]
+                - m[0][0] * m[1][2] * m[2][1];
+
+            return det;
+        }
+
+        template<typename T>
+        mat33<T> mat33<T>::Inverse()
+        {
+            mat33 res;
+
+            T det = Determinant();
+            if (det == 0.0)
+            {
+                return *this;
+            }
+
+            res.m[0][0] = (m[1][1] * m[2][2] - m[1][2] * m[2][1]) / det;
+            res.m[1][0] = (m[1][2] * m[2][0] - m[1][0] * m[2][2]) / det;
+            res.m[2][0] = (m[1][0] * m[2][1] - m[1][1] * m[2][0]) / det;
+
+            res.m[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) / det;
+            res.m[1][1] = (m[0][0] * m[2][2] - m[0][2] * m[2][0]) / det;
+            res.m[2][1] = (m[0][1] * m[2][0] - m[0][0] * m[2][1]) / det;
+
+            res.m[0][2] = (m[0][1] * m[1][2] - m[0][2] * m[1][1]) / det;
+            res.m[1][2] = (m[0][2] * m[1][0] - m[0][0] * m[1][2]) / det;
+            res.m[2][2] = (m[0][0] * m[1][1] - m[0][1] * m[1][0]) / det;
+
+            return res;
+        }
+
+        template<typename T>
+        vec3<T> mat33<T>::GetRow( const int row ) const
+        {
+            return vec3<T>( m[row][0], m[row][1], m[row][2] );
+        }
+
+        template<typename T>
+        vec3<T> mat33<T>::GetColumn( const int column ) const
+        {
+            return vec3<T>( m[0][column], m[1][column], m[2][column] );
+        }
+
+        template<typename T>
+        T mat33<T>::GetElement( const int row, const int column ) const
+        {
+            return m[row][column];
+        }
+
+        mat33<int> mat33<int>::IDENTITY = mat33( 1, 0, 0,
+                                                 0, 1, 0,
+                                                 0, 0, 1 );
+        mat33<int> mat33<int>::ZERO = mat33( 0, 0, 0,
+                                             0, 0, 0,
+                                             0, 0, 0 );
+
+        template<typename T>
+        mat33<T> mat33<T>::IDENTITY = mat33( 1.0, 0.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0, 0.0, 1.0 );
+
+        template<typename T>
+        mat33<T> mat33<T>::ZERO = mat33( 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0 );
+
+        template mat33<int>;
+        template mat33<float>;
+        template mat33<double>;
+
+        template<typename T>
+        mat44<T>::mat44()
+        {
+            *this = mat44<T>::IDENTITY;
+        }
+
+        template<typename T>
+        mat44<T>::mat44( const T* row0, const T* row1, const T* row2, const T* row3 )
+        {
+            m[0][0] = row0[0];
+            m[0][1] = row0[1];
+            m[0][2] = row0[2];
+            m[0][3] = row0[3];
+
+            m[1][0] = row1[0];
+            m[1][1] = row1[1];
+            m[1][2] = row1[2];
+            m[1][3] = row1[3];
+
+            m[2][0] = row2[0];
+            m[2][1] = row2[1];
+            m[2][2] = row2[2];
+            m[2][3] = row2[3];
+
+            m[3][0] = row3[0];
+            m[3][1] = row3[1];
+            m[3][2] = row3[2];
+            m[3][3] = row3[3];
+        }
+
+        template<typename T>
+        mat44<T>::mat44( const vec4<T>& row0, const vec4<T>& row1, const vec4<T>& row2, const vec4<T>& row3 )
+        {
+            m[0][0] = row0.x;
+            m[0][1] = row0.y;
+            m[0][2] = row0.z;
+            m[0][3] = row0.w;
+
+            m[1][0] = row1.x;
+            m[1][1] = row1.y;
+            m[1][2] = row1.z;
+            m[1][3] = row1.w;
+
+            m[2][0] = row2.x;
+            m[2][1] = row2.y;
+            m[2][2] = row2.z;
+            m[2][3] = row2.w;
+
+            m[3][0] = row3.x;
+            m[3][1] = row3.y;
+            m[3][2] = row3.z;
+            m[3][3] = row3.w;
+        }
+
+        template<typename T>
+        mat44<T>::mat44( T m00, T m01, T m02, T m03,
+            T m10, T m11, T m12, T m13,
+            T m20, T m21, T m22, T m23,
+            T m30, T m31, T m32, T m33 )
+        {
+            m[0][0] = m00;
+            m[0][1] = m01;
+            m[0][2] = m02;
+            m[0][3] = m03;
+
+            m[1][0] = m10;
+            m[1][1] = m11;
+            m[1][2] = m12;
+            m[1][3] = m13;
+
+            m[2][0] = m20;
+            m[2][1] = m21;
+            m[2][2] = m22;
+            m[2][3] = m23;
+
+            m[3][0] = m30;
+            m[3][1] = m31;
+            m[3][2] = m32;
+            m[3][3] = m33;
+        }
+
+        template<typename T>
+        mat44<T>::mat44( const mat44<T>& mat )
+        {
+            *this = mat;
+        }
+
+        template<typename T>
+        mat44<T>::~mat44()
+        {
+        }
+
+        template<typename T>
+        const mat44<T>& mat44<T>::operator=( const mat44<T>& mat )
+        {
+            m[0][0] = mat.m[0][0];
+            m[0][1] = mat.m[0][1];
+            m[0][2] = mat.m[0][2];
+            m[0][3] = mat.m[0][3];
+
+            m[1][0] = mat.m[1][0];
+            m[1][1] = mat.m[1][1];
+            m[1][2] = mat.m[1][2];
+            m[1][3] = mat.m[1][3];
+
+            m[2][0] = mat.m[2][0];
+            m[2][1] = mat.m[2][1];
+            m[2][2] = mat.m[2][2];
+            m[2][3] = mat.m[2][3];
+
+            m[3][0] = mat.m[3][0];
+            m[3][1] = mat.m[3][1];
+            m[3][2] = mat.m[3][2];
+            m[3][3] = mat.m[3][3];
+
+            return *this;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator+( const T& v ) const
+        {
+            mat44<T> res;
+            res.m[0][0] = m[0][0] + v;
+            res.m[0][1] = m[0][1] + v;
+            res.m[0][2] = m[0][2] + v;
+            res.m[0][3] = m[0][3] + v;
+
+            res.m[1][0] = m[1][0] + v;
+            res.m[1][1] = m[1][1] + v;
+            res.m[1][2] = m[1][2] + v;
+            res.m[1][3] = m[1][3] + v;
+
+            res.m[2][0] = m[2][0] + v;
+            res.m[2][1] = m[2][1] + v;
+            res.m[2][2] = m[2][2] + v;
+            res.m[2][3] = m[2][3] + v;
+
+            res.m[3][0] = m[3][0] + v;
+            res.m[3][1] = m[3][1] + v;
+            res.m[3][2] = m[3][2] + v;
+            res.m[3][3] = m[3][3] + v;
+
+            return res;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator+( const mat44<T>& mat ) const
+        {
+            mat44<T> res;
+            res.m[0][0] = m[0][0] + mat.m[0][0];
+            res.m[0][1] = m[0][1] + mat.m[0][1];
+            res.m[0][2] = m[0][2] + mat.m[0][2];
+            res.m[0][3] = m[0][3] + mat.m[0][3];
+
+            res.m[1][0] = m[1][0] + mat.m[1][0];
+            res.m[1][1] = m[1][1] + mat.m[1][1];
+            res.m[1][2] = m[1][2] + mat.m[1][2];
+            res.m[1][3] = m[1][3] + mat.m[1][3];
+
+            res.m[2][0] = m[2][0] + mat.m[2][0];
+            res.m[2][1] = m[2][1] + mat.m[2][1];
+            res.m[2][2] = m[2][2] + mat.m[2][2];
+            res.m[2][3] = m[2][3] + mat.m[2][3];
+
+            res.m[3][0] = m[3][0] + mat.m[3][0];
+            res.m[3][1] = m[3][1] + mat.m[3][1];
+            res.m[3][2] = m[3][2] + mat.m[3][2];
+            res.m[3][3] = m[3][3] + mat.m[3][3];
+
+            return res;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator-( const T& v ) const
+        {
+            mat44<T> res;
+            res.m[0][0] = m[0][0] - v;
+            res.m[0][1] = m[0][1] - v;
+            res.m[0][2] = m[0][2] - v;
+            res.m[0][3] = m[0][3] - v;
+
+            res.m[1][0] = m[1][0] - v;
+            res.m[1][1] = m[1][1] - v;
+            res.m[1][2] = m[1][2] - v;
+            res.m[1][3] = m[1][3] - v;
+
+            res.m[2][0] = m[2][0] - v;
+            res.m[2][1] = m[2][1] - v;
+            res.m[2][2] = m[2][2] - v;
+            res.m[2][3] = m[2][3] - v;
+
+            res.m[3][0] = m[3][0] - v;
+            res.m[3][1] = m[3][1] - v;
+            res.m[3][2] = m[3][2] - v;
+            res.m[3][3] = m[3][3] - v;
+            return res;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator-( const mat44<T>& mat ) const
+        {
+            mat44<T> res;
+            res.m[0][0] = m[0][0] - mat.m[0][0];
+            res.m[0][1] = m[0][1] - mat.m[0][1];
+            res.m[0][2] = m[0][2] - mat.m[0][2];
+            res.m[0][3] = m[0][3] - mat.m[0][3];
+
+            res.m[1][0] = m[1][0] - mat.m[1][0];
+            res.m[1][1] = m[1][1] - mat.m[1][1];
+            res.m[1][2] = m[1][2] - mat.m[1][2];
+            res.m[1][3] = m[1][3] - mat.m[1][3];
+
+            res.m[2][0] = m[2][0] - mat.m[2][0];
+            res.m[2][1] = m[2][1] - mat.m[2][1];
+            res.m[2][2] = m[2][2] - mat.m[2][2];
+            res.m[2][3] = m[2][3] - mat.m[2][3];
+
+            res.m[3][0] = m[3][0] - mat.m[3][0];
+            res.m[3][1] = m[3][1] - mat.m[3][1];
+            res.m[3][2] = m[3][2] - mat.m[3][2];
+            res.m[3][3] = m[3][3] - mat.m[3][3];
+
+            return res;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator*( const T s ) const
+        {
+            mat44<T> res;
+            res.m[0][0] = m[0][0] * s;
+            res.m[0][1] = m[0][1] * s;
+            res.m[0][2] = m[0][2] * s;
+            res.m[0][3] = m[0][3] * s;
+
+            res.m[1][0] = m[1][0] * s;
+            res.m[1][1] = m[1][1] * s;
+            res.m[1][2] = m[1][2] * s;
+            res.m[1][3] = m[1][3] * s;
+
+            res.m[2][0] = m[2][0] * s;
+            res.m[2][1] = m[2][1] * s;
+            res.m[2][2] = m[2][2] * s;
+            res.m[2][3] = m[2][3] * s;
+
+            res.m[3][0] = m[3][0] * s;
+            res.m[3][1] = m[3][1] * s;
+            res.m[3][2] = m[3][2] * s;
+            res.m[3][3] = m[3][3] * s;
+
+            return res;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator/( const T s ) const
+        {
+            mat44<T> res;
+            res.m[0][0] = m[0][0] / s;
+            res.m[0][1] = m[0][1] / s;
+            res.m[0][2] = m[0][2] / s;
+            res.m[0][3] = m[0][3] / s;
+
+            res.m[1][0] = m[1][0] / s;
+            res.m[1][1] = m[1][1] / s;
+            res.m[1][2] = m[1][2] / s;
+            res.m[1][3] = m[1][3] / s;
+
+            res.m[2][0] = m[2][0] / s;
+            res.m[2][1] = m[2][1] / s;
+            res.m[2][2] = m[2][2] / s;
+            res.m[2][3] = m[2][3] / s;
+
+            res.m[3][0] = m[3][0] / s;
+            res.m[3][1] = m[3][1] / s;
+            res.m[3][2] = m[3][2] / s;
+            res.m[3][3] = m[3][3] / s;
+
+            return res;
+        }
+
+        template<typename T>
+        bool mat44<T>::operator==( const mat44<T>& mat ) const
+        {
+            return (m[0][0] == mat.m[0][0] && m[0][1] == mat.m[0][1] && m[0][2] == mat.m[0][2] && m[0][3] == mat.m[0][3]) &&
+                   (m[1][0] == mat.m[1][0] && m[1][1] == mat.m[1][1] && m[1][2] == mat.m[1][2] && m[1][3] == mat.m[1][3]) &&
+                   (m[2][0] == mat.m[2][0] && m[2][1] == mat.m[2][1] && m[2][2] == mat.m[2][2] && m[2][3] == mat.m[2][3]) &&
+                   (m[3][0] == mat.m[3][0] && m[3][1] == mat.m[3][1] && m[3][2] == mat.m[3][2] && m[3][3] == mat.m[3][3]);
+        }
+
+        template<typename T>
+        bool mat44<T>::operator!=( const mat44<T>& mat ) const
+        {
+            return !(*this == mat);
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::operator-() const
+        {
+            mat44<T> res( *this );
+            res = -1 * res;
+            return res;
+        }
+
+        template<typename T>
+        double mat44<T>::Determinant() const
+        {
+            const vec4<T>& row0 = GetRow( 0 );
+            const vec4<T>& row1 = GetRow( 1 );
+            const vec4<T>& row2 = GetRow( 2 );
+            const vec4<T>& row3 = GetRow( 3 );
+
+            const mat33<T> A0( vec3<T>( row1[1], row1[2], row1[3] ),
+                               vec3<T>( row2[1], row2[2], row2[3] ),
+                               vec3<T>( row3[1], row3[2], row3[3] ) );
+
+            const mat33<T> A1( vec3<T>( row0[1], row0[2], row0[3] ),
+                            vec3<T>( row2[1], row2[2], row2[3] ),
+                            vec3<T>( row3[1], row3[2], row3[3] ) );
+
+            const mat33<T> A2( vec3<T>( row0[1], row0[2], row0[3] ),
+                            vec3<T>( row1[1], row1[2], row1[3] ),
+                            vec3<T>( row3[1], row3[2], row3[3] ) );
+
+            const mat33<T> A3( vec3<T>( row0[1], row0[2], row0[3] ),
+                            vec3<T>( row1[1], row1[2], row1[3] ),
+                            vec3<T>( row2[1], row2[2], row2[3] ) );
+
+            return m[0][0] * A0.Determinant() - m[1][0] * A1.Determinant() + m[2][0] * A2.Determinant() - m[3][0] * A3.Determinant();
+        }
+
+        template<typename T>
+        mat44<double> mat44<T>::Inverse()
+        {
+            mat44<double> res;
+
+            double det = Determinant();
+            if (det == 0.0)
+            {
+                cerr << "Waring: No Inverse Matrix" << endl;
+                return res;
+            }
+
+            const vec4<T>& row0 = GetRow( 0 );
+            const vec4<T>& row1 = GetRow( 1 );
+            const vec4<T>& row2 = GetRow( 2 );
+            const vec4<T>& row3 = GetRow( 3 );
+
+            mat33<double> M[4][4];
+            M[0][0] = mat33<double>( vec3<double>( row1[1], row1[2], row1[3] ),
+                             vec3<double>( row2[1], row2[2], row2[3] ),
+                             vec3<double>( row3[1], row3[2], row3[3] ) );
+
+            M[0][1] = mat33<double>( vec3<double>( row1[0], row1[2], row1[3] ),
+                             vec3<double>( row2[0], row2[2], row2[3] ),
+                             vec3<double>( row3[0], row3[2], row3[3] ) );
+
+            M[0][2] = mat33<double>( vec3<double>( row1[0], row1[1], row1[3] ),
+                             vec3<double>( row2[0], row2[1], row2[3] ),
+                             vec3<double>( row3[0], row3[1], row3[3] ) );
+
+            M[0][3] = mat33<double>( vec3<double>( row1[0], row1[1], row1[2] ),
+                             vec3<double>( row2[0], row2[1], row2[2] ),
+                             vec3<double>( row3[0], row3[1], row3[2] ) );
+
+            M[1][0] = mat33<double>( vec3<double>( row0[1], row0[2], row0[3] ),
+                             vec3<double>( row2[1], row2[2], row2[3] ),
+                             vec3<double>( row3[1], row3[2], row3[3] ) );
+
+
+            M[1][1] = mat33<double>( vec3<double>( row0[0], row0[2], row0[3] ),
+                             vec3<double>( row2[0], row2[2], row2[3] ),
+                             vec3<double>( row3[0], row3[2], row3[3] ) );
+
+            M[1][2] = mat33<double>( vec3<double>( row0[0], row0[1], row0[3] ),
+                             vec3<double>( row2[0], row2[1], row2[3] ),
+                             vec3<double>( row3[0], row3[1], row3[3] ) );
+
+            M[1][3] = mat33<double>( vec3<double>( row0[0], row0[1], row0[2] ),
+                             vec3<double>( row2[0], row2[1], row2[2] ),
+                             vec3<double>( row3[0], row3[1], row3[2] ) );
+
+
+            M[2][0] = mat33<double>( vec3<double>( row0[1], row0[2], row0[3] ),
+                             vec3<double>( row1[1], row1[2], row1[3] ),
+                             vec3<double>( row3[1], row3[2], row3[3] ) );
+
+            M[2][1] = mat33<double>( vec3<double>( row0[0], row0[2], row0[3] ),
+                             vec3<double>( row1[0], row1[2], row1[3] ),
+                             vec3<double>( row3[0], row3[2], row3[3] ) );
+
+            M[2][2] = mat33<double>( vec3<double>( row0[0], row0[1], row0[3] ),
+                vec3<double>( row1[0], row1[1], row1[3] ),
+                vec3<double>( row3[0], row3[1], row3[3] ) );
+
+            M[2][3] = mat33<double>( vec3<double>( row0[0], row0[1], row0[2] ),
+                vec3<double>( row1[0], row1[1], row1[2] ),
+                vec3<double>( row3[0], row3[1], row3[2] ) );
+
+            M[3][0] = mat33<double>( vec3<double>( row0[1], row0[2], row0[3] ),
+                vec3<double>( row1[1], row1[2], row1[3] ),
+                vec3<double>( row2[1], row2[2], row2[3] ) );
+
+            M[3][1] = mat33<double>( vec3<double>( row0[0], row0[2], row0[3] ),
+                vec3<double>( row1[0], row1[2], row1[3] ),
+                vec3<double>( row2[0], row2[2], row2[3] ) );
+
+            M[3][2] = mat33<double>( vec3<double>( row0[0], row0[1], row0[3] ),
+                vec3<double>( row1[0], row1[1], row1[3] ),
+                vec3<double>( row2[0], row2[1], row2[3] ) );
+
+            M[3][3] = mat33<double>( vec3<double>( row0[0], row0[1], row0[2] ),
+                vec3<double>( row1[0], row1[1], row1[2] ),
+                vec3<double>( row2[0], row2[1], row2[2] ) );
+
+            for (int i = 0; i < 4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    res.m[i][j] = pow( -1, i + j ) * M[j][i].Determinant() / det;
+                }
+            }
+
+            return res;
+        }
+
+        template<typename T>
+        vec4<T> mat44<T>::GetRow( const int row ) const
+        {
+            return vec4<T>( m[row][0], m[row][1], m[row][2], m[row][3] );
+        }
+
+        template<typename T>
+        vec4<T> mat44<T>::GetColumn( const int column ) const
+        {
+            return vec4<T>( m[0][column], m[1][column], m[2][column], m[3][column] );
+        }
+
+        template<typename T>
+        T mat44<T>::GetElement( const int row, const int column ) const
+        {
+            return m[row][column];
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up )
+        {
+            vec3<T> x, y, z;
+
+            z = eye - lookAt;
+            x = vec3<T>::cross( up, z );
+            y = vec3<T>::cross( z, x );
+
+            x = x.normalized();
+            y = y.normalized();
+            z = z.normalized();
+
+            T tx, ty, tz;
+            tx = vec3<T>::dot( eye, x );
+            ty = vec3<T>::dot( eye, y );
+            tz = vec3<T>::dot( eye, z );
+
+            mat44 mat = mat44<T>::IDENTITY;
+
+            mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
+            mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
+            mat.m[2][0] = z.x;  mat.m[2][1] = z.y;  mat.m[2][2] = z.z;
+            mat.m[3][0] = tx; mat.m[3][1] = ty; mat.m[3][2] = tz;
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<double> mat44<T>::CreatePerspectiveFieldOfView( const T radian, const T aspect, const T near, const T far )
+        {
+            mat44<double> mat = mat44<double>::IDENTITY;
+
+            double t = 1.0 / tan( radian*0.5 );
+            double dis = far - near;
+
+            mat.m[0][0] = aspect * t;
+
+            mat.m[1][1] = t;
+
+            mat.m[2][2] = far / dis;
+            mat.m[2][3] = 1.0;
+
+            mat.m[3][3] = 0.0;
+            mat.m[3][2] = -(near*far) / dis;
+
+            return mat;
+        }
+
+        mat44<int> mat44<int>::IDENTITY = mat44( 1, 0, 0, 0,
+                                                 0, 1, 0, 0,
+                                                 0, 0, 1, 0,
+                                                 0, 0, 0, 1 );
+
+        mat44<int> mat44<int>::ZERO = mat44( 0, 0, 0, 0,
+                                             0, 0, 0, 0,
+                                             0, 0, 0, 0,
+                                             0, 0, 0, 0 );
+
+        template<typename T>
+        mat44<T> mat44<T>::IDENTITY = mat44( 1.0, 0.0, 0.0, 0.0,
+                                             0.0, 1.0, 0.0, 0.0,
+                                             0.0, 0.0, 1.0, 0.0,
+                                             0.0, 0.0, 0.0, 1.0 );
+
+        template<typename T>
+        mat44<T> mat44<T>::ZERO = mat44( 0.0, 0.0, 0.0, 0.0,
+                                         0.0, 0.0, 0.0, 0.0,
+                                         0.0, 0.0, 0.0, 0.0,
+                                         0.0, 0.0, 0.0, 0.0 );
+
+        template mat44<int>;
+        template mat44<float>;
+        template mat44<double>;
     }
-
-    return res;
-}
-    
-Vec4 Mat44::GetRow(const int row) const
-{
-    return Vec4(m[row][0], m[row][1], m[row][2], m[row][3]);
-}
-
-Vec4 Mat44::GetColumn(const int column) const
-{
-    return Vec4(m[0][column], m[1][column], m[2][column], m[3][column]);
-}
-
-double Mat44::GetElement(const int row, const int column) const
-{
-    return m[row][column];
-}
-
-Mat44 Mat44::IDENTITY = Mat44(1.0, 0.0, 0.0, 0.0,
-                              0.0, 1.0, 0.0, 0.0,
-                              0.0, 0.0, 1.0, 0.0,
-                              0.0, 0.0, 0.0, 1.0);
-
-Mat44 Mat44::ZERO = Mat44(0.0, 0.0, 0.0, 0.0,
-                          0.0, 0.0, 0.0, 0.0,
-                          0.0, 0.0, 0.0, 0.0,
-                          0.0, 0.0, 0.0, 0.0);
-
-Mat44 Mat44::CreateLookAt( const Vec3& eye, const Vec3& lookAt, const Vec3& up )
-{
-    Vec3 x, y, z;
-
-    z = eye - lookAt ;
-    x = Vec3::cross( up, z );
-    y = Vec3::cross( z, x );
-
-    x = x.normalized();
-    y = y.normalized();
-    z = z.normalized();
-
-    double tx, ty, tz;
-    tx = Vec3::dot( eye, x );
-    ty = Vec3::dot( eye, y );
-    tz = Vec3::dot( eye, z );
-
-    Mat44 mat = Mat44::IDENTITY;
-
-    mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
-    mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
-    mat.m[2][0] = z.x;  mat.m[2][1] = z.y;  mat.m[2][2] = z.z;
-    mat.m[3][0] = tx; mat.m[3][1] = ty; mat.m[3][2] = tz;
-
-    return mat;
-}
-
-Mat44 Mat44::CreatePerspectiveFieldOfView( const double radian, const double aspect, const double near, const double far )
-{
-    Mat44 mat = Mat44::IDENTITY;
-
-    double t = 1.0/tan( radian*0.5 );
-    double dis = far - near;
-
-    mat.m[0][0] = aspect * t;
-
-    mat.m[1][1] = t;
-
-    mat.m[2][2] = far/dis;
-    mat.m[2][3] = 1.0;
-
-    mat.m[3][3] = 0.0;
-    mat.m[3][2] = -(near*far)/dis;
-
-    return mat;
 }

@@ -1,324 +1,317 @@
 #pragma once
-#include <iostream>
-#include <cmath>
-
-#include "Constant.h"
-#include "Mat.h"
 
 namespace acLib
 {
     namespace vec
     {
         using namespace std;
-        using namespace acLib::constant;
-        
+        using namespace constant;
+
         enum VEC_INDEX
         {
-            X,
-            Y,
-            Z,
-            W
+            X = 0,
+            Y = 1,
+            Z = 2,
+            W = 3
         };
 
-        struct Vec2
+        template<typename T>
+        struct vec2
         {
         public:
-            static const Vec2 ZERO;
-            static const Vec2 ONE;
+            static const vec2 ZERO;
+            static const vec2 ONE;
 
-            Vec2();
-            Vec2(double _v);
-            Vec2(double _x, double _y);
-            Vec2(const Vec2& orig);
-            ~Vec2();
+            vec2();
+            vec2(T _v);
+            vec2(T _x, T _y);
+            vec2(const vec2& orig);
+            ~vec2();
 
-            Vec2 operator+(const Vec2& v) const;
-            Vec2 operator-(const Vec2& v) const;
-            Vec2 operator*(const double s);
-            Vec2 operator*(const Vec2& v) const;
-            Vec2 operator/(const double s);
+            vec2 operator+(const vec2& v) const;
+            vec2 operator-(const vec2& v) const;
+            vec2 operator*(const T s);
+            vec2 operator*(const vec2& v) const;
+            vec2 operator/(const T s);
 
-            const Vec2& operator+=(const Vec2& v);
-            const Vec2& operator-=(const Vec2& v);
-            const Vec2& operator*=(const Vec2& v);
+            const vec2& operator+=(const vec2& v);
+            const vec2& operator-=(const vec2& v);
+            const vec2& operator*=(const vec2& v);
 
-            const Vec2& operator*=(const double s);
-            const Vec2& operator/=(const double s);
+            const vec2& operator*=(const T s);
+            const vec2& operator/=(const T s);
 
-            bool operator==(const Vec2& v) const;
-            bool operator!=(const Vec2& v) const;
-            bool operator<(const Vec2& v) const;
-            bool operator<=(const Vec2& v) const;
+            bool operator==(const vec2& v) const;
+            bool operator!=(const vec2& v) const;
+            bool operator<(const vec2& v) const;
+            bool operator<=(const vec2& v) const;
 
-            Vec2 operator-() const;
+            vec2 operator-() const;
 
             double norm() const;
-            const Vec2& normalized();
+            const vec2& normalized();
 
-            friend Vec2 operator+ (const double s, const Vec2& v)
+            friend vec2 operator+ (const T s, const vec2& v)
             {
-                Vec2 res(v);
+                vec2 res(v);
                 res = res + s;
                 return res;
             }
 
-            friend Vec2 operator- (const double s, const Vec2& v)
+            friend vec2 operator- (const T s, const vec2& v)
             {
-                Vec2 res(v);
+                vec2 res(v);
                 res = res - s;
                 return res;
             }
 
-            friend Vec2 operator* (const double s, const Vec2& v)
+            friend vec2 operator* (const T s, const vec2& v)
             {
-                Vec2 res(v);
+                vec2 res(v);
                 res = res*s;
                 return res;
             }
 
-            friend ostream& operator<<(ostream& os, const Vec2& v)
+            friend ostream& operator<<(ostream& os, const vec2& v)
             {
                 os << v.x << " " << v.y;
                 return os;
             }
 
-            static Vec2 normalize(Vec2 a)
+            static vec2 normalize(vec2 a)
             {
-                Vec2 res;
-                double len = a.norm();
+                vec2 res;
+                T len = a.norm();
                 if (len != 0.0) {
                     res = a / len;
                 }
                 else {
-                    res = Vec2(0.0);
+                    res = vec2(0.0);
                 }
 
                 return res;
             }
 
-            static double dot(const Vec2& a, const Vec2& b)
+            static T dot(const vec2& a, const vec2& b)
             {
                 return a.x*b.x + a.y*b.y;
             }
 
-            static double cross(const Vec2& a, const Vec2& b)
+            static T cross(const vec2& a, const vec2& b)
             {
                 return a.x*b.y - a.y*b.x;
             }
 
         public:
-            double x;
-            double y;
+            T x;
+            T y;
         };
 
-        struct Vec3
+        template<typename T>
+        struct vec3
         {
         public:
-            static Vec3 ZERO;
-            static Vec3 ONE;
+            static vec3<T> ZERO;
+            static vec3<T> ONE;
 
-            static int X;
-            static int Y;
-            static int Z;
+            vec3();
+            vec3(T _v);
+            vec3(T _x, T _y, T _z);
+            vec3(const vec3<T>& vec);
+            ~vec3();
 
-            Vec3();
-            Vec3(double _v);
-            Vec3(double _x, double _y, double _z);
-            Vec3(const Vec3& vec);
-            ~Vec3();
+            vec3<T> operator+(const vec3<T>& v) const;
+            vec3<T> operator-(const vec3<T>& v) const;
+            vec3<T> operator*(const T s) const;
+            vec3<T> operator*(const vec3<T>& v) const;
+            vec3<T> operator/(const T s) const;
 
-            Vec3 operator+(const Vec3& v) const;
-            Vec3 operator-(const Vec3& v) const;
-            Vec3 operator*(const double s) const;
-            Vec3 operator*(const Vec3& v) const;
-            Vec3 operator/(const double s) const;
+            const vec3<T>& operator+=(const vec3<T>& v);
+            const vec3<T>& operator-=(const vec3<T>& v);
+            const vec3<T>& operator*=(const vec3<T>& v);
+            const vec3<T>& operator*=(const T s);
+            const vec3<T>& operator/=(const T s);
 
-            const Vec3& operator+=(const Vec3& v);
-            const Vec3& operator-=(const Vec3& v);
-            const Vec3& operator*=(const Vec3& v);
-            const Vec3& operator*=(const double s);
-            const Vec3& operator/=(const double s);
-
-            bool operator==(const Vec3& v) const;
-            bool operator!=(const Vec3& v) const;
-            bool operator<(const Vec3& v) const;
-            bool operator<=(const Vec3& v) const;
-            Vec3 operator-() const;
+            bool operator==(const vec3<T>& v) const;
+            bool operator!=(const vec3<T>& v) const;
+            bool operator<(const vec3<T>& v) const;
+            bool operator<=(const vec3<T>& v) const;
+            vec3<T> operator-() const;
 
             double norm() const;
-            double normSq() const;
+            T normSq() const;
 
-            const Vec3& normalized();
-            const Vec3& transform(const acLib::mat::Mat33& mat);
+            const vec3<T>& normalized();
+            //const vec3<T>& transform(const acLib::mat::Mat33& mat);
 
-            double operator[](const int& idx) const;
+            T operator[](const int& idx) const;
 
-            friend Vec3 operator+ (const double s, const Vec3& v)
+            friend vec3<T> operator+ (const T s, const vec3<T>& v)
             {
-                Vec3 res(v);
-                res = res + s;
-                return res;
+                return v + s;
             }
 
-            friend Vec3 operator- (const double s, const Vec3& v)
+            friend vec3<T> operator- (const T s, const vec3<T>& v)
             {
-                Vec3 res(v);
-                res = res - s;
-                return res;
+                return v - s;
             }
 
-            friend Vec3 operator* (const double s, const Vec3& v)
+            friend vec3<T> operator* (const T s, const vec3<T>& v)
             {
-                Vec3 res(v);
-                res = res*s;
-                return res;
+                return v * s;
             }
 
 
-            friend ostream& operator<<(ostream& os, const Vec3& v)
+            friend ostream& operator<<(ostream& os, const vec3<T>& v)
             {
                 os << v.x << " " << v.y << " " << v.z;
                 return os;
             }
 
-            static Vec3 normalize(Vec3 a)
+            static vec3<T> normalize( vec3<T> a)
             {
-                Vec3 res;
-                double len = a.norm();
-                if (len != 0.0) {
-                    res = a / len;
-                }
-                else {
-                    res = Vec3(0.0);
-                }
-
-                return res;
+                T len = (T)a.norm();
+                return (len != 0.0) ? a / len : vec3<T>::ZERO;
             }
 
-            static double dot(const Vec3& a, const Vec3& b)
+            static T dot(const vec3<T>& a, const vec3<T>& b)
             {
                 return a.x*b.x + a.y*b.y + a.z * b.z;
             }
 
-            static Vec3 cross(const Vec3& a, const Vec3& b)
+            static vec3<T> cross(const vec3<T>& a, const vec3<T>& b)
             {
-                Vec3 res(a.y*b.z - a.z*b.y,
+                vec3<T> res(a.y*b.z - a.z*b.y,
                     a.z*b.x - a.x*b.z,
                     a.x*b.y - a.y*b.x);
 
                 return res;
             }
 
-            static bool approxEqual(const Vec3& v1, const Vec3& v2, const double err = kEps)
+            static bool approxEqual(const vec3<T>& v1, const vec3<T>& v2, const T err = kEps)
             {
                 return abs(v1.x - v2.x) < err && abs(v1.y - v2.y) < err && abs(v1.z - v2.z) < err;
             }
 
         public:
-            double x;
-            double y;
-            double z;
+            T x;
+            T y;
+            T z;
         };
 
-        struct Vec4
+        template<typename T>
+        struct vec4
         {
         public:
-            static Vec4 ZERO;
-            static Vec4 ONE;
+            static vec4 ZERO;
+            static vec4 ONE;
 
-            Vec4();
-            Vec4(double _v);
-            Vec4(double _x, double _y, double _z, double _w);
-            Vec4(const Vec4& vec);
-            Vec4(const Vec3& vec, double _w);
-            ~Vec4();
+            vec4();
+            vec4(T _v);
+            vec4(T _x, T _y, T _z, T _w);
+            vec4(const vec4<T>& vec);
+            vec4(const vec3<T>& vec, T _w);
+            ~vec4();
 
-            Vec4 operator+(const Vec4& v) const;
-            Vec4 operator-(const Vec4& v) const;
-            Vec4 operator*(const double s) const;
-            Vec4 operator*(const Vec4& v) const;
-            Vec4 operator/(const double s) const;
+            vec4 operator+(const vec4& v) const;
+            vec4 operator-(const vec4& v) const;
+            vec4 operator*(const T s) const;
+            vec4 operator*(const vec4& v) const;
+            vec4 operator/(const T s) const;
 
-            const Vec4& operator+=(const Vec4& v);
-            const Vec4& operator-=(const Vec4& v);
-            const Vec4& operator*=(const Vec4& v);
-            const Vec4& operator*=(const double s);
-            const Vec4& operator/=(const double s);
+            const vec4& operator+=(const vec4& v);
+            const vec4& operator-=(const vec4& v);
+            const vec4& operator*=(const vec4& v);
+            const vec4& operator*=(const T s);
+            const vec4& operator/=(const T s);
 
-            bool operator==(const Vec4& v) const;
-            bool operator!=(const Vec4& v) const;
-            bool operator<(const Vec4& v) const;
-            bool operator<=(const Vec4& v) const;
-            Vec4 operator-() const;
+            bool operator==(const vec4& v) const;
+            bool operator!=(const vec4& v) const;
+            bool operator<(const vec4& v) const;
+            bool operator<=(const vec4& v) const;
+            vec4 operator-() const;
 
             double norm() const;
-            double normSq() const;
+            T normSq() const;
 
-            const Vec4& normalized();
-            const Vec4& transform(const acLib::mat::Mat44& mat);
+            const vec4& normalized();
+            //const vec4& transform(const acLib::mat::Mat44& mat);
 
-            double operator[](const int& idx) const;
+            T operator[](const int& idx) const;
 
-            friend Vec4 operator+ (const double s, const Vec4& v)
+            friend vec4 operator+ (const T s, const vec4& v)
             {
-                Vec4 res(v);
+                vec4 res(v);
                 res = res + s;
                 return res;
             }
 
-            friend Vec4 operator- (const double s, const Vec4& v)
+            friend vec4 operator- (const T s, const vec4& v)
             {
-                Vec4 res(v);
+                vec4 res(v);
                 res = res - s;
                 return res;
             }
 
-            friend Vec4 operator* (const double s, const Vec4& v)
+            friend vec4 operator* (const T s, const vec4& v)
             {
-                Vec4 res(v);
+                vec4 res(v);
                 res = res*s;
                 return res;
             }
 
 
-            friend ostream& operator<<(ostream& os, const Vec4& v)
+            friend ostream& operator<<(ostream& os, const vec4& v)
             {
                 os << v.x << " " << v.y << " " << v.z<<" "<<v.w;
                 return os;
             }
 
-            static Vec4 normalize(Vec4 a)
+            static vec4 normalize(vec4 a)
             {
-                Vec4 res;
-                double len = a.norm();
+                vec4 res;
+                T len = (T)a.norm();
                 if (len != 0.0) {
                     res = a / len;
                 }
                 else {
-                    res = Vec4::ZERO;
+                    res = vec4::ZERO;
                 }
 
                 return res;
             }
 
-            static double dot(const Vec4& a, const Vec4& b)
+            static T dot(const vec4& a, const vec4& b)
             {
                 return a.x*b.x + a.y*b.y + a.z * b.z + a.w * b.w;
             }
 
-            static bool approxEqual(const Vec4& v1, const Vec4& v2, const double err = kEps)
+            static bool approxEqual(const vec4& v1, const vec4& v2, const T err = kEps)
             {
                 return abs(v1.x - v2.x) < err && abs(v1.y - v2.y) < err && abs(v1.z - v2.z) < err && abs(v1.w - v2.w) < err;
             }
 
         public:
-            double x;
-            double y;
-            double z;
-            double w;
+            T x;
+            T y;
+            T z;
+            T w;
         };
     }
 }
 
-typedef acLib::vec::Vec3 Vec;
-typedef acLib::vec::Vec3 Color;
+typedef acLib::vec::vec2<double> Vec2;
+typedef acLib::vec::vec2<int>    Vec2i;
+typedef acLib::vec::vec2<float>  Vec2f;
+typedef acLib::vec::vec2<double> Vec2d;
+
+typedef acLib::vec::vec3<double> Vec3;
+typedef acLib::vec::vec3<double> Color;
+typedef acLib::vec::vec3<int>    Vec3i;
+typedef acLib::vec::vec3<float>  Vec3f;
+typedef acLib::vec::vec3<double> Vec3d;
+
+typedef acLib::vec::vec4<double> Vec4;
+typedef acLib::vec::vec4<int>    Vec4i;
+typedef acLib::vec::vec4<float>  Vec4f;
+typedef acLib::vec::vec4<double> Vec4d;

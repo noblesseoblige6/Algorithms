@@ -1,10 +1,4 @@
 ﻿#pragma once
-#include <vector>
-#include <algorithm>
-
-#include "Vec.h"
-#include "Segment.h"
-#include "Constant.h"
 
 namespace acLib
 {
@@ -12,9 +6,9 @@ namespace acLib
     {
         using namespace std;
 
-        using namespace acLib::vec;
-        using namespace acLib::segment;
-        using namespace acLib::constant;
+        using namespace vec;
+        using namespace seg;
+        using namespace constant;
 
         class CGL
         {
@@ -255,7 +249,7 @@ namespace acLib
 
             static double GeometoryTerm(const Vec3& point1, const Vec3& point2, const Vec3& normal1, const Vec3& normal2)
             {
-                Vec dir = point2 - point1;
+                Vec3 dir = point2 - point1;
 
                 const double rSq = dir.normSq();
                 if(rSq == 0.0)

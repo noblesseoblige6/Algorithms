@@ -1,527 +1,629 @@
-#include "Vec.h"
-
-using namespace acLib::vec;
-using namespace acLib::mat;
-
-Vec2::Vec2() :x(0), y(0)
-{}
-Vec2::Vec2(double _v) : x(_v), y(_v)
-{}
-Vec2::Vec2(double _x, double _y) : x(_x), y(_y)
-{}
-Vec2::Vec2(const Vec2& orig)
+namespace acLib
 {
-    x = orig.x;
-    y = orig.y;
-}
-Vec2::~Vec2()
-{}
-
-Vec2 Vec2::operator+(const Vec2& v) const
-{
-    Vec2 res;
-    res.x = x + v.x;
-    res.y = y + v.y;
-    return res;
-}
-
-Vec2 Vec2::operator-(const Vec2& v) const
-{
-    Vec2 res;
-    res.x = x - v.x;
-    res.y = y - v.y;
-    return res;
-}
-
-Vec2 Vec2::operator*(const double s)
-{
-    Vec2 res;
-    res.x = x * s;
-    res.y = y * s;
-    return res;
-}
-
-Vec2 Vec2::operator*(const Vec2& v) const
-{
-    Vec2 res;
-    res.x = x * v.x;
-    res.y = y * v.y;
-    return res;
-}
-
-Vec2 Vec2::operator/(const double s)
-{
-    Vec2 res;
-    res.x = x / s;
-    res.y = y / s;
-
-    return res;
-}
-
-const Vec2& Vec2::operator+=(const Vec2& v)
-{
-    x += v.x;
-    y += v.y;
-
-    return *this;
-}
-
-const Vec2& Vec2::operator-=(const Vec2& v)
-{
-    x -= v.x;
-    y -= v.y;
-
-    return *this;
-}
-
-const Vec2& Vec2::operator*=(const Vec2& v)
-{
-    x *= v.x;
-    y *= v.y;
-
-    return *this;
-}
-
-const Vec2& Vec2::operator*=(const double s)
-{
-    x *= s;
-    y *= s;
-
-    return *this;
-}
-
-const Vec2& Vec2::operator/=(const double s)
-{
-    x /= s;
-    y /= s;
-
-    return *this;
-}
-
-bool Vec2::operator==(const Vec2& v) const
-{
-    return (x == v.x && y == v.y);
-}
-
-bool Vec2::operator!=(const Vec2& v) const
-{
-    return !(*this == v);
-}
-
-bool Vec2::operator<(const Vec2& v) const
-{
-    if (y == v.y)
-        return x < v.x;
-    return y < v.y;
-}
-bool Vec2::operator<=(const Vec2& v) const
-{
-    return y <= v.y;
-}
-
-Vec2 Vec2::operator-() const
-{
-    Vec2 res(*this);
-    res *= -1.0;
-    return res;
-}
-
-double Vec2::norm() const
-{
-    return sqrt(x*x + y*y);
-}
-
-const Vec2& Vec2::normalized()
-{
-    *this /= this->norm();
-    return *this;
-}
-
-const Vec2 Vec2::ZERO = Vec2(0.0, 0.0);
-const Vec2 Vec2::ONE = Vec2(1.0, 1.0);
-
-Vec3::Vec3() :x(0), y(0), z(0) {}
-Vec3::Vec3(double _v) : x(_v), y(_v), z(_v)
-{}
-Vec3::Vec3(double _x, double _y, double _z) : x(_x), y(_y), z(_z)
-{}
-Vec3::Vec3(const Vec3& vec) : x(vec.x), y(vec.y), z(vec.z)
-{
-}
-Vec3::~Vec3()
-{}
-
-Vec3 Vec3::operator+(const Vec3& v) const
-{
-    Vec3 res;
-    res.x = x + v.x;
-    res.y = y + v.y;
-    res.z = z + v.z;
-    return res;
-}
-
-Vec3 Vec3::operator-(const Vec3& v) const
-{
-    Vec3 res;
-    res.x = x - v.x;
-    res.y = y - v.y;
-    res.z = z - v.z;
-    return res;
-}
-
-Vec3 Vec3::operator*(const double s) const
-{
-    Vec3 res;
-    res.x = x * s;
-    res.y = y * s;
-    res.z = z * s;
-    return res;
-}
-
-Vec3 Vec3::operator*(const Vec3& v) const
-{
-    Vec3 res;
-    res.x = x * v.x;
-    res.y = y * v.y;
-    res.z = z * v.z;
-    return res;
-}
-
-Vec3 Vec3::operator/(const double s) const
-{
-    Vec3 res;
-    res.x = x / s;
-    res.y = y / s;
-    res.z = z / s;
-
-    return res;
-}
-
-const Vec3& Vec3::operator+=(const Vec3& v)
-{
-    x += v.x;
-    y += v.y;
-    z += v.z;
-
-    return *this;
-}
-
-const Vec3& Vec3::operator-=(const Vec3& v)
-{
-    x -= v.x;
-    y -= v.y;
-    z -= v.z;
-
-    return *this;
-}
-
-const Vec3& Vec3::operator*=(const Vec3& v)
-{
-    x *= v.x;
-    y *= v.y;
-    z *= v.z;
-
-    return *this;
-}
-
-const Vec3& Vec3::operator*=(const double s)
-{
-    x *= s;
-    y *= s;
-    z *= s;
-
-    return *this;
-}
-
-const Vec3& Vec3::operator/=(const double s)
-{
-    x /= s;
-    y /= s;
-    z /= s;
-
-    return *this;
-}
-
-bool Vec3::operator==(const Vec3& v) const
-{
-    return (x == v.x && y == v.y && z == v.z);
-}
-
-bool Vec3::operator!=(const Vec3& v) const
-{
-    return !(*this == v);
-}
-
-bool Vec3::operator<(const Vec3& v) const
-{
-    if (y == v.y)
-        return x < v.x;
-    return y < v.y;
-}
-bool Vec3::operator<=(const Vec3& v) const
-{
-    return y <= v.y;
-}
-
-Vec3 Vec3::operator-() const
-{
-    Vec3 res(*this);
-    res *= -1.0;
-    return res;
-}
-
-double Vec3::norm() const
-{
-    return sqrt(normSq());
-}
-
-double Vec3::normSq() const
-{
-    return x*x + y*y + z*z;
-}
-
-const Vec3& Vec3::normalized()
-{
-    *this /= this->norm();
-    return *this;
-}
-
-const Vec3& Vec3::transform(const Mat33& mat)
-{
-    *this = Vec3(Vec3::dot(mat.GetRow(0), *this), Vec3::dot(mat.GetRow(1), *this), Vec3::dot(mat.GetRow(2), *this));
-    return *this;
-}
-
-double Vec3::operator[](const int& idx) const
-{
-    if (idx == VEC_INDEX::X)
+    namespace vec
     {
-        return x;
+        template<typename T>
+        vec2<T>::vec2() :x( 0 ), y( 0 )
+        {
+        }
+
+        template<typename T>
+        vec2<T>::vec2( T _v ) : x( _v ), y( _v )
+        {
+        }
+
+        template<typename T>
+        vec2<T>::vec2( T _x, T _y ) : x( _x ), y( _y )
+        {
+        }
+
+        template<typename T>
+        vec2<T>::vec2( const vec2<T>& orig )
+        {
+            x = orig.x;
+            y = orig.y;
+        }
+
+        template<typename T>
+        vec2<T>::~vec2()
+        {
+        }
+
+        template<typename T>
+        vec2<T> vec2<T>::operator+( const vec2<T>& v ) const
+        {
+            vec2 res;
+            res.x = x + v.x;
+            res.y = y + v.y;
+            return res;
+        }
+
+        template<typename T>
+        vec2<T> vec2<T>::operator-( const vec2<T>& v ) const
+        {
+            vec2 res;
+            res.x = x - v.x;
+            res.y = y - v.y;
+            return res;
+        }
+        template<typename T>
+        vec2<T> vec2<T>::operator*( const T s )
+        {
+            vec2 res;
+            res.x = x * s;
+            res.y = y * s;
+            return res;
+        }
+        template<typename T>
+        vec2<T> vec2<T>::operator*( const vec2<T>& v ) const
+        {
+            vec2 res;
+            res.x = x * v.x;
+            res.y = y * v.y;
+            return res;
+        }
+        template<typename T>
+        vec2<T> vec2<T>::operator/( const T s )
+        {
+            vec2 res;
+            res.x = x / s;
+            res.y = y / s;
+
+            return res;
+        }
+        template<typename T>
+        const vec2<T>& vec2<T>::operator+=( const vec2<T>& v )
+        {
+            x += v.x;
+            y += v.y;
+
+            return *this;
+        }
+        template<typename T>
+        const vec2<T>& vec2<T>::operator-=( const vec2<T>& v )
+        {
+            x -= v.x;
+            y -= v.y;
+
+            return *this;
+        }
+        template<typename T>
+        const vec2<T>& vec2<T>::operator*=( const vec2<T>& v )
+        {
+            x *= v.x;
+            y *= v.y;
+
+            return *this;
+        }
+        template<typename T>
+        const vec2<T>& vec2<T>::operator*=( const T s )
+        {
+            x *= s;
+            y *= s;
+
+            return *this;
+        }
+        template<typename T>
+        const vec2<T>& vec2<T>::operator/=( const T s )
+        {
+            x /= s;
+            y /= s;
+
+            return *this;
+        }
+        template<typename T>
+        bool vec2<T>::operator==( const vec2<T>& v ) const
+        {
+            return (x == v.x && y == v.y);
+        }
+        template<typename T>
+        bool vec2<T>::operator!=( const vec2<T>& v ) const
+        {
+            return !(*this == v);
+        }
+        template<typename T>
+        bool vec2<T>::operator<( const vec2<T>& v ) const
+        {
+            if (y == v.y)
+                return x < v.x;
+            return y < v.y;
+        }
+
+        template<typename T>
+        bool vec2<T>::operator<=( const vec2<T>& v ) const
+        {
+            return y <= v.y;
+        }
+
+        template<typename T>
+        vec2<T> vec2<T>::operator-() const
+        {
+            vec2<T> res( *this );
+            res *= -1.0;
+            return res;
+        }
+
+        template<typename T>
+        double vec2<T>::norm() const
+        {
+            return (double)sqrt( x*x + y * y );
+        }
+
+        template<typename T>
+        const vec2<T>& vec2<T>::normalized()
+        {
+            *this /= (T)this->norm();
+            return *this;
+        }
+
+        template<typename T>
+        const vec2<T> vec2<T>::ZERO = vec2( 0.0, 0.0 );
+
+        template<typename T>
+        const vec2<T> vec2<T>::ONE = vec2( 1.0, 1.0 );
+
+        template<typename T>
+        vec3<T>::vec3() :x( 0 ), y( 0 ), z( 0 ) {}
+
+        template<typename T>
+        vec3<T>::vec3( T _v ) : x( _v ), y( _v ), z( _v )
+        {
+        }
+
+        template<typename T>
+        vec3<T>::vec3( T _x, T _y, T _z ) : x( _x ), y( _y ), z( _z )
+        {
+        }
+
+        template<typename T>
+        vec3<T>::vec3( const vec3<T>& vec ) : x( vec.x ), y( vec.y ), z( vec.z )
+        {
+        }
+
+        template<typename T>
+        vec3<T>::~vec3()
+        {
+        }
+
+        template<typename T>
+        vec3<T>vec3<T>::operator+( const vec3<T>& v ) const
+        {
+            vec3 res;
+            res.x = x + v.x;
+            res.y = y + v.y;
+            res.z = z + v.z;
+            return res;
+        }
+
+        template<typename T>
+        vec3<T>vec3<T>::operator-( const vec3<T>& v ) const
+        {
+            vec3 res;
+            res.x = x - v.x;
+            res.y = y - v.y;
+            res.z = z - v.z;
+            return res;
+        }
+
+        template<typename T>
+        vec3<T>vec3<T>::operator*( const T s ) const
+        {
+            vec3 res;
+            res.x = x * s;
+            res.y = y * s;
+            res.z = z * s;
+            return res;
+        }
+
+        template<typename T>
+        vec3<T>vec3<T>::operator*( const vec3<T>& v ) const
+        {
+            vec3 res;
+            res.x = x * v.x;
+            res.y = y * v.y;
+            res.z = z * v.z;
+            return res;
+        }
+
+        template<typename T>
+        vec3<T>vec3<T>::operator/( const T s ) const
+        {
+            vec3 res;
+            res.x = x / s;
+            res.y = y / s;
+            res.z = z / s;
+
+            return res;
+        }
+
+        template<typename T>
+        const vec3<T>& vec3<T>::operator+=( const vec3<T>& v )
+        {
+            x += v.x;
+            y += v.y;
+            z += v.z;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec3<T>& vec3<T>::operator-=( const vec3<T>& v )
+        {
+            x -= v.x;
+            y -= v.y;
+            z -= v.z;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec3<T>& vec3<T>::operator*=( const vec3<T>& v )
+        {
+            x *= v.x;
+            y *= v.y;
+            z *= v.z;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec3<T>& vec3<T>::operator*=( const T s )
+        {
+            x *= s;
+            y *= s;
+            z *= s;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec3<T>& vec3<T>::operator/=( const T s )
+        {
+            x /= s;
+            y /= s;
+            z /= s;
+
+            return *this;
+        }
+
+        template<typename T>
+        bool vec3<T>::operator==( const vec3<T>& v ) const
+        {
+            return (x == v.x && y == v.y && z == v.z);
+        }
+
+        template<typename T>
+        bool vec3<T>::operator!=( const vec3<T>& v ) const
+        {
+            return !(*this == v);
+        }
+
+        template<typename T>
+        bool vec3<T>::operator<( const vec3<T>& v ) const
+        {
+            if (y == v.y)
+                return x < v.x;
+            return y < v.y;
+        }
+        template<typename T>
+        bool vec3<T>::operator<=( const vec3<T>& v ) const
+        {
+            return y <= v.y;
+        }
+
+        template<typename T>
+        vec3<T> vec3<T>::operator-() const
+        {
+            vec3<T> res( *this );
+            res *= static_cast<T>(-1.0);
+            return res;
+        }
+
+        template<typename T>
+        double vec3<T>::norm() const
+        {
+            return (double)sqrt( normSq() );
+        }
+
+        template<typename T>
+        T vec3<T>::normSq() const
+        {
+            return x * x + y * y + z * z;
+        }
+
+        template<typename T>
+        const vec3<T>& vec3<T>::normalized()
+        {
+            *this /= (T)this->norm();
+            return *this;
+        }
+
+        /*template<typename T>
+        const vec3<T>& vec3<T>::transform( const Mat33& mat )
+        {
+            *this = vec3( vec3<T>::dot( mat.GetRow( 0 ), *this ), vec3<T>::dot( mat.GetRow( 1 ), *this ), vec3<T>::dot( mat.GetRow( 2 ), *this ) );
+            return *this;
+        }*/
+
+        template<typename T>
+        T vec3<T>::operator[]( const int& idx ) const
+        {
+            if (idx == VEC_INDEX::X)
+            {
+                return x;
+            }
+            else if (idx == VEC_INDEX::Y)
+            {
+                return y;
+            }
+            else if (idx == VEC_INDEX::Z)
+            {
+                return z;
+            }
+
+            cerr << "vec3 Out of bounds:" << idx << endl;
+            return x;
+        }
+
+        vec3<int> vec3<int>::ZERO = vec3( 0, 0, 0 );
+        vec3<float> vec3<float>::ZERO = vec3( 0.0f, 0.0f, 0.0f );
+        vec3<double> vec3<double>::ZERO = vec3( 0.0, 0.0, 0.0 );
+
+        vec3<int> vec3<int>::ONE = vec3( 1, 1, 1);
+        vec3<float> vec3<float>::ONE = vec3( 1.0f, 1.0f, 1.0f );
+        vec3<double> vec3<double>::ONE = vec3( 1.0, 1.0, 1.0 );
+
+        template vec3<int>;
+        template vec3<float>;
+        template vec3<double>;
+
+        template<typename T>
+        vec4<T>::vec4()
+        {
+            *this = vec4<T>::ZERO;
+        }
+
+        template<typename T>
+        vec4<T>::vec4( T _v ) : x( _v ), y( _v ), z( _v ), w( _v )
+        {
+        }
+
+        template<typename T>
+        vec4<T>::vec4( T _x, T _y, T _z, T _w ) : x( _x ), y( _y ), z( _z ), w( _w )
+        {
+        }
+
+        template<typename T>
+        vec4<T>::vec4( const vec4<T>& vec )
+        {
+            *this = vec;
+        }
+
+        template<typename T>
+        vec4<T>::vec4( const vec3<T>& vec, T _w )
+        {
+            x = vec.x;
+            y = vec.y;
+            z = vec.z;
+            w = _w;
+        }
+
+        template<typename T>
+        vec4<T>::~vec4()
+        {
+        }
+
+        template<typename T>
+        vec4<T> vec4<T>::operator+( const vec4<T>& v ) const
+        {
+            vec4 res;
+            res.x = x + v.x;
+            res.y = y + v.y;
+            res.z = z + v.z;
+            res.w = w + v.w;
+
+            return res;
+        }
+
+        template<typename T>
+        vec4<T> vec4<T>::operator-( const vec4<T>& v ) const
+        {
+            vec4 res;
+            res.x = x - v.x;
+            res.y = y - v.y;
+            res.z = z - v.z;
+            res.w = w - v.w;
+
+            return res;
+        }
+
+        template<typename T>
+        vec4<T> vec4<T>::operator*( const T s ) const
+        {
+            vec4 res;
+            res.x = x * s;
+            res.y = y * s;
+            res.z = z * s;
+            res.w = w * s;
+
+            return res;
+        }
+
+        template<typename T>
+        vec4<T> vec4<T>::operator*( const vec4<T>& v ) const
+        {
+            vec4 res;
+            res.x = x * v.x;
+            res.y = y * v.y;
+            res.z = z * v.z;
+            return res;
+        }
+
+        template<typename T>
+        vec4<T> vec4<T>::operator/( const T s ) const
+        {
+            vec4 res;
+            res.x = x / s;
+            res.y = y / s;
+            res.z = z / s;
+            res.w = w / s;
+
+            return res;
+        }
+
+        template<typename T>
+        const vec4<T>& vec4<T>::operator+=( const vec4<T>& v )
+        {
+            x += v.x;
+            y += v.y;
+            z += v.z;
+            w += v.w;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec4<T>& vec4<T>::operator-=( const vec4<T>& v )
+        {
+            x -= v.x;
+            y -= v.y;
+            z -= v.z;
+            w -= v.w;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec4<T>& vec4<T>::operator*=( const vec4<T>& v )
+        {
+            x *= v.x;
+            y *= v.y;
+            z *= v.z;
+            w *= v.w;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec4<T>& vec4<T>::operator*=( const T s )
+        {
+            x *= s;
+            y *= s;
+            z *= s;
+            w *= s;
+
+            return *this;
+        }
+
+        template<typename T>
+        const vec4<T>& vec4<T>::operator/=( const T s )
+        {
+            x /= s;
+            y /= s;
+            z /= s;
+            w /= s;
+
+            return *this;
+        }
+
+        template<typename T>
+        bool vec4<T>::operator==( const vec4<T>& v ) const
+        {
+            return (x == v.x && y == v.y && z == v.z);
+        }
+
+        template<typename T>
+        bool vec4<T>::operator!=( const vec4<T>& v ) const
+        {
+            return !(*this == v);
+        }
+
+        template<typename T>
+        bool vec4<T>::operator<( const vec4<T>& v ) const
+        {
+            if (y == v.y)
+                return x < v.x;
+            return y < v.y;
+        }
+        template<typename T>
+        bool vec4<T>::operator<=( const vec4<T>& v ) const
+        {
+            return y <= v.y;
+        }
+
+        template<typename T>
+        vec4<T> vec4<T>::operator-() const
+        {
+            vec4<T> res( *this );
+            res *= -1;
+            return res;
+        }
+
+        template<typename T>
+        double vec4<T>::norm() const
+        {
+            return (double)sqrt( normSq() );
+        }
+
+        template<typename T>
+        T vec4<T>::normSq() const
+        {
+            return x * x + y * y + z * z;
+        }
+
+        template<typename T>
+        const vec4<T>& vec4<T>::normalized()
+        {
+            *this /= (T)this->norm();
+            return *this;
+        }
+
+        /*template<typename T>
+        const vec4<T>& vec4<T>::transform( const Mat44& mat )
+        {
+            *this = vec4( vec4<T>::dot( mat.GetRow( 0 ), *this ),
+                vec4<T>::dot( mat.GetRow( 1 ), *this ),
+                vec4<T>::dot( mat.GetRow( 2 ), *this ),
+                vec4<T>::dot( mat.GetRow( 3 ), *this ) );
+
+            return *this;
+        }*/
+
+        template<typename T>
+        T vec4<T>::operator[]( const int& idx ) const
+        {
+            if (idx == VEC_INDEX::X)
+            {
+                return x;
+            }
+            else if (idx == VEC_INDEX::Y)
+            {
+                return y;
+            }
+            else if (idx == VEC_INDEX::Z)
+            {
+                return z;
+            }
+            else if (idx == VEC_INDEX::W)
+            {
+                return w;
+            }
+            
+            cerr << "vec4 Out of bounds:" << idx << endl;
+            return x;
+        }
+
+        vec4<int> vec4<int>::ZERO = vec4( 0, 0, 0, 0 );
+        template<typename T>
+        vec4<T> vec4<T>::ZERO = vec4( 0.0, 0.0, 0.0, 0.0 );
+
+        vec4<int> vec4<int>::ONE = vec4( 1, 1, 1, 1 );
+        template<typename T>
+        vec4<T> vec4<T>::ONE = vec4( 1.0, 1.0, 1.0, 1.0 );
+
+        template vec4<int>;
+        template vec4<float>;
+        template vec4<double>;
+
     }
-    else if (idx == VEC_INDEX::Y)
-    {
-        return y;
-    }
-    else if (idx == VEC_INDEX::Z)
-    {
-        return z;
-    }
-    else
-    {
-        cerr << "Vec3 Out of bounds:" << idx << endl;
-    }
-
-    return 0.0;
 }
-
-Vec3 Vec3::ZERO = Vec3(0.0, 0.0, 0.0);
-Vec3 Vec3::ONE = Vec3(1.0, 1.0, 1.0);
-
-
-Vec4::Vec4()
-{
-    *this = Vec4::ZERO;
-}
-Vec4::Vec4(double _v) : x(_v), y(_v), z(_v), w(_v)
-{}
-Vec4::Vec4(double _x, double _y, double _z, double _w) : x(_x), y(_y), z(_z), w(_w)
-{}
-Vec4::Vec4(const Vec4& vec)
-{
-    *this = vec;
-}
-Vec4::Vec4(const Vec3& vec, double _w)
-{
-    x = vec.x;
-    y = vec.y;
-    z = vec.z;
-    w = _w;
-}
-Vec4::~Vec4()
-{}
-
-Vec4 Vec4::operator+(const Vec4& v) const
-{
-    Vec4 res;
-    res.x = x + v.x;
-    res.y = y + v.y;
-    res.z = z + v.z;
-    res.w = w + v.w;
-
-    return res;
-}
-
-Vec4 Vec4::operator-(const Vec4& v) const
-{
-    Vec4 res;
-    res.x = x - v.x;
-    res.y = y - v.y;
-    res.z = z - v.z;
-    res.w = w - v.w;
-
-    return res;
-}
-
-Vec4 Vec4::operator*(const double s) const
-{
-    Vec4 res;
-    res.x = x * s;
-    res.y = y * s;
-    res.z = z * s;
-    res.w = w * s;
-
-    return res;
-}
-
-Vec4 Vec4::operator*(const Vec4& v) const
-{
-    Vec4 res;
-    res.x = x * v.x;
-    res.y = y * v.y;
-    res.z = z * v.z;
-    return res;
-}
-
-Vec4 Vec4::operator/(const double s) const
-{
-    Vec4 res;
-    res.x = x / s;
-    res.y = y / s;
-    res.z = z / s;
-    res.w = w / s;
-
-    return res;
-}
-
-const Vec4& Vec4::operator+=(const Vec4& v)
-{
-    x += v.x;
-    y += v.y;
-    z += v.z;
-    w += v.w;
-
-    return *this;
-}
-
-const Vec4& Vec4::operator-=(const Vec4& v)
-{
-    x -= v.x;
-    y -= v.y;
-    z -= v.z;
-    w -= v.w;
-
-    return *this;
-}
-
-const Vec4& Vec4::operator*=(const Vec4& v)
-{
-    x *= v.x;
-    y *= v.y;
-    z *= v.z;
-    w *= v.w;
-
-    return *this;
-}
-
-const Vec4& Vec4::operator*=(const double s)
-{
-    x *= s;
-    y *= s;
-    z *= s;
-    w *= s;
-
-    return *this;
-}
-
-const Vec4& Vec4::operator/=(const double s)
-{
-    x /= s;
-    y /= s;
-    z /= s;
-    w /= s;
-
-    return *this;
-}
-
-bool Vec4::operator==(const Vec4& v) const
-{
-    return (x == v.x && y == v.y && z == v.z);
-}
-
-bool Vec4::operator!=(const Vec4& v) const
-{
-    return !(*this == v);
-}
-
-bool Vec4::operator<(const Vec4& v) const
-{
-    if (y == v.y)
-        return x < v.x;
-    return y < v.y;
-}
-bool Vec4::operator<=(const Vec4& v) const
-{
-    return y <= v.y;
-}
-
-Vec4 Vec4::operator-() const
-{
-    Vec4 res(*this);
-    res *= -1.0;
-    return res;
-}
-
-double Vec4::norm() const
-{
-    return sqrt(normSq());
-}
-
-double Vec4::normSq() const
-{
-    return x*x + y*y + z*z;
-}
-
-const Vec4& Vec4::normalized()
-{
-    *this /= this->norm();
-    return *this;
-}
-
-const Vec4& Vec4::transform(const Mat44& mat)
-{
-    *this = Vec4(Vec4::dot(mat.GetRow(0), *this), 
-                 Vec4::dot(mat.GetRow(1), *this), 
-                 Vec4::dot(mat.GetRow(2), *this), 
-                 Vec4::dot(mat.GetRow(3), *this));
-
-    return *this;
-}
-
-double Vec4::operator[](const int& idx) const
-{
-    if (idx == VEC_INDEX::X)
-    {
-        return x;
-    }
-    else if (idx == VEC_INDEX::Y)
-    {
-        return y;
-    }
-    else if (idx == VEC_INDEX::Z)
-    {
-        return z;
-    }
-    else if (idx == VEC_INDEX::W)
-    {
-        return w;
-    }
-    else
-    {
-        cerr << "Vec4 Out of bounds:" << idx << endl;
-    }
-
-    return 0.0;
-}
-
-Vec4 Vec4::ZERO = Vec4(0.0, 0.0, 0.0, 0.0);
-Vec4 Vec4::ONE = Vec4(1.0, 1.0, 1.0, 1.0);

@@ -1,29 +1,41 @@
 #pragma once
-#include "Vec.h"
 
 namespace acLib
 {
-    namespace segment
+    using namespace vec;
+
+    namespace seg
     {
-        using namespace acLib::vec;
-
-        struct Segment
+        template <typename T>
+        struct segment
         {
+        public: // static
+            static bool IntersectPoint( const segment<T>& seg,
+                                        const vec2<T>& point ) 
+            { return seg.IntersectPoint( point ); }
+
+            static bool Intersect( const segment<T>& seg1,
+                                   const segment<T>& seg2 )
+            { return seg1.Intersect( seg2 ); }
+
+            static vec2<T> CrossPoint( const segment<T>& seg1,
+                                       const segment<T>& seg2 )
+            { return seg1.CrossPoint( seg2 ); }
+
         public:
-            Segment();
-            Segment(const Vec2& start, const Vec2& end);
-
-            bool IntersectPoint(const Vec2& point) const;
-            bool Intersect(const Segment& seg) const;
-            Vec2 CrossPoint(const Segment& seg) const;
-
-            static bool IntersectPoint(const Segment& seg, const Vec2& point);
-            static bool Intersect(const Segment& seg1, const Segment& seg2);
-            static Vec2 CrossPoint(const Segment& seg1, const Segment& seg2);
+            segment();
+            segment(const vec2<T>& start, const vec2<T>& end);
+            
+        public:
+            bool IntersectPoint(const vec2<T>& point) const;
+            bool Intersect(const segment<T>& seg) const;
+            vec2<T> CrossPoint(const segment<T>& seg) const;
 
         public:
-            Vec2 m_start;
-            Vec2 m_end;
+            vec2<T> m_start;
+            vec2<T> m_end;
         };
     }
 }
+
+typedef acLib::seg::segment<double> Segment;

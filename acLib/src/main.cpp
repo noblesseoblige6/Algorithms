@@ -1,8 +1,4 @@
-#include "CGL.h"
-#include "PSL.h"
-#include "Mat.h"
-#include <random>
-#include <algorithm>
+#include "acLib_PCH.h"
 
 using namespace std;
 using namespace acLib::cgl;

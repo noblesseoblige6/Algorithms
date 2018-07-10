@@ -1,8 +1,4 @@
 #pragma once
-#include <vector>
-
-#include "Vec.h"
-#include "Constant.h"
 
 namespace acLib
 {
