@@ -18,10 +18,8 @@ namespace acLib
         }
 
         template<typename T>
-        vec2<T>::vec2( const vec2<T>& orig )
+        vec2<T>::vec2( const vec2<T>& vec ) : x( vec.x ), y( vec.y )
         {
-            x = orig.x;
-            y = orig.y;
         }
 
         template<typename T>
@@ -139,7 +137,7 @@ namespace acLib
         vec2<T> vec2<T>::operator-() const
         {
             vec2<T> res( *this );
-            res *= -1.0;
+            res *= -1;
             return res;
         }
 
@@ -156,11 +154,17 @@ namespace acLib
             return *this;
         }
 
-        template<typename T>
-        const vec2<T> vec2<T>::ZERO = vec2( 0.0, 0.0 );
+        const vec2<int> vec2<int>::ZERO = vec2( 0, 0 );
+        const vec2<float> vec2<float>::ZERO = vec2( 0.0f, 0.0f );
+        const vec2<double> vec2<double>::ZERO = vec2( 0.0, 0.0 );
 
-        template<typename T>
-        const vec2<T> vec2<T>::ONE = vec2( 1.0, 1.0 );
+        const vec2<int> vec2<int>::ONE = vec2( 1, 1 );
+        const vec2<float> vec2<float>::ONE = vec2( 1.0f, 1.0f);
+        const vec2<double> vec2<double>::ONE = vec2( 1.0, 1.0 );
+
+        template vec2<int>;
+        template vec2<float>;
+        template vec2<double>;
 
         template<typename T>
         vec3<T>::vec3() :x( 0 ), y( 0 ), z( 0 ) {}
@@ -578,17 +582,6 @@ namespace acLib
             return *this;
         }
 
-        /*template<typename T>
-        const vec4<T>& vec4<T>::transform( const Mat44& mat )
-        {
-            *this = vec4( vec4<T>::dot( mat.GetRow( 0 ), *this ),
-                vec4<T>::dot( mat.GetRow( 1 ), *this ),
-                vec4<T>::dot( mat.GetRow( 2 ), *this ),
-                vec4<T>::dot( mat.GetRow( 3 ), *this ) );
-
-            return *this;
-        }*/
-
         template<typename T>
         T vec4<T>::operator[]( const int& idx ) const
         {
@@ -608,8 +601,8 @@ namespace acLib
             {
                 return w;
             }
-            
             cerr << "vec4 Out of bounds:" << idx << endl;
+
             return x;
         }
 
@@ -624,6 +617,5 @@ namespace acLib
         template vec4<int>;
         template vec4<float>;
         template vec4<double>;
-
     }
 }

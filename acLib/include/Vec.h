@@ -5,7 +5,6 @@ namespace acLib
     namespace vec
     {
         using namespace std;
-        using namespace constant;
 
         enum VEC_INDEX
         {
@@ -25,7 +24,7 @@ namespace acLib
             vec2();
             vec2(T _v);
             vec2(T _x, T _y);
-            vec2(const vec2& orig);
+            vec2(const vec2& vec);
             ~vec2();
 
             vec2 operator+(const vec2& v) const;
@@ -78,21 +77,27 @@ namespace acLib
                 return os;
             }
 
-            static vec2 normalize(vec2 a)
+            static vec2<float> normalize(vec2<int> a)
             {
-                vec2 res;
-                T len = a.norm();
-                if (len != 0.0) {
-                    res = a / len;
-                }
-                else {
-                    res = vec2(0.0);
-                }
-
-                return res;
+                vec2<float> tmp( static_cast<float>(a.x),
+                                 static_cast<float>(a.y) );
+                float len = static_cast<float>(a.norm());
+                return (len != 0.0) ? tmp / len : vec2<float>::ZERO;
             }
 
-            static T dot(const vec2& a, const vec2& b)
+            static vec2<float> normalize( vec2<float> a )
+            {
+                float len = static_cast<float>(a.norm());
+                return (len != 0.0) ? a / len : vec2<float>::ZERO;
+            }
+
+            static vec2<double> normalize( vec2<double> a )
+            {
+                double len = a.norm();
+                return (len != 0.0) ? a / len : vec2<double>::ZERO;
+            }
+
+            static T dot(const vec2<T>& a, const vec2<T>& b)
             {
                 return a.x*b.x + a.y*b.y;
             }
@@ -142,7 +147,6 @@ namespace acLib
             T normSq() const;
 
             const vec3<T>& normalized();
-            //const vec3<T>& transform(const acLib::mat::Mat33& mat);
 
             T operator[](const int& idx) const;
 
@@ -168,10 +172,25 @@ namespace acLib
                 return os;
             }
 
-            static vec3<T> normalize( vec3<T> a)
+            static vec3<float> normalize( vec3<int> a )
             {
-                T len = (T)a.norm();
-                return (len != 0.0) ? a / len : vec3<T>::ZERO;
+                vec3<float> tmp( static_cast<float>(a.x),
+                                 static_cast<float>(a.y),
+                                 static_cast<float>(a.z) );
+                float len = static_cast<float>(tmp.norm());
+                return (len != 0.0f) ? tmp / len : vec3<float>::ZERO;
+            }
+
+            static vec3<float> normalize( vec3<float> a)
+            {
+                float len = static_cast<float>(a.norm());
+                return (len != 0.0) ? a / len : vec3<float>::ZERO;
+            }
+
+            static vec3<double> normalize( vec3<double> a )
+            {
+                double len = a.norm();
+                return (len != 0.0) ? a / len : vec3<double>::ZERO;
             }
 
             static T dot(const vec3<T>& a, const vec3<T>& b)
@@ -235,7 +254,6 @@ namespace acLib
             T normSq() const;
 
             const vec4& normalized();
-            //const vec4& transform(const acLib::mat::Mat44& mat);
 
             T operator[](const int& idx) const;
 
@@ -267,21 +285,29 @@ namespace acLib
                 return os;
             }
 
-            static vec4 normalize(vec4 a)
+            static vec4<float> normalize( vec4<int> a )
             {
-                vec4 res;
-                T len = (T)a.norm();
-                if (len != 0.0) {
-                    res = a / len;
-                }
-                else {
-                    res = vec4::ZERO;
-                }
-
-                return res;
+                vec4<float> tmp(static_cast<float>(a.x),
+                                static_cast<float>(a.y), 
+                                static_cast<float>(a.z), 
+                                static_cast<float>(a.w));
+                float len = static_cast<float>(a.norm());
+                return (len != 0.0) ? tmp / len : vec4<float>::ZERO;
             }
 
-            static T dot(const vec4& a, const vec4& b)
+            static vec4<float> normalize(vec4<float> a)
+            {
+                float len = (float)a.norm();
+                return (len != 0.0) ? a / len : vec4<float>::ZERO;
+            }
+
+            static vec4<double> normalize( vec4<double> a )
+            {
+                double len = (double)a.norm();
+                return (len != 0.0) ? a / len : vec4<double>::ZERO;
+            }
+
+            static T dot(const vec4<T>& a, const vec4<T>& b)
             {
                 return a.x*b.x + a.y*b.y + a.z * b.z + a.w * b.w;
             }

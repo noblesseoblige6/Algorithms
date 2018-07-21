@@ -186,6 +186,18 @@ namespace acLib
         }
 
         template<typename T>
+        vec3<T> mat33<T>::operator*( const vec3<T>& v ) const
+        {
+            vec3<T> res;
+
+            res.x = vec3<T>::dot( vec3<T>( m[0][0], m[0][1], m[0][2] ), v );
+            res.y = vec3<T>::dot( vec3<T>( m[1][0], m[1][1], m[1][2] ), v );
+            res.z = vec3<T>::dot( vec3<T>( m[2][0], m[2][1], m[2][2] ), v );
+
+            return res;
+        }
+
+        template<typename T>
         mat33<T> mat33<T>::operator/( const T s ) const
         {
             mat33 res;
@@ -263,6 +275,14 @@ namespace acLib
             res.m[2][2] = (m[0][0] * m[1][1] - m[0][1] * m[1][0]) / det;
 
             return res;
+        }
+
+        template<typename T>
+        void mat33<T>::Transform( vec3<T>& vec )
+        {
+            vec = vec3<T>( vec3<T>::dot( GetRow( 0 ), vec ),
+                           vec3<T>::dot( GetRow( 1 ), vec ),
+                           vec3<T>::dot( GetRow( 2 ), vec ) );
         }
 
         template<typename T>
@@ -557,6 +577,19 @@ namespace acLib
         }
 
         template<typename T>
+        vec4<T> mat44<T>::operator*( const vec4<T>& v ) const
+        {
+            vec4<T> res;
+
+            res.x = vec4<T>::dot( vec4<T>( m[0][0], m[0][1], m[0][2], m[0][3] ), v );
+            res.y = vec4<T>::dot( vec4<T>( m[1][0], m[1][1], m[1][2], m[1][3] ), v );
+            res.z = vec4<T>::dot( vec4<T>( m[2][0], m[2][1], m[2][2], m[2][3] ), v );
+            res.w = vec4<T>::dot( vec4<T>( m[3][0], m[3][1], m[3][2], m[3][3] ), v );
+
+            return res;
+        }
+
+        template<typename T>
         mat44<T> mat44<T>::operator/( const T s ) const
         {
             mat44<T> res;
@@ -729,6 +762,15 @@ namespace acLib
         }
 
         template<typename T>
+        void mat44<T>::Transform( vec4<T>& vec )
+        {
+            vec = vec4<T>( vec4<T>::dot( GetRow( 0 ), vec ),
+                           vec4<T>::dot( GetRow( 1 ), vec ),
+                           vec4<T>::dot( GetRow( 2 ), vec ),
+                           vec4<T>::dot( GetRow( 3 ), vec ) );
+        }
+
+        template<typename T>
         vec4<T> mat44<T>::GetRow( const int row ) const
         {
             return vec4<T>( m[row][0], m[row][1], m[row][2], m[row][3] );
@@ -747,24 +789,52 @@ namespace acLib
         }
 
         template<typename T>
-        mat44<T> mat44<T>::CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up )
+        mat44<float> mat44<T>::CreateLookAt( const vec3<float>& eye, const vec3<float>& lookAt, const vec3<float>& up )
         {
-            vec3<T> x, y, z;
+            vec3<float> x, y, z;
 
             z = eye - lookAt;
-            x = vec3<T>::cross( up, z );
-            y = vec3<T>::cross( z, x );
+            x = vec3<float>::cross( up, z );
+            y = vec3<float>::cross( z, x );
 
             x = x.normalized();
             y = y.normalized();
             z = z.normalized();
 
-            T tx, ty, tz;
-            tx = vec3<T>::dot( eye, x );
-            ty = vec3<T>::dot( eye, y );
-            tz = vec3<T>::dot( eye, z );
+            float tx, ty, tz;
+            tx = vec3<float>::dot( eye, x );
+            ty = vec3<float>::dot( eye, y );
+            tz = vec3<float>::dot( eye, z );
 
-            mat44 mat = mat44<T>::IDENTITY;
+            mat44<float> mat = mat44<float>::IDENTITY;
+
+            mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
+            mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
+            mat.m[2][0] = z.x;  mat.m[2][1] = z.y;  mat.m[2][2] = z.z;
+            mat.m[3][0] = tx;   mat.m[3][1] = ty;   mat.m[3][2] = tz;
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<double> mat44<T>::CreateLookAt( const vec3<double>& eye, const vec3<double>& lookAt, const vec3<double>& up )
+        {
+            vec3<double> x, y, z;
+
+            z = eye - lookAt;
+            x = vec3<double>::cross( up, z );
+            y = vec3<double>::cross( z, x );
+
+            x = x.normalized();
+            y = y.normalized();
+            z = z.normalized();
+
+            double tx, ty, tz;
+            tx = vec3<double>::dot( eye, x );
+            ty = vec3<double>::dot( eye, y );
+            tz = vec3<double>::dot( eye, z );
+
+            mat44<double> mat = mat44<double>::IDENTITY;
 
             mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
             mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
@@ -775,7 +845,70 @@ namespace acLib
         }
 
         template<typename T>
-        mat44<double> mat44<T>::CreatePerspectiveFieldOfView( const T radian, const T aspect, const T near, const T far )
+        mat44<float> mat44<T>::CreatePerspectiveFieldOfViewRH( const float radian, const float aspect, const float near, const float far )
+        {
+            mat44<float> mat = mat44<float>::IDENTITY;
+
+            const float t = 1.0f / tan( radian*0.5f );
+            const float dis = far - near;
+
+            mat.m[0][0] = aspect * t;
+
+            mat.m[1][1] = t;
+
+            mat.m[2][2] = -far / dis;
+            mat.m[2][3] = -1.0;
+
+            mat.m[3][3] = 0.0;
+            mat.m[3][2] = -(near*far) / dis;
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<double> mat44<T>::CreatePerspectiveFieldOfViewRH( const double radian, const double aspect, const double near, const double far )
+        {
+            mat44<double> mat = mat44<double>::IDENTITY;
+
+            double t = 1.0 / tan( radian*0.5 );
+            double dis = far - near;
+
+            mat.m[0][0] = aspect * t;
+
+            mat.m[1][1] = t;
+
+            mat.m[2][2] = -far / dis;
+            mat.m[2][3] = -1.0;
+
+            mat.m[3][3] = 0.0;
+            mat.m[3][2] = -(near*far) / dis;
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<float> mat44<T>::CreatePerspectiveFieldOfViewLH( const float radian, const float aspect, const float near, const float far )
+        {
+            mat44<float> mat = mat44<float>::IDENTITY;
+
+            const float t = 1.0f / tan( radian*0.5f );
+            const float dis = far - near;
+
+            mat.m[0][0] = aspect * t;
+
+            mat.m[1][1] = t;
+
+            mat.m[2][2] = far / dis;
+            mat.m[2][3] = 1.0;
+
+            mat.m[3][3] = 0.0;
+            mat.m[3][2] = -(near*far) / dis;
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<double> mat44<T>::CreatePerspectiveFieldOfViewLH( const double radian, const double aspect, const double near, const double far )
         {
             mat44<double> mat = mat44<double>::IDENTITY;
 
