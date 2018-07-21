@@ -65,7 +65,7 @@ namespace acLib
 
             static void FindConvexHull(vector<Vec2>& points, vector<Vec2>& res)
             {
-                const int size = points.size();
+                const int size = static_cast<int>(points.size());
 
                 //@comment sort the vertices by y-axis
                 sort(points.begin(), points.end());
@@ -78,7 +78,7 @@ namespace acLib
                 //@comment Search right-hand side
                 for (int i = 2; i < size; ++i)
                 {
-                    for (int n = rSide.size() - 1; n >= 1; --n)
+                    for (int n = static_cast<int>(rSide.size()) - 1; n >= 1; --n)
                     {
                         const Vec2 &a = rSide[n] - rSide[n - 1];
                         const Vec2 &b = points[i] - rSide[n];
@@ -104,7 +104,7 @@ namespace acLib
                 //@comment Search left-hand side
                 for (int i = size - 3; i >= 0; --i)
                 {
-                    for (int n = lSide.size() - 1; n >= 1; --n)
+                    for (int n = static_cast<int>(lSide.size()) - 1; n >= 1; --n)
                     {
                         const Vec2 &a = lSide[n] - lSide[n - 1];
                         const Vec2 &b = points[i] - lSide[n];
@@ -161,7 +161,7 @@ namespace acLib
                 cutConvex.reserve(convex.size());
 
                 //@comment For detection second inter.occurs last segment, loop one more
-                const int size = convex.size();
+                const int size = static_cast<int>(convex.size());
                 for (int i = 0; i < size; ++i)
                 {
                     Vec2 tmp = Vec2::normalize(convex[i] - start);
