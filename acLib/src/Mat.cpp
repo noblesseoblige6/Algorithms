@@ -894,7 +894,7 @@ namespace acLib
             const float t = 1.0f / tan( radian*0.5f );
             const float dis = far - near;
 
-            mat.m[0][0] = aspect * t;
+            mat.m[0][0] = 1.0f/aspect * t;
 
             mat.m[1][1] = t;
 
