@@ -1,5 +1,4 @@
 #pragma once
-
 namespace acLib
 {
     namespace util
@@ -145,6 +144,124 @@ namespace acLib
                     quickSort( arr, rIdx + 1, r );
                 }
             }
+        };
+
+        class Log
+        {
+        public:
+            enum LOG_LEVEL
+            {
+                LOG_LEVEL_DEBUG = 0,
+                LOG_LEVEL_INFO,
+                LOG_LEVEL_WARNING,
+                LOG_LEVEL_ERROR,
+            };
+
+        public:
+            template<typename First, typename... Rest>
+            static void OutputWithPrefix( LOG_LEVEL logLevel, const char* format, const First& first, const Rest&... rest )
+            {
+                if (logLevel < g_logLevel)
+                    return;
+
+                PrefixOut( logLevel );
+
+                Output(logLevel, format, first, rest...);
+            }
+
+            template<typename First, typename... Rest>
+            static void Output( LOG_LEVEL logLevel, const char* format, const First& first, const Rest&... rest)
+            {
+                if (logLevel < g_logLevel)
+                    return;
+
+                while (*format) 
+                {
+                    if (*format == '%' && *(++format) != '%')
+                    {
+                        ConsoleOut( logLevel, first, false );
+                        Output( logLevel, *format ? ++format : format, rest...);
+                        return;
+                    }
+
+                    char a[2];
+                    strncpy_s( a, sizeof(a), format, 1 );
+                    ConsoleOut( logLevel, a, false );
+
+                    ++format;
+                }
+            }
+
+            static void OutputWithPrefix( LOG_LEVEL logLevel, const char* format )
+            {
+                if (logLevel < g_logLevel)
+                    return;
+
+                PrefixOut( logLevel );
+
+                Output( logLevel, format );
+            }
+
+            static void Output( LOG_LEVEL logLevel, const char* format )
+            {
+                if (logLevel < g_logLevel)
+                    return;
+
+                ConsoleOut( logLevel, format, true);
+            }
+
+            static void Output( LOG_LEVEL logLevel )
+            {
+                (void)logLevel;
+            }
+
+        protected:
+            static void PrefixOut( LOG_LEVEL logLevel )
+            {
+                switch (logLevel)
+                {
+                case acLib::util::Log::LOG_LEVEL_DEBUG:
+                    cout << "DEBUG: ";
+                    break;
+                case acLib::util::Log::LOG_LEVEL_INFO:
+                    cout << "INFO: ";
+                    break;
+                case acLib::util::Log::LOG_LEVEL_WARNING:
+                    cerr << "WARNING: ";
+                    break;
+                case acLib::util::Log::LOG_LEVEL_ERROR:
+                    cerr << "ERROR: ";
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            template<class T>
+            static void ConsoleOut( LOG_LEVEL logLevel, T message, bool bNewLine = true )
+            {
+                switch (logLevel)
+                {
+                case LOG_LEVEL_DEBUG:
+                case LOG_LEVEL_INFO:
+                    cout << message;
+                    if (bNewLine)
+                        cerr << endl;
+                    break;
+                case LOG_LEVEL_WARNING:
+                case LOG_LEVEL_ERROR:
+                    cerr << message;
+                    if (bNewLine)
+                        cerr << endl;
+                    break;
+                default:
+                    break;
+                };
+                
+            }
+
+        private:
+            static LOG_LEVEL g_logLevel;
         };
     }
 }

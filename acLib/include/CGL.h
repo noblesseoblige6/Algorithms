@@ -1,6 +1,4 @@
-﻿#pragma once
-
-namespace acLib
+﻿namespace acLib
 {
     namespace cgl
     {
@@ -177,7 +175,7 @@ namespace acLib
                     const Segment seg2(start, end);
                     if (Segment::Intersect(seg1, seg2))
                     {
-                        Vec2 tmp = Segment::CrossPoint(seg1, seg2);
+                        tmp = Segment::CrossPoint(seg1, seg2);
 
                         //@comment avoid miss judge that the same point is intersection
                         if (tmp == convex[i] || tmp == convex[(i + 1) % size])
@@ -258,7 +256,7 @@ namespace acLib
                 }
 
                 dir.normalized();
-                return (std::max(Vec3::dot(normal1, dir), 0.0)*std::max(Vec3::dot(normal2, -dir), 0.0)) / rSq;
+                return (max(Vec3::dot(normal1, dir), 0.0)*max(Vec3::dot(normal2, -dir), 0.0)) / rSq;
             }
 
             static Vec3 RotateX(const Vec3& vec, const double deg)
