@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <algorithm>
 #include <random>
@@ -16,6 +18,10 @@
 #include "Mat.h"
 
 #include "Segment.h"
+#include "Triangle.h"
 
 #include "CGL.h"
 #include "PSL.h"
+
+#include "Loader/acModelLoader.h"
+#include "Loader/acObjLoader.h"

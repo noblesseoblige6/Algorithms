@@ -157,9 +157,12 @@
     <ClInclude Include="..\include\acLib_PCH.h" />
     <ClInclude Include="..\include\CGL.h" />
     <ClInclude Include="..\include\Constant.h" />
+    <ClInclude Include="..\include\Loader\acModelLoader.h" />
+    <ClInclude Include="..\include\Loader\acObjLoader.h" />
     <ClInclude Include="..\include\Mat.h" />
     <ClInclude Include="..\include\PSL.h" />
     <ClInclude Include="..\include\Segment.h" />
+    <ClInclude Include="..\include\Triangle.h" />
     <ClInclude Include="..\include\Util.h" />
     <ClInclude Include="..\include\Vec.h" />
   </ItemGroup>
@@ -168,6 +171,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\Loader\acModelLoader.cpp" />
+    <ClCompile Include="..\src\Loader\acObjLoader.cpp" />
     <ClCompile Include="..\src\main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -176,6 +181,7 @@
     <ClCompile Include="..\src\Segment.cpp" />
     <ClCompile Include="..\src\Util .cpp" />
     <ClCompile Include="..\src\Vec.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

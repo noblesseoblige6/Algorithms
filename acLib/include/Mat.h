@@ -109,6 +109,9 @@ namespace acLib
             mat44(const mat44& mat);
             ~mat44();
 
+            void Scale( const vec3<T>& scaler );
+            void Translate( const vec3<T>& translate );
+
             mat44 operator+(const T& v) const;
             mat44 operator+(const mat44& mat) const;
             mat44 operator-(const T& v) const;

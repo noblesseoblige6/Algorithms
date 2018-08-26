@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Arithmetic">
+      <UniqueIdentifier>{5487b518-eaa5-4632-ba5d-3249b2784ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Arithmetic">
+      <UniqueIdentifier>{54c8df5c-02e7-4f0c-a21c-cc7a7de8d391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Loader">
+      <UniqueIdentifier>{96990b2c-17b2-42ac-9609-7267d3941094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Loader">
+      <UniqueIdentifier>{11a8ca41-c48c-4321-8cc2-1a365a2acb35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CGL.h">
@@ -21,39 +33,36 @@
     <ClInclude Include="..\include\Constant.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Mat.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\PSL.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Segment.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Util.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Vec.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\acLib_PCH.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Vec.h">
+      <Filter>ヘッダー ファイル\Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Mat.h">
+      <Filter>ヘッダー ファイル\Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Segment.h">
+      <Filter>ヘッダー ファイル\Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Loader\acObjLoader.h">
+      <Filter>ヘッダー ファイル\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Loader\acModelLoader.h">
+      <Filter>ヘッダー ファイル\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Triangle.h">
+      <Filter>ヘッダー ファイル\Arithmetic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Mat.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Vec.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PSL.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Segment.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\src\acLib_PCH.cpp">
@@ -61,6 +70,27 @@
     </ClCompile>
     <ClCompile Include="..\src\Util .cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Segment.cpp">
+      <Filter>ソース ファイル\Arithmetic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Mat.cpp">
+      <Filter>ソース ファイル\Arithmetic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Vec.cpp">
+      <Filter>ソース ファイル\Arithmetic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PSL.cpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Loader\acObjLoader.cpp">
+      <Filter>ソース ファイル\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Loader\acModelLoader.cpp">
+      <Filter>ソース ファイル\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>ソース ファイル\Arithmetic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

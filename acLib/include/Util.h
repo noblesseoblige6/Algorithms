@@ -4,6 +4,24 @@ namespace acLib
     namespace util
     {
         using namespace std;
+        class StrUtil
+        {
+        public:
+            static void Split( const string& src, char delim , vector<string>& res )
+            {
+                stringstream ss( src );
+                string item;
+
+                while (getline( ss, item, delim ))
+                {
+                    if (!item.empty()) 
+                    {
+                        res.push_back( item );
+                    }
+                }
+            }
+
+        };
 
         class MathUtil
         {

@@ -1,6 +1,6 @@
 namespace acLib
 {
-    namespace seg
+    namespace arithmetic
     {
         using namespace vec;
 

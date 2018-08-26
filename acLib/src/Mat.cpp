@@ -928,6 +928,23 @@ namespace acLib
             return mat;
         }
 
+        template<typename T>
+        void mat44<T>::Scale( const vec3<T>& scaler )
+        {
+            m[0][0] = scaler[0];
+            m[1][1] = scaler[1];
+            m[2][2] = scaler[2];
+        }
+
+        template<typename T>
+        void mat44<T>::Translate( const vec3<T>& translate )
+        {
+            m[3][0] = translate[0];
+            m[3][1] = translate[1];
+            m[3][2] = translate[2];
+        }
+
+
         mat44<int> mat44<int>::IDENTITY = mat44( 1, 0, 0, 0,
                                                  0, 1, 0, 0,
                                                  0, 0, 1, 0,

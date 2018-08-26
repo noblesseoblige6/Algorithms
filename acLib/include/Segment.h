@@ -4,7 +4,7 @@ namespace acLib
 {
     using namespace vec;
 
-    namespace seg
+    namespace arithmetic
     {
         template <typename T>
         struct segment
@@ -38,4 +38,4 @@ namespace acLib
     }
 }
 
-typedef acLib::seg::segment<double> Segment;
+typedef acLib::arithmetic::segment<double> Segment;
