@@ -5,7 +5,7 @@
         using namespace std;
 
         using namespace vec;
-        using namespace seg;
+        using namespace arithmetic;
         using namespace constant;
 
         class CGL
