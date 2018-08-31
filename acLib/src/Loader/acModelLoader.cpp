@@ -6,7 +6,7 @@ namespace acLib
     acModelLoader::acModelLoader()
     {
         m_vertices.clear();
-        m_faces.clear();
+        m_indices.clear();
         m_texCoords.clear();
         m_normals.clear();
         m_polygons.clear();

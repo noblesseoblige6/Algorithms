@@ -16,6 +16,7 @@
 
     acObjLoader::~acObjLoader()
     {
+        m_faces.clear();
     }
 
     bool acObjLoader::Load( const std::string& filename )
@@ -70,12 +71,55 @@
                     Log::Output( Log::LOG_LEVEL_ERROR, "Fail to read line from file" );
                 }
 
-                vector<string> values;
-                StrUtil::Split(line, ' ', values);
-                for (string str : values)
+                vector<string> faceStr;
+                StrUtil::Split(line, ' ', faceStr );
+
+                int n = faceStr.size();
+                vector<int> values;
+                for (int face_i = 0; face_i < faceStr.size(); ++face_i)
                 {
-                   m_faces.push_back( atoi( str.c_str() )-1 );
+                    vector<string> elements;
+                    StrUtil::Split( faceStr[face_i], '/', elements );
+
+                    FaceInfo face;
+                    for (int element_i = 0; element_i < elements.size(); ++element_i)
+                    {
+                        string& str = elements[element_i];
+                        int value = atoi( str.c_str() ) - 1;
+                        if (element_i == 0)
+                        {
+                            values.push_back( value );
+                            face.vertex = value;
+                        }
+                        else if (element_i == 1)
+                        {
+                            face.texCoord = value;
+                        }
+                        else
+                        {
+                            face.normal = value;
+                        }
+                    }
+                    m_faces.push_back( face );
                 }
+
+                int i = 1;
+                while(1)
+                {
+                    m_indices.push_back( values[0] );
+
+                    for (int j = i; j < i + 2; ++j)
+                    {
+                        m_indices.push_back(values[j]);
+                    }
+
+                    i++;
+
+                    if (i >= n-1)
+                        break;
+                }
+
+                m_vertexPerFaceCount = n;
             }
         }
 

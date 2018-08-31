@@ -15,9 +15,9 @@ namespace acLib
         Vec3f& GetVertex( int index ) { return m_vertices[index]; }
         const Vec3f& GetVertex( int index ) const { return m_vertices[index]; }
 
-        int GetFaceCount()const { return static_cast<int>(m_faces.size()); }
-        int GetFace( int index ) { return m_faces[index]; }
-        const int GetFace( int index ) const { return m_faces[index]; }
+        int GetIndexCount()const { return static_cast<int>(m_indices.size()); }
+        int GetIndex( int index ) { return m_indices[index]; }
+        const int GetIndex( int index ) const { return m_indices[index]; }
 
         int GetNormalCount()const { return static_cast<int>(m_normals.size()); }
         Vec3f& GetNormal( int index ) { return m_normals[index]; }
@@ -29,7 +29,7 @@ namespace acLib
 
     protected:
         std::vector<Vec3f> m_vertices;
-        std::vector<int>   m_faces;
+        std::vector<int>   m_indices;
         std::vector<Vec3f> m_normals;
         std::vector<Vec2f> m_texCoords;
         std::vector<TriangleF> m_polygons;
