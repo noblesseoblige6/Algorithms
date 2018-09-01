@@ -74,7 +74,7 @@
                 vector<string> faceStr;
                 StrUtil::Split(line, ' ', faceStr );
 
-                int n = faceStr.size();
+                int n = static_cast<int>(faceStr.size());
                 vector<int> values;
                 for (int face_i = 0; face_i < faceStr.size(); ++face_i)
                 {
