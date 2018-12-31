@@ -16,6 +16,7 @@
 
 #include "Vec.h"
 #include "Mat.h"
+#include "Quaternion.h"
 
 #include "Segment.h"
 #include "Triangle.h"

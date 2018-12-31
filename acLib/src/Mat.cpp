@@ -944,6 +944,13 @@ namespace acLib
             m[3][2] = translate[2];
         }
 
+        template<typename T>
+        void mat44<T>::Move( const vec3<T>& vec )
+        {
+            m[3][0] += vec[0];
+            m[3][1] += vec[1];
+            m[3][2] += vec[2];
+        }
 
         mat44<int> mat44<int>::IDENTITY = mat44( 1, 0, 0, 0,
                                                  0, 1, 0, 0,

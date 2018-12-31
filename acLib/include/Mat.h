@@ -112,6 +112,8 @@ namespace acLib
             void Scale( const vec3<T>& scaler );
             void Translate( const vec3<T>& translate );
 
+            void Move( const vec3<T>& vec );
+
             mat44 operator+(const T& v) const;
             mat44 operator+(const mat44& mat) const;
             mat44 operator-(const T& v) const;
