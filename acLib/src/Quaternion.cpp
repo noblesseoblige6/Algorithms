@@ -1,7 +1,5 @@
 namespace acLib
 {
-    using namespace vec;
-
     namespace quat
     {
         template<typename T>
@@ -12,12 +10,12 @@ namespace acLib
         }
 
         template<typename T>
-        Quat<T>::Quat( T _t, vec3<T> _v ) : t( _t ), v( _v )
+        Quat<T>::Quat( T _t, vec3<T> _v ) : t( cos( _t*0.5f ) ), v( vec3<T>(_v.x * sin(_t*0.5f), _v.y * sin( _t*0.5f ) , _v.z * sin( _t*0.5f )))
         {
         }
 
         template<typename T>
-        Quat<T>::Quat( T _t, T _x, T _y, T _z ) : t( _t ), v( vec3<T>( _x, _y, _z ) )
+        Quat<T>::Quat( T _t, T _x, T _y, T _z ) : t( cos( _t*0.5f ) ), v( vec3<T>( _x * sin( _t*0.5f ), _y * sin( _t*0.5f ), _z * sin( _t*0.5f )))
         {
         }
 
@@ -139,13 +137,13 @@ namespace acLib
         }
 
         template<typename T>
-        T Quat<T>::norm() const
+        T Quat<T>::Norm() const
         {
-            return sqrt( normSq() );
+            return sqrt( NormSq() );
         }
 
         template<typename T>
-        T Quat<T>::normSq() const
+        T Quat<T>::NormSq() const
         {
             return MulConjugate( *this );
         }
@@ -154,7 +152,7 @@ namespace acLib
         Quat<T> Quat<T>::Inverse() const
         {
             Quat<T> res;
-            res = Conjugate() / normSq();
+            res = Conjugate() / NormSq();
             return res;
         }
 
@@ -187,8 +185,35 @@ namespace acLib
            return t*q.t + v.x*q.v.x + v.x*q.v.x + v.y*q.v.y + v.z*q.v.z;
         }
 
-        const Quat<float> Quat<float>::ZERO = Quat( 0.0f, 0.0f );
-        const Quat<double> Quat<double>::ZERO = Quat( 0.0, 0.0 );
+        template<typename T>
+        void Quat<T>::Rotate( vec3<T>& point )
+        {
+            Quat<T> res;
+
+            Quat<T> q;
+            q.t = 0;
+            q.v = point;
+
+            res = Conjugate() * q * (*this);
+
+            point = res.v;
+        }
+
+        template<typename T>
+        mat33<T> Quat<T>::GetRotationMatrix() const
+        {
+            T xSq = v.x*v.x;
+            T ySq = v.y*v.y;
+            T zSq = v.z*v.z;
+
+            mat33<T> mat = mat33<T>( vec3<T>( 1 - 2*ySq - 2*zSq    , 2*v.x*v.y + 2*t*v.z , 2 * v.x*v.z - 2*t*v.y ),
+                                     vec3<T>( 2*v.x*v.y - 2*t*v.z, 1 - 2*xSq - 2*zSq   , 2 * v.y*v.z + 2*t*v.x ),
+                                     vec3<T>( 2*v.x*v.z + 2*t*v.y  , 2*v.y*v.z - 2*t*v.x , 1 - 2*xSq - 2*ySq ));
+            return mat;
+        }
+
+        const Quat<float> Quat<float>::ZERO = Quat( static_cast<float>(kPI), 0.0f );
+        const Quat<double> Quat<double>::ZERO = Quat( kPI, 0.0 );
 
         template Quat<float>;
         template Quat<double>;

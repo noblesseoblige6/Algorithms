@@ -2,6 +2,10 @@
 
 namespace acLib
 {
+    using namespace vec;
+    using namespace mat;
+    using namespace constant;
+
     namespace quat
     {
         using namespace std;
@@ -35,8 +39,8 @@ namespace acLib
 
             Quat operator-() const;
 
-            T norm() const;
-            T normSq() const;
+            T Norm() const;
+            T NormSq() const;
 
             Quat Inverse() const;
             const Quat& Inversed();
@@ -44,6 +48,9 @@ namespace acLib
             Quat Conjugate() const;
             const Quat& Conjugated();
             T MulConjugate( const Quat& q ) const;
+
+            void Rotate( vec3<T>& point );
+            mat33<T> GetRotationMatrix() const;
 
             friend Quat operator* ( const T s, const Quat& q )
             {
