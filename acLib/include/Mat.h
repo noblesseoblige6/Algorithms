@@ -28,6 +28,7 @@ namespace acLib
             mat33 operator-(const T& v) const;
             mat33 operator-(const mat33& mat) const;
             mat33 operator*( const T s ) const;
+            mat33 operator*( const mat33& mat ) const;
             vec3<T> operator*(const vec3<T>& s) const;
             mat33 operator/(const T s) const;
 
@@ -89,14 +90,9 @@ namespace acLib
             static mat44 ZERO;
 
         public:
-            static mat44<float>  CreateLookAt( const vec3<float>& eye, const vec3<float>& lookAt, const vec3<float>& up );
-            static mat44<double> CreateLookAt( const vec3<double>& eye, const vec3<double>& lookAt, const vec3<double>& up );
-
-            static mat44<float>  CreatePerspectiveFieldOfViewRH( const float radian, const float aspect, const float near, const float far );
-            static mat44<double> CreatePerspectiveFieldOfViewRH( const double radian, const double aspect, const double near, const double far );
-
-            static mat44<float>  CreatePerspectiveFieldOfViewLH( const float radian, const float aspect, const float near, const float far );
-            static mat44<double> CreatePerspectiveFieldOfViewLH( const double radian, const double aspect, const double near, const double far );
+            static mat44  CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up );
+            static mat44  CreatePerspectiveFieldOfViewRH( const T radian, const T aspect, const T near, const T far );
+            static mat44  CreatePerspectiveFieldOfViewLH( const T radian, const T aspect, const T near, const T far );
 
         public:
             mat44();
@@ -107,6 +103,7 @@ namespace acLib
                   T m20, T m21, T m22, T m23,
                   T m30, T m31, T m32, T m33);
             mat44(const mat44& mat);
+            mat44( const mat33<T>& mat, const vec3<T>& p );
             ~mat44();
 
             void Scale( const vec3<T>& scaler );
@@ -119,6 +116,7 @@ namespace acLib
             mat44 operator-(const T& v) const;
             mat44 operator-(const mat44& mat) const;
             mat44 operator*(const T s) const;
+            mat44 operator*( const mat44& mat ) const;
             vec4<T> operator*(const vec4<T>& v) const;
             mat44 operator/(const T s) const;
 
@@ -129,8 +127,8 @@ namespace acLib
 
             mat44 operator-() const;
 
-            double Determinant() const;
-            mat44<double> Inverse();
+            T Determinant() const;
+            mat44 Inverse();
 
             void Transform(vec4<T>& vec);
 

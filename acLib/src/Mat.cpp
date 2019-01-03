@@ -186,6 +186,17 @@ namespace acLib
         }
 
         template<typename T>
+        mat33<T> mat33<T>::operator*( const mat33& mat ) const
+        {
+            mat33<T> res;
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j)
+                    res.m[i][j] = vec3<T>::dot( GetRow( i ), mat.GetColumn( j ) );
+
+            return res;
+        }
+
+        template<typename T>
         vec3<T> mat33<T>::operator*( const vec3<T>& v ) const
         {
             vec3<T> res;
@@ -412,6 +423,30 @@ namespace acLib
         }
 
         template<typename T>
+        mat44<T>::mat44( const mat33<T>& mat, const vec3<T>& p )
+        {
+            m[0][0] = mat.GetElement( 0, 0 );
+            m[0][1] = mat.GetElement( 0, 1 );
+            m[0][2] = mat.GetElement( 0, 2 );
+            m[0][3] = static_cast<T>(0);
+
+            m[1][0] = mat.GetElement( 1, 0 );
+            m[1][1] = mat.GetElement( 1, 1 );
+            m[1][2] = mat.GetElement( 1, 2 );
+            m[1][3] = static_cast<T>(0);
+
+            m[2][0] = mat.GetElement( 2, 0 );
+            m[2][1] = mat.GetElement( 2, 1 );
+            m[2][2] = mat.GetElement( 2, 2 );
+            m[2][3] = static_cast<T>(0);
+
+            m[3][0] = p.x;
+            m[3][1] = p.y;
+            m[3][2] = p.z;
+            m[3][3] = static_cast<T>(1);
+        }
+
+        template<typename T>
         mat44<T>::~mat44()
         {
         }
@@ -577,6 +612,17 @@ namespace acLib
         }
 
         template<typename T>
+        mat44<T> mat44<T>::operator*( const mat44& mat ) const
+        {
+            mat44<T> res;
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j)
+                    res.m[i][j] = vec4<T>::dot( GetRow( i ), mat.GetColumn( j ) );
+
+            return res;
+        }
+
+        template<typename T>
         vec4<T> mat44<T>::operator*( const vec4<T>& v ) const
         {
             vec4<T> res;
@@ -640,7 +686,7 @@ namespace acLib
         }
 
         template<typename T>
-        double mat44<T>::Determinant() const
+        T mat44<T>::Determinant() const
         {
             const vec4<T>& row0 = GetRow( 0 );
             const vec4<T>& row1 = GetRow( 1 );
@@ -667,11 +713,11 @@ namespace acLib
         }
 
         template<typename T>
-        mat44<double> mat44<T>::Inverse()
+        mat44<T> mat44<T>::Inverse()
         {
-            mat44<double> res;
+            mat44<T> res;
 
-            double det = Determinant();
+            T det = Determinant();
             if (det == 0.0)
             {
                 cerr << "Waring: No Inverse Matrix" << endl;
@@ -683,78 +729,78 @@ namespace acLib
             const vec4<T>& row2 = GetRow( 2 );
             const vec4<T>& row3 = GetRow( 3 );
 
-            mat33<double> M[4][4];
-            M[0][0] = mat33<double>( vec3<double>( row1[1], row1[2], row1[3] ),
-                             vec3<double>( row2[1], row2[2], row2[3] ),
-                             vec3<double>( row3[1], row3[2], row3[3] ) );
+            mat33<T> M[4][4];
+            M[0][0] = mat33<T>( vec3<T>( row1[1], row1[2], row1[3] ),
+                             vec3<T>( row2[1], row2[2], row2[3] ),
+                             vec3<T>( row3[1], row3[2], row3[3] ) );
 
-            M[0][1] = mat33<double>( vec3<double>( row1[0], row1[2], row1[3] ),
-                             vec3<double>( row2[0], row2[2], row2[3] ),
-                             vec3<double>( row3[0], row3[2], row3[3] ) );
+            M[0][1] = mat33<T>( vec3<T>( row1[0], row1[2], row1[3] ),
+                             vec3<T>( row2[0], row2[2], row2[3] ),
+                             vec3<T>( row3[0], row3[2], row3[3] ) );
 
-            M[0][2] = mat33<double>( vec3<double>( row1[0], row1[1], row1[3] ),
-                             vec3<double>( row2[0], row2[1], row2[3] ),
-                             vec3<double>( row3[0], row3[1], row3[3] ) );
+            M[0][2] = mat33<T>( vec3<T>( row1[0], row1[1], row1[3] ),
+                             vec3<T>( row2[0], row2[1], row2[3] ),
+                             vec3<T>( row3[0], row3[1], row3[3] ) );
 
-            M[0][3] = mat33<double>( vec3<double>( row1[0], row1[1], row1[2] ),
-                             vec3<double>( row2[0], row2[1], row2[2] ),
-                             vec3<double>( row3[0], row3[1], row3[2] ) );
+            M[0][3] = mat33<T>( vec3<T>( row1[0], row1[1], row1[2] ),
+                             vec3<T>( row2[0], row2[1], row2[2] ),
+                             vec3<T>( row3[0], row3[1], row3[2] ) );
 
-            M[1][0] = mat33<double>( vec3<double>( row0[1], row0[2], row0[3] ),
-                             vec3<double>( row2[1], row2[2], row2[3] ),
-                             vec3<double>( row3[1], row3[2], row3[3] ) );
-
-
-            M[1][1] = mat33<double>( vec3<double>( row0[0], row0[2], row0[3] ),
-                             vec3<double>( row2[0], row2[2], row2[3] ),
-                             vec3<double>( row3[0], row3[2], row3[3] ) );
-
-            M[1][2] = mat33<double>( vec3<double>( row0[0], row0[1], row0[3] ),
-                             vec3<double>( row2[0], row2[1], row2[3] ),
-                             vec3<double>( row3[0], row3[1], row3[3] ) );
-
-            M[1][3] = mat33<double>( vec3<double>( row0[0], row0[1], row0[2] ),
-                             vec3<double>( row2[0], row2[1], row2[2] ),
-                             vec3<double>( row3[0], row3[1], row3[2] ) );
+            M[1][0] = mat33<T>( vec3<T>( row0[1], row0[2], row0[3] ),
+                             vec3<T>( row2[1], row2[2], row2[3] ),
+                             vec3<T>( row3[1], row3[2], row3[3] ) );
 
 
-            M[2][0] = mat33<double>( vec3<double>( row0[1], row0[2], row0[3] ),
-                             vec3<double>( row1[1], row1[2], row1[3] ),
-                             vec3<double>( row3[1], row3[2], row3[3] ) );
+            M[1][1] = mat33<T>( vec3<T>( row0[0], row0[2], row0[3] ),
+                             vec3<T>( row2[0], row2[2], row2[3] ),
+                             vec3<T>( row3[0], row3[2], row3[3] ) );
 
-            M[2][1] = mat33<double>( vec3<double>( row0[0], row0[2], row0[3] ),
-                             vec3<double>( row1[0], row1[2], row1[3] ),
-                             vec3<double>( row3[0], row3[2], row3[3] ) );
+            M[1][2] = mat33<T>( vec3<T>( row0[0], row0[1], row0[3] ),
+                             vec3<T>( row2[0], row2[1], row2[3] ),
+                             vec3<T>( row3[0], row3[1], row3[3] ) );
 
-            M[2][2] = mat33<double>( vec3<double>( row0[0], row0[1], row0[3] ),
-                vec3<double>( row1[0], row1[1], row1[3] ),
-                vec3<double>( row3[0], row3[1], row3[3] ) );
+            M[1][3] = mat33<T>( vec3<T>( row0[0], row0[1], row0[2] ),
+                             vec3<T>( row2[0], row2[1], row2[2] ),
+                             vec3<T>( row3[0], row3[1], row3[2] ) );
 
-            M[2][3] = mat33<double>( vec3<double>( row0[0], row0[1], row0[2] ),
-                vec3<double>( row1[0], row1[1], row1[2] ),
-                vec3<double>( row3[0], row3[1], row3[2] ) );
 
-            M[3][0] = mat33<double>( vec3<double>( row0[1], row0[2], row0[3] ),
-                vec3<double>( row1[1], row1[2], row1[3] ),
-                vec3<double>( row2[1], row2[2], row2[3] ) );
+            M[2][0] = mat33<T>( vec3<T>( row0[1], row0[2], row0[3] ),
+                             vec3<T>( row1[1], row1[2], row1[3] ),
+                             vec3<T>( row3[1], row3[2], row3[3] ) );
 
-            M[3][1] = mat33<double>( vec3<double>( row0[0], row0[2], row0[3] ),
-                vec3<double>( row1[0], row1[2], row1[3] ),
-                vec3<double>( row2[0], row2[2], row2[3] ) );
+            M[2][1] = mat33<T>( vec3<T>( row0[0], row0[2], row0[3] ),
+                             vec3<T>( row1[0], row1[2], row1[3] ),
+                             vec3<T>( row3[0], row3[2], row3[3] ) );
 
-            M[3][2] = mat33<double>( vec3<double>( row0[0], row0[1], row0[3] ),
-                vec3<double>( row1[0], row1[1], row1[3] ),
-                vec3<double>( row2[0], row2[1], row2[3] ) );
+            M[2][2] = mat33<T>( vec3<T>( row0[0], row0[1], row0[3] ),
+                vec3<T>( row1[0], row1[1], row1[3] ),
+                vec3<T>( row3[0], row3[1], row3[3] ) );
 
-            M[3][3] = mat33<double>( vec3<double>( row0[0], row0[1], row0[2] ),
-                vec3<double>( row1[0], row1[1], row1[2] ),
-                vec3<double>( row2[0], row2[1], row2[2] ) );
+            M[2][3] = mat33<T>( vec3<T>( row0[0], row0[1], row0[2] ),
+                vec3<T>( row1[0], row1[1], row1[2] ),
+                vec3<T>( row3[0], row3[1], row3[2] ) );
+
+            M[3][0] = mat33<T>( vec3<T>( row0[1], row0[2], row0[3] ),
+                vec3<T>( row1[1], row1[2], row1[3] ),
+                vec3<T>( row2[1], row2[2], row2[3] ) );
+
+            M[3][1] = mat33<T>( vec3<T>( row0[0], row0[2], row0[3] ),
+                vec3<T>( row1[0], row1[2], row1[3] ),
+                vec3<T>( row2[0], row2[2], row2[3] ) );
+
+            M[3][2] = mat33<T>( vec3<T>( row0[0], row0[1], row0[3] ),
+                vec3<T>( row1[0], row1[1], row1[3] ),
+                vec3<T>( row2[0], row2[1], row2[3] ) );
+
+            M[3][3] = mat33<T>( vec3<T>( row0[0], row0[1], row0[2] ),
+                vec3<T>( row1[0], row1[1], row1[2] ),
+                vec3<T>( row2[0], row2[1], row2[2] ) );
 
             for (int i = 0; i < 4; ++i)
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    res.m[i][j] = pow( -1, i + j ) * M[j][i].Determinant() / det;
+                    res.m[i][j] = static_cast<T>(pow( -1, i + j ) * M[j][i].Determinant() / det);
                 }
             }
 
@@ -789,24 +835,24 @@ namespace acLib
         }
 
         template<typename T>
-        mat44<float> mat44<T>::CreateLookAt( const vec3<float>& eye, const vec3<float>& lookAt, const vec3<float>& up )
+        mat44<T> mat44<T>::CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up )
         {
-            vec3<float> x, y, z;
+            vec3<T> x, y, z;
 
             z = eye - lookAt;
-            x = vec3<float>::cross( up, z );
-            y = vec3<float>::cross( z, x );
+            x = vec3<T>::cross( up, z );
+            y = vec3<T>::cross( z, x );
 
             x = x.normalized();
             y = y.normalized();
             z = z.normalized();
 
-            float tx, ty, tz;
-            tx = vec3<float>::dot( eye, x );
-            ty = vec3<float>::dot( eye, y );
-            tz = vec3<float>::dot( eye, z );
+            T tx, ty, tz;
+            tx = vec3<T>::dot( eye, x );
+            ty = vec3<T>::dot( eye, y );
+            tz = vec3<T>::dot( eye, z );
 
-            mat44<float> mat = mat44<float>::IDENTITY;
+            mat44<T> mat = mat44<T>::IDENTITY;
 
             mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
             mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
@@ -817,112 +863,42 @@ namespace acLib
         }
 
         template<typename T>
-        mat44<double> mat44<T>::CreateLookAt( const vec3<double>& eye, const vec3<double>& lookAt, const vec3<double>& up )
+        mat44<T> mat44<T>::CreatePerspectiveFieldOfViewRH( const T radian, const T aspect, const T near, const T far )
         {
-            vec3<double> x, y, z;
+            mat44<T> mat = mat44<T>::IDENTITY;
 
-            z = eye - lookAt;
-            x = vec3<double>::cross( up, z );
-            y = vec3<double>::cross( z, x );
-
-            x = x.normalized();
-            y = y.normalized();
-            z = z.normalized();
-
-            double tx, ty, tz;
-            tx = vec3<double>::dot( eye, x );
-            ty = vec3<double>::dot( eye, y );
-            tz = vec3<double>::dot( eye, z );
-
-            mat44<double> mat = mat44<double>::IDENTITY;
-
-            mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
-            mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
-            mat.m[2][0] = z.x;  mat.m[2][1] = z.y;  mat.m[2][2] = z.z;
-            mat.m[3][0] = tx; mat.m[3][1] = ty; mat.m[3][2] = tz;
-
-            return mat;
-        }
-
-        template<typename T>
-        mat44<float> mat44<T>::CreatePerspectiveFieldOfViewRH( const float radian, const float aspect, const float near, const float far )
-        {
-            mat44<float> mat = mat44<float>::IDENTITY;
-
-            const float t = 1.0f / tan( radian*0.5f );
-            const float dis = far - near;
+            const T t   = static_cast<T>(1.0 / tan( radian*0.5 ));
+            const T dis = static_cast<T>(far - near);
 
             mat.m[0][0] = aspect * t;
 
             mat.m[1][1] = t;
 
             mat.m[2][2] = -far / dis;
-            mat.m[2][3] = -1.0;
+            mat.m[2][3] = static_cast<T>(-1);
 
-            mat.m[3][3] = 0.0;
+            mat.m[3][3] = static_cast<T>(0);
             mat.m[3][2] = -(near*far) / dis;
 
             return mat;
         }
 
         template<typename T>
-        mat44<double> mat44<T>::CreatePerspectiveFieldOfViewRH( const double radian, const double aspect, const double near, const double far )
+        mat44<T> mat44<T>::CreatePerspectiveFieldOfViewLH( const T radian, const T aspect, const T near, const T far )
         {
-            mat44<double> mat = mat44<double>::IDENTITY;
+            mat44<T> mat = mat44<T>::IDENTITY;
 
-            double t = 1.0 / tan( radian*0.5 );
-            double dis = far - near;
+            const T t   = static_cast<T>(1.0 / tan( radian*0.5f ));
+            const T dis = static_cast<T>(far - near);
 
-            mat.m[0][0] = aspect * t;
-
-            mat.m[1][1] = t;
-
-            mat.m[2][2] = -far / dis;
-            mat.m[2][3] = -1.0;
-
-            mat.m[3][3] = 0.0;
-            mat.m[3][2] = -(near*far) / dis;
-
-            return mat;
-        }
-
-        template<typename T>
-        mat44<float> mat44<T>::CreatePerspectiveFieldOfViewLH( const float radian, const float aspect, const float near, const float far )
-        {
-            mat44<float> mat = mat44<float>::IDENTITY;
-
-            const float t = 1.0f / tan( radian*0.5f );
-            const float dis = far - near;
-
-            mat.m[0][0] = 1.0f/aspect * t;
+            mat.m[0][0] = static_cast<T>(1.0/aspect * t);
 
             mat.m[1][1] = t;
 
             mat.m[2][2] = far / dis;
-            mat.m[2][3] = 1.0;
+            mat.m[2][3] = static_cast<T>(1);
 
-            mat.m[3][3] = 0.0;
-            mat.m[3][2] = -(near*far) / dis;
-
-            return mat;
-        }
-
-        template<typename T>
-        mat44<double> mat44<T>::CreatePerspectiveFieldOfViewLH( const double radian, const double aspect, const double near, const double far )
-        {
-            mat44<double> mat = mat44<double>::IDENTITY;
-
-            double t = 1.0 / tan( radian*0.5 );
-            double dis = far - near;
-
-            mat.m[0][0] = aspect * t;
-
-            mat.m[1][1] = t;
-
-            mat.m[2][2] = far / dis;
-            mat.m[2][3] = 1.0;
-
-            mat.m[3][3] = 0.0;
+            mat.m[3][3] = static_cast<T>(0);
             mat.m[3][2] = -(near*far) / dis;
 
             return mat;
