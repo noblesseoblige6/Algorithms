@@ -136,6 +136,9 @@ namespace acLib
             vec4<T> GetColumn(const int column) const;
             T GetElement(const int row, const int column) const;
 
+            vec3<T>  GetPosition() const;
+            mat33<T> GetScaleAndRoation() const;
+
             friend mat44 operator+ (const T s, const mat44& mat)
             {
                 mat44 res(mat);

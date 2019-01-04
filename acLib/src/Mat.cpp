@@ -835,11 +835,27 @@ namespace acLib
         }
 
         template<typename T>
+        vec3<T> mat44<T>::GetPosition() const
+        {
+            vec3<T> pos( m[3][0], m[3][1], m[3][2] );
+            return pos;
+        }
+
+        template<typename T>
+        mat33<T> mat44<T>::GetScaleAndRoation() const
+        {
+            mat33<T> res = mat33<T>( GetElement( 0, 0 ), GetElement( 0, 1 ), GetElement( 0, 2 ),
+                                     GetElement( 1, 0 ), GetElement( 1, 1 ), GetElement( 1, 2 ),
+                                     GetElement( 2, 0 ), GetElement( 2, 1 ), GetElement( 2, 2 ) );
+            return res;
+        }
+
+        template<typename T>
         mat44<T> mat44<T>::CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up )
         {
             vec3<T> x, y, z;
 
-            z = eye - lookAt;
+            z = lookAt - eye;
             x = vec3<T>::cross( up, z );
             y = vec3<T>::cross( z, x );
 
@@ -848,15 +864,15 @@ namespace acLib
             z = z.normalized();
 
             T tx, ty, tz;
-            tx = vec3<T>::dot( eye, x );
-            ty = vec3<T>::dot( eye, y );
-            tz = vec3<T>::dot( eye, z );
+            tx = -vec3<T>::dot( eye, x );
+            ty = -vec3<T>::dot( eye, y );
+            tz = -vec3<T>::dot( eye, z );
 
             mat44<T> mat = mat44<T>::IDENTITY;
 
-            mat.m[0][0] = x.x;  mat.m[0][1] = x.y;  mat.m[0][2] = x.z;
-            mat.m[1][0] = y.x;  mat.m[1][1] = y.y;  mat.m[1][2] = y.z;
-            mat.m[2][0] = z.x;  mat.m[2][1] = z.y;  mat.m[2][2] = z.z;
+            mat.m[0][0] = x.x;  mat.m[0][1] = y.x;  mat.m[0][2] = z.x;
+            mat.m[1][0] = x.y;  mat.m[1][1] = y.y;  mat.m[1][2] = z.y;
+            mat.m[2][0] = x.z;  mat.m[2][1] = y.z;  mat.m[2][2] = z.z;
             mat.m[3][0] = tx;   mat.m[3][1] = ty;   mat.m[3][2] = tz;
 
             return mat;
