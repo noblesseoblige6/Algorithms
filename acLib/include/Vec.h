@@ -20,6 +20,8 @@ namespace acLib
         public:
             static const vec2 ZERO;
             static const vec2 ONE;
+            static const vec2 XAXIS;
+            static const vec2 YAXIS;
 
             vec2();
             vec2(T _v);
@@ -47,7 +49,7 @@ namespace acLib
 
             vec2 operator-() const;
 
-            double norm() const;
+            T norm() const;
             const vec2& normalized();
 
             friend vec2 operator+ (const T s, const vec2& v)
@@ -116,8 +118,11 @@ namespace acLib
         struct vec3
         {
         public:
-            static vec3<T> ZERO;
-            static vec3<T> ONE;
+            static const vec3 ZERO;
+            static const vec3 ONE;
+            static const vec3 XAXIS;
+            static const vec3 YAXIS;
+            static const vec3 ZAXIS;
 
             vec3();
             vec3(T _v);
@@ -143,7 +148,7 @@ namespace acLib
             bool operator<=(const vec3<T>& v) const;
             vec3<T> operator-() const;
 
-            double norm() const;
+            T norm() const;
             T normSq() const;
 
             const vec3<T>& normalized();
@@ -201,8 +206,8 @@ namespace acLib
             static vec3<T> cross(const vec3<T>& a, const vec3<T>& b)
             {
                 vec3<T> res(a.y*b.z - a.z*b.y,
-                    a.z*b.x - a.x*b.z,
-                    a.x*b.y - a.y*b.x);
+                            a.z*b.x - a.x*b.z,
+                            a.x*b.y - a.y*b.x);
 
                 return res;
             }
@@ -222,8 +227,11 @@ namespace acLib
         struct vec4
         {
         public:
-            static vec4 ZERO;
-            static vec4 ONE;
+            static const vec4 ZERO;
+            static const vec4 ONE;
+            static const vec4 XAXIS;
+            static const vec4 YAXIS;
+            static const vec4 ZAXIS;
 
             vec4();
             vec4(T _v);
@@ -250,7 +258,7 @@ namespace acLib
             bool operator<=(const vec4& v) const;
             vec4 operator-() const;
 
-            double norm() const;
+            T norm() const;
             T normSq() const;
 
             const vec4& normalized();

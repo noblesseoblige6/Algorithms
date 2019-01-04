@@ -142,9 +142,9 @@ namespace acLib
         }
 
         template<typename T>
-        double vec2<T>::norm() const
+        T vec2<T>::norm() const
         {
-            return (double)sqrt( x*x + y * y );
+            return (T)sqrt( x*x + y * y );
         }
 
         template<typename T>
@@ -154,13 +154,17 @@ namespace acLib
             return *this;
         }
 
-        const vec2<int> vec2<int>::ZERO = vec2( 0, 0 );
-        const vec2<float> vec2<float>::ZERO = vec2( 0.0f, 0.0f );
-        const vec2<double> vec2<double>::ZERO = vec2( 0.0, 0.0 );
+        template<typename T>
+        const vec2<T> vec2<T>::ZERO = vec2( static_cast<T>(0), static_cast<T>(0) );
 
-        const vec2<int> vec2<int>::ONE = vec2( 1, 1 );
-        const vec2<float> vec2<float>::ONE = vec2( 1.0f, 1.0f);
-        const vec2<double> vec2<double>::ONE = vec2( 1.0, 1.0 );
+        template<typename T>
+        const vec2<T> vec2<T>::ONE = vec2( static_cast<T>(1), static_cast<T>(1) );
+
+        template<typename T>
+        const vec2<T> vec2<T>::XAXIS = vec2( static_cast<T>(1), static_cast<T>(0) );
+
+        template<typename T>
+        const vec2<T> vec2<T>::YAXIS = vec2( static_cast<T>(0), static_cast<T>(1) );
 
         template vec2<int>;
         template vec2<float>;
@@ -324,9 +328,9 @@ namespace acLib
         }
 
         template<typename T>
-        double vec3<T>::norm() const
+        T vec3<T>::norm() const
         {
-            return (double)sqrt( normSq() );
+            return (T)sqrt( normSq() );
         }
 
         template<typename T>
@@ -369,13 +373,20 @@ namespace acLib
             return x;
         }
 
-        vec3<int> vec3<int>::ZERO = vec3( 0, 0, 0 );
-        vec3<float> vec3<float>::ZERO = vec3( 0.0f, 0.0f, 0.0f );
-        vec3<double> vec3<double>::ZERO = vec3( 0.0, 0.0, 0.0 );
+        template<typename T>
+        const vec3<T> vec3<T>::ZERO = vec3( static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) );
 
-        vec3<int> vec3<int>::ONE = vec3( 1, 1, 1);
-        vec3<float> vec3<float>::ONE = vec3( 1.0f, 1.0f, 1.0f );
-        vec3<double> vec3<double>::ONE = vec3( 1.0, 1.0, 1.0 );
+        template<typename T>
+        const vec3<T> vec3<T>::ONE = vec3( static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) );
+
+        template<typename T>
+        const vec3<T> vec3<T>::XAXIS = vec3( static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) );
+
+        template<typename T>
+        const vec3<T> vec3<T>::YAXIS = vec3( static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) );
+
+        template<typename T>
+        const vec3<T> vec3<T>::ZAXIS = vec3( static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) );
 
         template vec3<int>;
         template vec3<float>;
@@ -564,9 +575,9 @@ namespace acLib
         }
 
         template<typename T>
-        double vec4<T>::norm() const
+        T vec4<T>::norm() const
         {
-            return (double)sqrt( normSq() );
+            return (T)sqrt( normSq() );
         }
 
         template<typename T>
@@ -606,13 +617,20 @@ namespace acLib
             return x;
         }
 
-        vec4<int> vec4<int>::ZERO = vec4( 0, 0, 0, 0 );
-        template<typename T>
-        vec4<T> vec4<T>::ZERO = vec4( 0.0, 0.0, 0.0, 0.0 );
+        template <typename T>
+        const vec4<T> vec4<T>::ZERO = vec4( static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) );
 
-        vec4<int> vec4<int>::ONE = vec4( 1, 1, 1, 1 );
         template<typename T>
-        vec4<T> vec4<T>::ONE = vec4( 1.0, 1.0, 1.0, 1.0 );
+        const vec4<T> vec4<T>::ONE = vec4( static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) );
+
+        template<typename T>
+        const vec4<T> vec4<T>::XAXIS = vec4( static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) );
+
+        template<typename T>
+        const vec4<T> vec4<T>::YAXIS = vec4( static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(1) );
+
+        template<typename T>
+        const vec4<T> vec4<T>::ZAXIS = vec4( static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(1) );
 
         template vec4<int>;
         template vec4<float>;
