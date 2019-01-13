@@ -2,18 +2,21 @@
 
 namespace acLib
 {
+    using namespace std;
+
     class acObjLoader : public acModelLoader
     {
         struct FaceInfo
         {
-            int vertex;
-            int texCoord;
-            int normal;
+            vector<int> vertex;
+            vector<int> texCoord;
+            vector<int> normal;
+            Vec3f       faceNormal;
         };
 
     public:
         acObjLoader();
-
+        acObjLoader( const LoadOption& option );
         acObjLoader( const std::string& );
 
         ~acObjLoader();
@@ -24,8 +27,12 @@ namespace acLib
         FaceInfo& GetFace( int index ) { return m_faces[index]; }
         const FaceInfo& GetFace( int index ) const { return m_faces[index]; }
 
+    protected:
+        void CreateNormal();
+
     private:
-        std::vector<FaceInfo>   m_faces;
-        int                m_vertexPerFaceCount;
+        vector<FaceInfo>       m_faces;
+        map<int, vector<int> > m_vertexFaceMap;
+        int                    m_vertexPerFaceCount;
     };
 }

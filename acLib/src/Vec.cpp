@@ -1,5 +1,7 @@
 namespace acLib
 {
+    using namespace util;
+
     namespace vec
     {
         template<typename T>
@@ -342,7 +344,14 @@ namespace acLib
         template<typename T>
         const vec3<T>& vec3<T>::normalized()
         {
-            *this /= (T)this->norm();
+            T deno = (T)this->norm();
+            if (deno == (T)0)
+            {
+                Log::Output( Log::LOG_LEVEL_ERROR, "Zero division!" );
+                return *this;
+            }
+
+            *this /= deno;
             return *this;
         }
 

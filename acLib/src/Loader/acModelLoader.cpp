@@ -12,6 +12,12 @@ namespace acLib
         m_polygons.clear();
     }
 
+    acModelLoader::acModelLoader( const LoadOption& option )
+        : acModelLoader()
+    {
+        m_option = option;
+    }
+
     acModelLoader::~acModelLoader()
     {}
 }

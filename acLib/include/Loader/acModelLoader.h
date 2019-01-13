@@ -5,9 +5,32 @@ namespace acLib
     class acModelLoader
     {
     public:
+        enum NORMAL_TYPE
+        {
+            NORMAL_TYPE_FACE = 0,
+            NORMAL_TYPE_VERTEX
+        };
+
+        struct LoadOption
+        {
+            LoadOption() 
+                : bCreateNormal( true )
+                , normalType( NORMAL_TYPE_VERTEX )
+            {
+            }
+
+            bool bCreateNormal;
+            NORMAL_TYPE normalType;
+        };
+
+    public:
         acModelLoader();
+        acModelLoader(const LoadOption& option);
 
         ~acModelLoader();
+
+        const LoadOption& GetLoadOption() const { return m_option; }
+        void SetLoadOption( const LoadOption& option ) { m_option = option; }
 
         virtual bool Load( const std::string& ) = 0;
 
@@ -33,5 +56,7 @@ namespace acLib
         std::vector<Vec3f> m_normals;
         std::vector<Vec2f> m_texCoords;
         std::vector<TriangleF> m_polygons;
+
+        LoadOption m_option;
     };
 }
