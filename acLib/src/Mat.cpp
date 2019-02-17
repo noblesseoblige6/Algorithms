@@ -904,7 +904,7 @@ namespace acLib
         {
             mat44<T> mat = mat44<T>::IDENTITY;
 
-            const T t   = static_cast<T>(1.0 / tan( radian*0.5f ));
+            const T t   = static_cast<T>(1.0 / tan( radian*0.5 ));
             const T dis = static_cast<T>(far - near);
 
             mat.m[0][0] = static_cast<T>(1.0/aspect * t);

@@ -4,6 +4,10 @@ namespace acLib
     namespace util
     {
         using namespace std;
+        #define AC_USE_VAR(x) (void*)x;
+        #define AC_MAX(a, b) (((a) > (b)) ? (a) : (b))
+        #define AC_MIN(a,b)  (((a) < (b)) ? (a) : (b))
+
         class StrUtil
         {
         public:
