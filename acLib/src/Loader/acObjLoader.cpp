@@ -96,7 +96,7 @@
                             m_indices.push_back( value );
                             face.vertex.push_back( value );
 
-                            m_vertexFaceMap[value].push_back( m_faces.size() );
+                            m_vertexFaceMap[value].push_back( static_cast<int>(m_faces.size()) );
                         }
                         else if (element_i == 1)
                         {
