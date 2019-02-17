@@ -197,11 +197,11 @@ namespace acLib
 
             // ƒŠƒ\[ƒX‚ð¶¬.
             hr = pDevice->CreateCommittedResource( &prop,
-                D3D12_HEAP_FLAG_NONE,
-                &desc,
-                D3D12_RESOURCE_STATE_GENERIC_READ,
-                nullptr,
-                IID_PPV_ARGS( m_pBuffer.ReleaseAndGetAddressOf() ) );
+                                                   D3D12_HEAP_FLAG_NONE,
+                                                   &desc,
+                                                   D3D12_RESOURCE_STATE_DEPTH_WRITE,
+                                                   &clearValue,
+                                                   IID_PPV_ARGS( m_pBuffer.ReleaseAndGetAddressOf() ) );
 
             if (FAILED( hr ))
             {
