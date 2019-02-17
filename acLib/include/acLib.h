@@ -47,4 +47,4 @@
 #undef far
 
 #include "DX12/DescriptorHeap.h"
-#include "DX12/ConstantBuffer.h"
+#include "DX12/Buffer.h"
