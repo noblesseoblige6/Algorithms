@@ -105,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\a_comma\WorkSpace\Algorithms\acLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WindowsSDK_IncludePath);$(ProjectDir)\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>acLib_PCH.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>acLib_PCH.h</ForcedIncludeFiles>
     </ClCompile>
@@ -113,6 +113,12 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>shlwapi.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath)\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -142,7 +148,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\a_comma\WorkSpace\Algorithms\acLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WindowsSDK_IncludePath);$(ProjectDir)\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>acLib_PCH.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>acLib_PCH.h</ForcedIncludeFiles>
     </ClCompile>
@@ -152,11 +158,19 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>shlwapi.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath)\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\acLib_PCH.h" />
     <ClInclude Include="..\include\CGL.h" />
     <ClInclude Include="..\include\Constant.h" />
+    <ClInclude Include="..\include\DX12\ConstantBuffer.h" />
+    <ClInclude Include="..\include\DX12\DescriptorHeap.h" />
     <ClInclude Include="..\include\Loader\acModelLoader.h" />
     <ClInclude Include="..\include\Loader\acObjLoader.h" />
     <ClInclude Include="..\include\Mat.h" />
@@ -172,6 +186,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\DX12\ConstantBuffer.cpp" />
+    <ClCompile Include="..\src\DX12\DescriptorHeap.cpp" />
     <ClCompile Include="..\src\Loader\acModelLoader.cpp" />
     <ClCompile Include="..\src\Loader\acObjLoader.cpp" />
     <ClCompile Include="..\src\main.cpp">

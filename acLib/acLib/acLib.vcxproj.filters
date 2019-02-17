@@ -25,6 +25,12 @@
     <Filter Include="ソース ファイル\Math">
       <UniqueIdentifier>{54c8df5c-02e7-4f0c-a21c-cc7a7de8d391}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\DX12">
+      <UniqueIdentifier>{c98b5895-2c0c-44c9-876f-03b6da83f700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\DX12">
+      <UniqueIdentifier>{ff3c9118-3bd1-4cbd-94a3-4b87b719862e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CGL.h">
@@ -63,6 +69,12 @@
     <ClInclude Include="..\include\Quaternion.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\DX12\DescriptorHeap.h">
+      <Filter>ヘッダー ファイル\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DX12\ConstantBuffer.h">
+      <Filter>ヘッダー ファイル\DX12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -83,9 +95,6 @@
     <ClCompile Include="..\src\Vec.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\PSL.cpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Loader\acObjLoader.cpp">
       <Filter>ソース ファイル\Loader</Filter>
     </ClCompile>
@@ -97,6 +106,15 @@
     </ClCompile>
     <ClCompile Include="..\src\Quaternion.cpp">
       <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DX12\DescriptorHeap.cpp">
+      <Filter>ソース ファイル\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PSL.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DX12\ConstantBuffer.cpp">
+      <Filter>ソース ファイル\DX12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
