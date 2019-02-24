@@ -22,7 +22,7 @@ namespace acLib
             }
         };
 
-        bool Buffer::Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc )
+        bool Buffer::Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
         {
             HRESULT hr = S_OK;
 
@@ -30,8 +30,8 @@ namespace acLib
             hr = pDevice->CreateCommittedResource( &prop,
                                                    D3D12_HEAP_FLAG_NONE,
                                                    &desc,
-                                                   D3D12_RESOURCE_STATE_GENERIC_READ,
-                                                   nullptr,
+                                                   initState,
+                                                   pClearValue,
                                                    IID_PPV_ARGS( m_pBuffer.ReleaseAndGetAddressOf() ) );
 
             if (FAILED( hr ))
@@ -150,15 +150,6 @@ namespace acLib
         ConstantBuffer::~ConstantBuffer()
         {}
 
-        bool ConstantBuffer::Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc )
-        {
-            HRESULT hr = S_OK;
-
-            Buffer::Create( pDevice, prop, desc );
-
-            return true;
-        };
-
         bool ConstantBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
         {
             if (!Buffer::CreateBufferView( pDevice, desc ))
@@ -171,7 +162,7 @@ namespace acLib
             // 定数バッファビューの設定.
             D3D12_CONSTANT_BUFFER_VIEW_DESC bufferDesc = {};
             bufferDesc.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
-            bufferDesc.SizeInBytes    = m_bufferSize;
+            bufferDesc.SizeInBytes    = (UINT)m_bufferSize;
 
             // 定数バッファビューを生成.
             pDevice->CreateConstantBufferView( &bufferDesc, m_handle );
@@ -189,29 +180,6 @@ namespace acLib
 
         DepthStencilBuffer::~DepthStencilBuffer()
         {
-        };
-
-        bool DepthStencilBuffer::Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_CLEAR_VALUE& clearValue )
-        {
-            HRESULT hr = S_OK;
-
-            // リソースを生成.
-            hr = pDevice->CreateCommittedResource( &prop,
-                                                   D3D12_HEAP_FLAG_NONE,
-                                                   &desc,
-                                                   D3D12_RESOURCE_STATE_DEPTH_WRITE,
-                                                   &clearValue,
-                                                   IID_PPV_ARGS( m_pBuffer.ReleaseAndGetAddressOf() ) );
-
-            if (FAILED( hr ))
-            {
-                Log::Output( Log::LOG_LEVEL_ERROR, "ID3D12Device::CreateCommittedResource() Failed." );
-                return false;
-            }
-
-            CreateBufferView( pDevice, desc );
-
-            return true;
         };
 
         bool DepthStencilBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )

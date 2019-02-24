@@ -16,7 +16,7 @@ namespace acLib
             void SetDescHeap( shared_ptr<DescriptorHeap> heap ) { m_pDescHeap = heap; }
             shared_ptr<DescriptorHeap> GetDescHeap() const { return m_pDescHeap; }
 
-            bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc );
+            bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue = nullptr);
             virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
 
             virtual bool Map( void* pData, int size );
@@ -86,7 +86,6 @@ namespace acLib
             ConstantBuffer();
             ~ConstantBuffer();
 
-            virtual bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc );
             virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc  );
 
         private:
@@ -99,7 +98,6 @@ namespace acLib
             DepthStencilBuffer();
             ~DepthStencilBuffer();
 
-            bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_CLEAR_VALUE& clearValue );
             virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
 
         private:
