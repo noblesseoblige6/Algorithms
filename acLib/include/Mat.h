@@ -91,6 +91,13 @@ namespace acLib
 
         public:
             static mat44  CreateLookAt( const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up );
+
+            static mat44  CreateOrthoRH( const T left, const T right, const T bottom, const T top, const T near, const T far );
+            static mat44  CreateOrthoLH( const T left, const T right, const T bottom, const T top, const T near, const T far );
+
+            static mat44  CreatePerspectiveRH( const T left, const T right, const T bottom, const T top, const T near, const T far );
+            static mat44  CreatePerspectiveLH( const T left, const T right, const T bottom, const T top, const T near, const T far );
+
             static mat44  CreatePerspectiveFieldOfViewRH( const T radian, const T aspect, const T near, const T far );
             static mat44  CreatePerspectiveFieldOfViewLH( const T radian, const T aspect, const T near, const T far );
 

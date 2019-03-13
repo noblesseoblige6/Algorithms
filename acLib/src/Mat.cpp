@@ -879,6 +879,94 @@ namespace acLib
         }
 
         template<typename T>
+        mat44<T> mat44<T>::CreateOrthoRH( const T left, const T right, const T bottom, const T top, const T near, const T far )
+        {
+            mat44<T> mat = mat44<T>::IDENTITY;
+
+            T w = right - left;
+            T h = top - bottom;
+            T d = near - far;
+
+            mat.m[0][0] = static_cast<T>(2.0 / w);
+
+            mat.m[1][1] = static_cast<T>(2.0 / h);
+
+            mat.m[2][2] = static_cast<T>(-1.0 / d);
+
+            mat.m[3][0] = static_cast<T>(-(right + left) / w);
+            mat.m[3][1] = static_cast<T>(-(top + bottom) / h);
+            mat.m[3][2] = static_cast<T>(near / d);
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::CreateOrthoLH( const T left, const T right, const T bottom, const T top, const T near, const T far )
+        {
+            mat44<T> mat = mat44<T>::IDENTITY;
+
+            T w = right - left;
+            T h = top - bottom;
+            T d = far - near;
+
+            mat.m[0][0] = static_cast<T>(2.0 / w);
+
+            mat.m[1][1] = static_cast<T>(2.0 / h);
+
+            mat.m[2][2] = static_cast<T>(1.0 / d);
+
+            mat.m[3][0] = static_cast<T>(-(right+left) / w);
+            mat.m[3][1] = static_cast<T>(-(top+bottom) / h);
+            mat.m[3][2] = static_cast<T>(-near / d);
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::CreatePerspectiveRH( const T left, const T right, const T bottom, const T top, const T near, const T far )
+        {
+            mat44<T> mat = mat44<T>::IDENTITY;
+
+            T w = right - left;
+            T h = top - bottom;
+            T d = far - near;
+
+            mat.m[0][0] = static_cast<T>((2 * near) / w);
+
+            mat.m[1][1] = static_cast<T>((2 * near) / h);
+
+            mat.m[2][2] = -far / d;
+            mat.m[2][3] = static_cast<T>(-1);
+
+            mat.m[3][3] = static_cast<T>(0);
+            mat.m[3][2] = -(near*far) / d;
+
+            return mat;
+        }
+
+        template<typename T>
+        mat44<T> mat44<T>::CreatePerspectiveLH( const T left, const T right, const T bottom, const T top, const T near, const T far )
+        {
+            mat44<T> mat = mat44<T>::IDENTITY;
+
+            T w = right - left;
+            T h = top - bottom;
+            T d = far - near;
+
+            mat.m[0][0] = static_cast<T>((2 * near) / w);
+
+            mat.m[1][1] = static_cast<T>((2 * near) / h);
+
+            mat.m[2][2] = far / d;
+            mat.m[2][3] = static_cast<T>(1);
+
+            mat.m[3][3] = static_cast<T>(0);
+            mat.m[3][2] = -(near*far) / d;
+
+            return mat;
+        }
+
+        template<typename T>
         mat44<T> mat44<T>::CreatePerspectiveFieldOfViewRH( const T radian, const T aspect, const T near, const T far )
         {
             mat44<T> mat = mat44<T>::IDENTITY;
@@ -904,12 +992,15 @@ namespace acLib
         {
             mat44<T> mat = mat44<T>::IDENTITY;
 
-            const T t   = static_cast<T>(1.0 / tan( radian*0.5 ));
+            const T f   = static_cast<T>(1.0 / tan( radian*0.5 ));
             const T dis = static_cast<T>(far - near);
 
-            mat.m[0][0] = static_cast<T>(1.0/aspect * t);
+            T w = (2*far*aspect) / f;
+            T h = (2 * far) / f;
 
-            mat.m[1][1] = t;
+            mat.m[0][0] = static_cast<T>(f / aspect);
+
+            mat.m[1][1] = f;
 
             mat.m[2][2] = far / dis;
             mat.m[2][3] = static_cast<T>(1);
