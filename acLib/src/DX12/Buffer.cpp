@@ -7,9 +7,11 @@ namespace acLib
         Buffer::Buffer()
             : m_pBuffer( nullptr )
             , m_pDataBegin( 0 )
-            , m_pDescHeap( nullptr )
-            , m_handle( {} )
+            , m_pDescHeap()
+            , m_handle()
         {
+            m_pDescHeap.clear();
+            m_handle.clear();
         };
 
 
@@ -40,15 +42,62 @@ namespace acLib
                 return false;
             }
 
-            CreateBufferView( pDevice, desc );
-
             return true;
         };
 
-        bool Buffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
+        bool Buffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> pHeap, BUFFER_VIEW_TYPE type )
         {
-            if (!AdvanceHadle())
+            D3D12_CPU_DESCRIPTOR_HANDLE handle;
+            if (!AdvanceHadle(pHeap.get(), handle))
                 return false;
+
+            m_handle.push_back( handle );
+
+            switch (type)
+            {
+            case BUFFER_VIEW_TYPE_RENDER_TARGET:
+            {
+                D3D12_RENDER_TARGET_VIEW_DESC bufferDesc;
+                bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                bufferDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+                bufferDesc.Texture2D.MipSlice = 0;
+                bufferDesc.Texture2D.PlaneSlice = 0;
+
+                pDevice->CreateRenderTargetView( m_pBuffer.Get(), &bufferDesc, m_handle.back() );
+            }
+            break;
+            case BUFFER_VIEW_TYPE_DEPTH_STENCIL:
+            {
+                D3D12_DEPTH_STENCIL_VIEW_DESC bufferDesc = {};
+                bufferDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+                bufferDesc.Format = DXGI_FORMAT_D32_FLOAT;
+                bufferDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+                bufferDesc.Texture2D.MipSlice = 0;
+                bufferDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+                pDevice->CreateDepthStencilView( m_pBuffer.Get(), &bufferDesc, m_handle.back() );
+            }
+            break;
+            case BUFFER_VIEW_TYPE_SHADER_RESOURCE:
+            {
+                D3D12_SHADER_RESOURCE_VIEW_DESC  bufferDesc = {};
+                bufferDesc.Format = DXGI_FORMAT_R32_FLOAT;
+                bufferDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+                bufferDesc.Texture2D.MipLevels = 1;
+                bufferDesc.Texture2D.MostDetailedMip = 0;
+                bufferDesc.Texture2D.PlaneSlice = 0;
+                bufferDesc.Texture2D.ResourceMinLODClamp = 0.0F;
+                bufferDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+                pDevice->CreateShaderResourceView( m_pBuffer.Get(), &bufferDesc, m_handle.back() );
+            }
+            break;
+            case BUFFER_VIEW_TYPE_CONSTANT:
+            case BUFFER_VIEW_TYPE_VERTEX:
+            case BUFFER_VIEW_TYPE_INDEX:
+            default:
+                break;
+            }
 
             return true;
         }
@@ -77,23 +126,17 @@ namespace acLib
             m_pBuffer->Unmap( 0, nullptr );
         }
 
-        bool Buffer::AdvanceHadle()
+        bool Buffer::AdvanceHadle( DescriptorHeap* pHeap, D3D12_CPU_DESCRIPTOR_HANDLE& handle )
         {
-            if (m_pDescHeap == nullptr)
-            {
-                Log::Output( Log::LOG_LEVEL_ERROR, "Buffer::AdvanceHadle --> No descriptor heap." );
-                return false;
-            }
+            size_t count = pHeap->GetBufferCount();
             
-            size_t count = m_pDescHeap->GetBufferCount();
-            m_handle = m_pDescHeap->GetCPUStartHandle();
-            m_handle.ptr += m_pDescHeap->GetIncrementSize() * count;
+            handle = pHeap->GetCPUStartHandle();
+            handle.ptr += pHeap->GetIncrementSize() * count;
 
-            m_pDescHeap->SetBufferCount( count + 1 );
+            pHeap->SetBufferCount( count + 1 );
 
             return true;
         }
-
 
         //----------------------------------------------
         VertexBuffer::VertexBuffer()
@@ -109,7 +152,7 @@ namespace acLib
             m_vertexBufferView.StrideInBytes = 0;
         }
 
-        bool VertexBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
+        bool VertexBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
         {
             m_vertexBufferView.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
             m_vertexBufferView.StrideInBytes  = (UINT)m_dataStride;
@@ -131,7 +174,7 @@ namespace acLib
             m_depthStencilBufferView.SizeInBytes = 0;
         }
 
-        bool IndexBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
+        bool IndexBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
         {
             m_depthStencilBufferView.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
             m_depthStencilBufferView.Format         = m_dataFormat;
@@ -150,22 +193,25 @@ namespace acLib
         ConstantBuffer::~ConstantBuffer()
         {}
 
-        bool ConstantBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
+        bool ConstantBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
         {
-            if (!Buffer::CreateBufferView( pDevice, desc ))
+            if (!Buffer::CreateBufferView( pDevice, desc, heap, type ))
             {
                 return false;
             }
+
+            if (type != BUFFER_VIEW_TYPE_CONSTANT)
+                return true;
 
             m_bufferSize = desc.Width;
 
             // 定数バッファビューの設定.
             D3D12_CONSTANT_BUFFER_VIEW_DESC bufferDesc = {};
             bufferDesc.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
-            bufferDesc.SizeInBytes    = (UINT)m_bufferSize;
+            bufferDesc.SizeInBytes = (UINT)m_bufferSize;
 
             // 定数バッファビューを生成.
-            pDevice->CreateConstantBufferView( &bufferDesc, m_handle );
+            pDevice->CreateConstantBufferView( &bufferDesc, m_handle.back() );
 
             return true;
         }
@@ -182,24 +228,6 @@ namespace acLib
         {
         };
 
-        bool DepthStencilBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
-        {
-            if (!Buffer::CreateBufferView( pDevice, desc ))
-            {
-                return false;
-            }
-
-            D3D12_DEPTH_STENCIL_VIEW_DESC bufferDesc = {};
-            bufferDesc.ViewDimension      = D3D12_DSV_DIMENSION_TEXTURE2D;
-            bufferDesc.Format             = DXGI_FORMAT_D32_FLOAT;
-            bufferDesc.ViewDimension      = D3D12_DSV_DIMENSION_TEXTURE2D;
-            bufferDesc.Texture2D.MipSlice = 0;
-            bufferDesc.Flags              = D3D12_DSV_FLAG_NONE;
-
-            pDevice->CreateDepthStencilView( m_pBuffer.Get(), &bufferDesc, m_handle );
-
-            return true;
-        }
 
         RenderTarget::RenderTarget()
             : Buffer()
@@ -210,23 +238,5 @@ namespace acLib
         RenderTarget::~RenderTarget()
         {
         };
-
-        bool RenderTarget::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc )
-        {
-            if (!Buffer::CreateBufferView( pDevice, desc ))
-            {
-                return false;
-            }
-
-            D3D12_RENDER_TARGET_VIEW_DESC bufferDesc;
-            bufferDesc.Format               = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-            bufferDesc.ViewDimension        = D3D12_RTV_DIMENSION_TEXTURE2D;
-            bufferDesc.Texture2D.MipSlice   = 0;
-            bufferDesc.Texture2D.PlaneSlice = 0;
-
-            pDevice->CreateRenderTargetView( m_pBuffer.Get(), &bufferDesc, m_handle );
-
-            return true;
-        }
     }
 }

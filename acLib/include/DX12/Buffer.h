@@ -10,14 +10,24 @@ namespace acLib
         class Buffer
         {
         public:
+            enum BUFFER_VIEW_TYPE 
+            {
+                BUFFER_VIEW_TYPE_RENDER_TARGET = 0,
+                BUFFER_VIEW_TYPE_DEPTH_STENCIL,
+                BUFFER_VIEW_TYPE_CONSTANT,
+                BUFFER_VIEW_TYPE_SHADER_RESOURCE,
+                BUFFER_VIEW_TYPE_VERTEX,
+                BUFFER_VIEW_TYPE_INDEX,
+            };
+        public:
             Buffer();
             ~Buffer();
 
-            void SetDescHeap( shared_ptr<DescriptorHeap> heap ) { m_pDescHeap = heap; }
-            shared_ptr<DescriptorHeap> GetDescHeap() const { return m_pDescHeap; }
+            shared_ptr<DescriptorHeap> GetDescHeap(int index = 0) const { return m_pDescHeap[index]; }
+            D3D12_CPU_DESCRIPTOR_HANDLE GetHadle( int index = 0 ) const { return m_handle[index]; }
 
             bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue = nullptr);
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
             virtual bool Map( void* pData, int size );
             virtual void Unmap();
@@ -25,20 +35,15 @@ namespace acLib
             ID3D12Resource* GetBuffer() { return m_pBuffer.Get(); }
             ID3D12Resource** GetBufferAddressOf() { return m_pBuffer.GetAddressOf(); }
 
-
-            D3D12_CPU_DESCRIPTOR_HANDLE GetHadle() const
-            {
-                return m_handle;
-            }
-
         protected:
-            bool AdvanceHadle();
+            bool AdvanceHadle( DescriptorHeap* pHeap, D3D12_CPU_DESCRIPTOR_HANDLE& handle );
 
         protected:
             ComPtr<ID3D12Resource>          m_pBuffer;
             UINT8*                          m_pDataBegin;
-            shared_ptr<DescriptorHeap>      m_pDescHeap;
-            D3D12_CPU_DESCRIPTOR_HANDLE     m_handle;
+            
+            vector<shared_ptr<DescriptorHeap> >     m_pDescHeap;
+            vector<D3D12_CPU_DESCRIPTOR_HANDLE>     m_handle;
         };
 
 
@@ -48,7 +53,7 @@ namespace acLib
             VertexBuffer();
             ~VertexBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
             void SetDataStride( size_t stride ) { m_dataStride = stride; }
             const D3D12_VERTEX_BUFFER_VIEW& GetVertexBV() const
@@ -67,7 +72,7 @@ namespace acLib
             IndexBuffer();
             ~IndexBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
             void SetDataFormat( DXGI_FORMAT format ) { m_dataFormat = format; }
             const D3D12_INDEX_BUFFER_VIEW& GetIndexBV() const
@@ -86,7 +91,7 @@ namespace acLib
             ConstantBuffer();
             ~ConstantBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc  );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
         private:
             size_t                          m_bufferSize;
@@ -98,8 +103,6 @@ namespace acLib
             DepthStencilBuffer();
             ~DepthStencilBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
-
         private:
             D3D12_DEPTH_STENCIL_VIEW_DESC        m_depthStencilBufferView;
         };
@@ -109,8 +112,6 @@ namespace acLib
         public:
             RenderTarget();
             ~RenderTarget();
-
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc );
 
         private:
             D3D12_RENDER_TARGET_VIEW_DESC        m_renderTargetBufferView;
