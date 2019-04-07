@@ -24,6 +24,20 @@ namespace acLib
             }
         };
 
+        D3D12_CPU_DESCRIPTOR_HANDLE Buffer::GetHandleFromHeap( const shared_ptr<DescriptorHeap>& pHeap )
+        {
+            for (int i = 0; i < m_pDescHeap.size(); ++i)
+            {
+                if (m_pDescHeap[i].get() == pHeap.get())
+                {
+                    return m_handle[i];
+                }
+            }
+
+            Log::Output( Log::LOG_LEVEL_WARNING, "Buffer::GetHandleFromHeap --> Cannot find descriptor heap." );
+            return m_handle[0];
+        }
+
         bool Buffer::Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
         {
             HRESULT hr = S_OK;
@@ -51,45 +65,43 @@ namespace acLib
             if (!AdvanceHadle(pHeap.get(), handle))
                 return false;
 
-            m_handle.push_back( handle );
-
             switch (type)
             {
             case BUFFER_VIEW_TYPE_RENDER_TARGET:
             {
                 D3D12_RENDER_TARGET_VIEW_DESC bufferDesc;
-                bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                bufferDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-                bufferDesc.Texture2D.MipSlice = 0;
+                bufferDesc.Format               = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                bufferDesc.ViewDimension        = D3D12_RTV_DIMENSION_TEXTURE2D;
+                bufferDesc.Texture2D.MipSlice   = 0;
                 bufferDesc.Texture2D.PlaneSlice = 0;
 
-                pDevice->CreateRenderTargetView( m_pBuffer.Get(), &bufferDesc, m_handle.back() );
+                pDevice->CreateRenderTargetView( m_pBuffer.Get(), &bufferDesc, handle );
             }
             break;
             case BUFFER_VIEW_TYPE_DEPTH_STENCIL:
             {
                 D3D12_DEPTH_STENCIL_VIEW_DESC bufferDesc = {};
-                bufferDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-                bufferDesc.Format = DXGI_FORMAT_D32_FLOAT;
-                bufferDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-                bufferDesc.Texture2D.MipSlice = 0;
-                bufferDesc.Flags = D3D12_DSV_FLAG_NONE;
+                bufferDesc.ViewDimension        = D3D12_DSV_DIMENSION_TEXTURE2D;
+                bufferDesc.Format               = DXGI_FORMAT_D32_FLOAT;
+                bufferDesc.ViewDimension        = D3D12_DSV_DIMENSION_TEXTURE2D;
+                bufferDesc.Texture2D.MipSlice   = 0;
+                bufferDesc.Flags                = D3D12_DSV_FLAG_NONE;
 
-                pDevice->CreateDepthStencilView( m_pBuffer.Get(), &bufferDesc, m_handle.back() );
+                pDevice->CreateDepthStencilView( m_pBuffer.Get(), &bufferDesc, handle );
             }
             break;
             case BUFFER_VIEW_TYPE_SHADER_RESOURCE:
             {
                 D3D12_SHADER_RESOURCE_VIEW_DESC  bufferDesc = {};
-                bufferDesc.Format = DXGI_FORMAT_R32_FLOAT;
-                bufferDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-                bufferDesc.Texture2D.MipLevels = 1;
-                bufferDesc.Texture2D.MostDetailedMip = 0;
-                bufferDesc.Texture2D.PlaneSlice = 0;
-                bufferDesc.Texture2D.ResourceMinLODClamp = 0.0F;
-                bufferDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+                bufferDesc.Format                           = DXGI_FORMAT_R32_FLOAT;
+                bufferDesc.ViewDimension                    = D3D12_SRV_DIMENSION_TEXTURE2D;
+                bufferDesc.Texture2D.MipLevels              = 1;
+                bufferDesc.Texture2D.MostDetailedMip        = 0;
+                bufferDesc.Texture2D.PlaneSlice             = 0;
+                bufferDesc.Texture2D.ResourceMinLODClamp    = 0.0F;
+                bufferDesc.Shader4ComponentMapping          = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-                pDevice->CreateShaderResourceView( m_pBuffer.Get(), &bufferDesc, m_handle.back() );
+                pDevice->CreateShaderResourceView( m_pBuffer.Get(), &bufferDesc, handle );
             }
             break;
             case BUFFER_VIEW_TYPE_CONSTANT:
@@ -98,6 +110,9 @@ namespace acLib
             default:
                 break;
             }
+
+            m_handle.push_back( handle );
+            m_pDescHeap.push_back( pHeap );
 
             return true;
         }

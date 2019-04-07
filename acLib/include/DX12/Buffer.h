@@ -19,12 +19,14 @@ namespace acLib
                 BUFFER_VIEW_TYPE_VERTEX,
                 BUFFER_VIEW_TYPE_INDEX,
             };
+
         public:
             Buffer();
             ~Buffer();
 
-            shared_ptr<DescriptorHeap> GetDescHeap(int index = 0) const { return m_pDescHeap[index]; }
-            D3D12_CPU_DESCRIPTOR_HANDLE GetHadle( int index = 0 ) const { return m_handle[index]; }
+            shared_ptr<DescriptorHeap> GetDescHeap(int index ) const { return m_pDescHeap[index]; }
+            D3D12_CPU_DESCRIPTOR_HANDLE GetHandle( int index ) const { return m_handle[index]; }
+            D3D12_CPU_DESCRIPTOR_HANDLE GetHandleFromHeap( const shared_ptr<DescriptorHeap>& pHeap );
 
             bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue = nullptr);
             virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
