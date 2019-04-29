@@ -48,3 +48,4 @@
 
 #include "DX12/DescriptorHeap.h"
 #include "DX12/Buffer.h"
+#include "DX12/PipelineState.h"

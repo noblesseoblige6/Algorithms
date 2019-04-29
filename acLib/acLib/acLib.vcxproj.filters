@@ -78,6 +78,9 @@
     <ClInclude Include="..\include\acLib.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\DX12\PipelineState.h">
+      <Filter>ヘッダー ファイル\DX12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -117,6 +120,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DX12\Buffer.cpp">
+      <Filter>ソース ファイル\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DX12\PipelineState.cpp">
       <Filter>ソース ファイル\DX12</Filter>
     </ClCompile>
   </ItemGroup>

@@ -172,6 +172,7 @@
     <ClInclude Include="..\include\Constant.h" />
     <ClInclude Include="..\include\DX12\Buffer.h" />
     <ClInclude Include="..\include\DX12\DescriptorHeap.h" />
+    <ClInclude Include="..\include\DX12\PipelineState.h" />
     <ClInclude Include="..\include\Loader\acModelLoader.h" />
     <ClInclude Include="..\include\Loader\acObjLoader.h" />
     <ClInclude Include="..\include\Mat.h" />
@@ -189,6 +190,7 @@
     </ClCompile>
     <ClCompile Include="..\src\DX12\Buffer.cpp" />
     <ClCompile Include="..\src\DX12\DescriptorHeap.cpp" />
+    <ClCompile Include="..\src\DX12\PipelineState.cpp" />
     <ClCompile Include="..\src\Loader\acModelLoader.cpp" />
     <ClCompile Include="..\src\Loader\acObjLoader.cpp" />
     <ClCompile Include="..\src\main.cpp">
