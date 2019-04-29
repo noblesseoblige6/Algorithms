@@ -171,8 +171,10 @@
     <ClInclude Include="..\include\CGL.h" />
     <ClInclude Include="..\include\Constant.h" />
     <ClInclude Include="..\include\DX12\Buffer.h" />
+    <ClInclude Include="..\include\DX12\CommandList.h" />
     <ClInclude Include="..\include\DX12\DescriptorHeap.h" />
     <ClInclude Include="..\include\DX12\PipelineState.h" />
+    <ClInclude Include="..\include\DX12\RootSignature.h" />
     <ClInclude Include="..\include\Loader\acModelLoader.h" />
     <ClInclude Include="..\include\Loader\acObjLoader.h" />
     <ClInclude Include="..\include\Mat.h" />
@@ -189,8 +191,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\DX12\Buffer.cpp" />
+    <ClCompile Include="..\src\DX12\CommandList.cpp" />
     <ClCompile Include="..\src\DX12\DescriptorHeap.cpp" />
     <ClCompile Include="..\src\DX12\PipelineState.cpp" />
+    <ClCompile Include="..\src\DX12\RootSignature.cpp" />
     <ClCompile Include="..\src\Loader\acModelLoader.cpp" />
     <ClCompile Include="..\src\Loader\acObjLoader.cpp" />
     <ClCompile Include="..\src\main.cpp">

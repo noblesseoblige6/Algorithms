@@ -48,4 +48,6 @@
 
 #include "DX12/DescriptorHeap.h"
 #include "DX12/Buffer.h"
+#include "DX12/RootSignature.h"
 #include "DX12/PipelineState.h"
+#include "DX12/CommandList.h"

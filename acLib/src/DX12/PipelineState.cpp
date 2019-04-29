@@ -77,7 +77,7 @@ namespace acLib
             return descDS;
         }
 
-        PipelineState::PipelineState( const InputElement& inputElement, const ShaderCode& shader, ComPtr<ID3D12RootSignature> rs )
+        PipelineState::PipelineState( const InputElement& inputElement, const ShaderCode& shader, shared_ptr<RootSignature> rs )
         {
             m_desc = { 0 };
 
@@ -112,9 +112,9 @@ namespace acLib
             m_pPipelineState.Reset();
         }
 
-        void PipelineState::SetRootSinature( ComPtr<ID3D12RootSignature> rs )
+        void PipelineState::SetRootSinature( shared_ptr<RootSignature> rs )
         {
-            m_desc.pRootSignature = rs.Get();
+            m_desc.pRootSignature = rs->GetRootSignature();
         }
 
         bool PipelineState::Create( ID3D12Device* pDevice )

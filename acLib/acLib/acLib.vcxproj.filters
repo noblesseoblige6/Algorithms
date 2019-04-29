@@ -81,6 +81,12 @@
     <ClInclude Include="..\include\DX12\PipelineState.h">
       <Filter>ヘッダー ファイル\DX12</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\DX12\RootSignature.h">
+      <Filter>ヘッダー ファイル\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DX12\CommandList.h">
+      <Filter>ヘッダー ファイル\DX12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -123,6 +129,12 @@
       <Filter>ソース ファイル\DX12</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DX12\PipelineState.cpp">
+      <Filter>ソース ファイル\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DX12\RootSignature.cpp">
+      <Filter>ソース ファイル\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DX12\CommandList.cpp">
       <Filter>ソース ファイル\DX12</Filter>
     </ClCompile>
   </ItemGroup>

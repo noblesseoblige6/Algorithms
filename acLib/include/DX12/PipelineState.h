@@ -27,12 +27,12 @@ namespace acLib
             };
 
         public:
-            PipelineState( const InputElement& inputElements, const ShaderCode& shader, ComPtr<ID3D12RootSignature> rs );
+            PipelineState( const InputElement& inputElements, const ShaderCode& shader, shared_ptr<RootSignature> rs );
             ~PipelineState();
 
             bool Create( ID3D12Device* pDevice );
 
-            void SetRootSinature( ComPtr<ID3D12RootSignature> rs);
+            void SetRootSinature( shared_ptr<RootSignature> rs);
 
             ID3D12PipelineState* GetPipelineState() { return m_pPipelineState.Get(); };
             ID3D12PipelineState** GetGetPipelineStateAddress() { return m_pPipelineState.GetAddressOf(); };
