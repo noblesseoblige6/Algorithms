@@ -21,8 +21,8 @@ namespace acLib
             void SetRootSignature( shared_ptr<RootSignature> pRootSignature );
             void SetPipelineState( shared_ptr<PipelineState> pPipelineState );
 
-            void SetViewport( D3D12_VIEWPORT& vp);
-            void SetViewport( D3D12_VIEWPORT& vp, D3D12_RECT& sr );
+            void SetViewport( const D3D12_VIEWPORT& vp);
+            void SetViewport( const D3D12_VIEWPORT& vp, D3D12_RECT& sr );
 
             void SetTargets( D3D12_CPU_DESCRIPTOR_HANDLE* pHandleRTV, D3D12_CPU_DESCRIPTOR_HANDLE* pHandleDSV );
             void ClearTargets( D3D12_CPU_DESCRIPTOR_HANDLE* pHandleRTV, float* clearColor, 

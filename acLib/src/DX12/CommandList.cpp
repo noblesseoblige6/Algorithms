@@ -64,7 +64,7 @@ namespace acLib
             m_pCommandList->SetPipelineState( pPipelineState->GetPipelineState() );
         }
 
-        void CommandList::SetViewport( D3D12_VIEWPORT& vp )
+        void CommandList::SetViewport( const D3D12_VIEWPORT& vp )
         {
             D3D12_RECT sr;
             sr.left   = static_cast<long>(vp.TopLeftX);
@@ -75,7 +75,7 @@ namespace acLib
             SetViewport( vp, sr );
         }
 
-        void CommandList::SetViewport( D3D12_VIEWPORT& vp, D3D12_RECT& sr )
+        void CommandList::SetViewport( const D3D12_VIEWPORT& vp, D3D12_RECT& sr )
         {
             m_pCommandList->RSSetViewports( 1, &vp );
             m_pCommandList->RSSetScissorRects( 1, &sr );
