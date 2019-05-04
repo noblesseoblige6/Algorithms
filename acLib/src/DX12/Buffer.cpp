@@ -59,7 +59,7 @@ namespace acLib
             return true;
         };
 
-        bool Buffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> pHeap, BUFFER_VIEW_TYPE type )
+        bool Buffer::CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> pHeap, BUFFER_VIEW_TYPE type )
         {
             D3D12_CPU_DESCRIPTOR_HANDLE handle;
             if (!AdvanceHadle(pHeap.get(), handle))
@@ -167,8 +167,37 @@ namespace acLib
             m_vertexBufferView.StrideInBytes = 0;
         }
 
-        bool VertexBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
+        bool VertexBuffer::Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
         {
+            // ヒーププロパティの設定.
+            D3D12_HEAP_PROPERTIES prop;
+            prop.Type = D3D12_HEAP_TYPE_UPLOAD;
+            prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+            prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+            prop.CreationNodeMask = 1;
+            prop.VisibleNodeMask = 1;
+
+            // リソースの設定.
+            D3D12_RESOURCE_DESC desc;
+            desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+            desc.Alignment = 0;
+            desc.Width = size;
+            desc.Height = 1;
+            desc.DepthOrArraySize = 1;
+            desc.MipLevels = 1;
+            desc.Format = DXGI_FORMAT_UNKNOWN;
+            desc.SampleDesc.Count = 1;
+            desc.SampleDesc.Quality = 0;
+            desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+            desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+            return Buffer::Create( pDevice, prop, desc, initState, pClearValue );
+        }
+
+        bool VertexBuffer::CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
+        {
+            const auto& desc = m_pBuffer->GetDesc();
+
             m_vertexBufferView.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
             m_vertexBufferView.StrideInBytes  = (UINT)m_dataStride;
             m_vertexBufferView.SizeInBytes    = (UINT)desc.Width;
@@ -189,8 +218,37 @@ namespace acLib
             m_depthStencilBufferView.SizeInBytes = 0;
         }
 
-        bool IndexBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
+        bool IndexBuffer::Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
         {
+            // ヒーププロパティの設定.
+            D3D12_HEAP_PROPERTIES prop;
+            prop.Type = D3D12_HEAP_TYPE_UPLOAD;
+            prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+            prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+            prop.CreationNodeMask = 1;
+            prop.VisibleNodeMask = 1;
+
+            // リソースの設定.
+            D3D12_RESOURCE_DESC desc;
+            desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+            desc.Alignment = 0;
+            desc.Width = size;
+            desc.Height = 1;
+            desc.DepthOrArraySize = 1;
+            desc.MipLevels = 1;
+            desc.Format = DXGI_FORMAT_UNKNOWN;
+            desc.SampleDesc.Count = 1;
+            desc.SampleDesc.Quality = 0;
+            desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+            desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+            return Buffer::Create( pDevice, prop, desc, initState, pClearValue );
+        }
+
+        bool IndexBuffer::CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
+        {
+            const auto& desc = m_pBuffer->GetDesc();
+
             m_depthStencilBufferView.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
             m_depthStencilBufferView.Format         = m_dataFormat;
             m_depthStencilBufferView.SizeInBytes    = (UINT)desc.Width;
@@ -208,15 +266,44 @@ namespace acLib
         ConstantBuffer::~ConstantBuffer()
         {}
 
-        bool ConstantBuffer::CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
+        bool ConstantBuffer::Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
         {
-            if (!Buffer::CreateBufferView( pDevice, desc, heap, type ))
+            // ヒーププロパティの設定.
+            D3D12_HEAP_PROPERTIES prop = {};
+            prop.Type = D3D12_HEAP_TYPE_UPLOAD;
+            prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+            prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+            prop.CreationNodeMask = 1;
+            prop.VisibleNodeMask = 1;
+
+            // リソースの設定.
+            D3D12_RESOURCE_DESC desc = {};
+            desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+            desc.Alignment = 0;
+            desc.Width = (sizeof( size ) + 255) &~255;
+            desc.Height = 1;
+            desc.DepthOrArraySize = 1;
+            desc.MipLevels = 1;
+            desc.Format = DXGI_FORMAT_UNKNOWN;
+            desc.SampleDesc.Count = 1;
+            desc.SampleDesc.Quality = 0;
+            desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+            desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+           return Buffer::Create( pDevice, prop, desc, initState, pClearValue );
+        }
+
+        bool ConstantBuffer::CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type )
+        {
+            if (!Buffer::CreateBufferView( pDevice, heap, type ))
             {
                 return false;
             }
 
             if (type != BUFFER_VIEW_TYPE_CONSTANT)
                 return true;
+
+            const auto& desc = m_pBuffer->GetDesc();
 
             m_bufferSize = desc.Width;
 
@@ -243,6 +330,32 @@ namespace acLib
         {
         };
 
+        bool DepthStencilBuffer::Create( ID3D12Device* pDevice, int width, int height, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
+        {
+            // ヒーププロパティの設定.
+            D3D12_HEAP_PROPERTIES prop = {};
+            prop.Type = D3D12_HEAP_TYPE_DEFAULT;
+            prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+            prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+            prop.CreationNodeMask = 0;
+            prop.VisibleNodeMask = 0;
+
+            // リソースの設定.
+            D3D12_RESOURCE_DESC desc = {};
+            desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+            desc.Alignment = 0;
+            desc.Width = width;
+            desc.Height = height;
+            desc.DepthOrArraySize = 1;
+            desc.MipLevels = 1;
+            desc.Format = DXGI_FORMAT_R32_TYPELESS;
+            desc.SampleDesc.Count = 1;
+            desc.SampleDesc.Quality = 0;
+            desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+            desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+            return Buffer::Create( pDevice, prop, desc, initState, pClearValue );
+        }
 
         RenderTarget::RenderTarget()
             : Buffer()

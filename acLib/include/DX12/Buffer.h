@@ -30,7 +30,7 @@ namespace acLib
             D3D12_CPU_DESCRIPTOR_HANDLE GetHandleFromHeap( const shared_ptr<DescriptorHeap>& pHeap );
 
             bool Create( ID3D12Device* pDevice, D3D12_HEAP_PROPERTIES& prop, D3D12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue = nullptr);
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
             virtual bool Map( void* pData, int size );
             virtual void Unmap();
@@ -56,7 +56,8 @@ namespace acLib
             VertexBuffer();
             ~VertexBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
+            bool Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState = D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_CLEAR_VALUE* pClearValue = nullptr );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
             void SetDataStride( size_t stride ) { m_dataStride = stride; }
             const D3D12_VERTEX_BUFFER_VIEW& GetVertexBV() const
@@ -75,7 +76,8 @@ namespace acLib
             IndexBuffer();
             ~IndexBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
+            bool Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState = D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_CLEAR_VALUE* pClearValue = nullptr );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
             void SetDataFormat( DXGI_FORMAT format ) { m_dataFormat = format; }
             const D3D12_INDEX_BUFFER_VIEW& GetIndexBV() const
@@ -94,7 +96,8 @@ namespace acLib
             ConstantBuffer();
             ~ConstantBuffer();
 
-            virtual bool CreateBufferView( ID3D12Device* pDevice, const D3D12_RESOURCE_DESC& desc, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
+            bool Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState = D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_CLEAR_VALUE* pClearValue = nullptr );
+            virtual bool CreateBufferView( ID3D12Device* pDevice, shared_ptr<DescriptorHeap> heap, BUFFER_VIEW_TYPE type );
 
         private:
             size_t                          m_bufferSize;
@@ -105,6 +108,8 @@ namespace acLib
         public:
             DepthStencilBuffer();
             ~DepthStencilBuffer();
+
+            bool Create( ID3D12Device* pDevice, int width, int height, D3D12_RESOURCE_STATES initState = D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_CLEAR_VALUE* pClearValue = nullptr );
 
         private:
             D3D12_DEPTH_STENCIL_VIEW_DESC        m_depthStencilBufferView;
