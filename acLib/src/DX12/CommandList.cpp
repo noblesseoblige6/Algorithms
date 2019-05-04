@@ -136,7 +136,10 @@ namespace acLib
             if (FAILED( hr ))
                 Log::Output( Log::LOG_LEVEL_DEBUG, "ID3D12CommandAllocator::Reset Failed" );
 
-            hr = m_pCommandList->Reset( m_pCommandAllocator.Get(), pPipelineState->GetPipelineState() );
+            if (pPipelineState == nullptr)
+                hr = m_pCommandList->Reset( m_pCommandAllocator.Get(), nullptr);
+            else
+                hr = m_pCommandList->Reset( m_pCommandAllocator.Get(), pPipelineState->GetPipelineState() );
             if (FAILED( hr ))
                 Log::Output( Log::LOG_LEVEL_DEBUG, "ID3D12GraphicsCommandList::Reset Failed" );
         }

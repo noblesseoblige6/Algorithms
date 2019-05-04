@@ -18,6 +18,7 @@ namespace acLib
                 BUFFER_VIEW_TYPE_SHADER_RESOURCE,
                 BUFFER_VIEW_TYPE_VERTEX,
                 BUFFER_VIEW_TYPE_INDEX,
+                BUFFER_VIEW_TYPE_NUM,
             };
 
         public:

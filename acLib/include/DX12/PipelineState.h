@@ -27,7 +27,7 @@ namespace acLib
             };
 
         public:
-            PipelineState( const InputElement& inputElements, const ShaderCode& shader, shared_ptr<RootSignature> rs );
+            PipelineState( const InputElement& inputElements, const ShaderCode& shader, shared_ptr<RootSignature> rs = nullptr);
             ~PipelineState();
 
             bool Create( ID3D12Device* pDevice );
