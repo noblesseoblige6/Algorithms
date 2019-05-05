@@ -19,7 +19,6 @@ namespace acLib
         {
             if (m_pBuffer != nullptr)
             {
-                Unmap();
                 m_pBuffer.Reset();
             }
         };
@@ -260,11 +259,14 @@ namespace acLib
         ConstantBuffer::ConstantBuffer()
             : Buffer()
             , m_bufferSize( 0 )
-        {}
+        {
+        }
 
 
         ConstantBuffer::~ConstantBuffer()
-        {}
+        {
+            Unmap();
+        }
 
         bool ConstantBuffer::Create( ID3D12Device* pDevice, int size, D3D12_RESOURCE_STATES initState, D3D12_CLEAR_VALUE* pClearValue )
         {
