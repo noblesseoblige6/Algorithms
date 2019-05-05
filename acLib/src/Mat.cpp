@@ -263,7 +263,7 @@ namespace acLib
         }
 
         template<typename T>
-        mat33<T> mat33<T>::Inverse()
+        mat33<T> mat33<T>::Inverse() const
         {
             mat33 res;
 
@@ -713,7 +713,7 @@ namespace acLib
         }
 
         template<typename T>
-        mat44<T> mat44<T>::Inverse()
+        mat44<T> mat44<T>::Inverse() const
         {
             mat44<T> res;
 

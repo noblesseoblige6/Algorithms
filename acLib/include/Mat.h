@@ -40,7 +40,7 @@ namespace acLib
             mat33 operator-() const;
 
             T Determinant() const;
-            mat33 Inverse();
+            mat33 Inverse() const;
 
             void Transform( vec3<T>& vec );
 
@@ -135,7 +135,7 @@ namespace acLib
             mat44 operator-() const;
 
             T Determinant() const;
-            mat44 Inverse();
+            mat44 Inverse() const;
 
             void Transform(vec4<T>& vec);
 
