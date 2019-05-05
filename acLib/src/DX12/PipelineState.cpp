@@ -98,6 +98,10 @@ namespace acLib
             m_desc.DepthStencilState = CreateDefaultDepthStencilDesc();
             m_desc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
+            // Render Targets
+            m_desc.NumRenderTargets = 1;
+            m_desc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+
             // Sampler
             m_desc.SampleDesc.Count = 1;
             m_desc.SampleDesc.Quality = 0;
