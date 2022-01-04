@@ -19,32 +19,19 @@ bool IsPrime(std::int64_t num)
 std::vector<std::int64_t> PrimeFactorization(std::int64_t num)
 {
     std::vector<std::int64_t> primes;
-    for (decltype(num) i = 1; i * i <= num; ++i)
+    for (decltype(num) i = 2; i * i <= num; ++i)
     {
-        if (IsPrime(i))
-            primes.push_back(i);
-
-        auto tmp = static_cast<std::int64_t>(num / i);
-        if (IsPrime(tmp))
-            primes.push_back(tmp);
-    }
-
-    std::vector<std::int64_t> res;
-    auto tmp = num;
-    while (tmp != 1)
-    {
-        for (auto prime : primes)
+        while (num % i == 0)
         {
-            if (tmp % prime == 0)
-            {
-                tmp /= prime;
-                res.push_back(prime);
-                break;
-            }
+            num /= i;
+            primes.push_back(i);
         }
     }
 
-    return res;
+    if(num >= 2)
+        primes.push_back(num);
+
+    return primes;
 }
 
 int main()
