@@ -2,36 +2,39 @@
 #include <vector>
 #include <cmath>
 
-bool IsPrime(std::int64_t num)
+namespace alg
 {
-    if(num <= 1)
-        return false;
-
-    for (decltype(num) i = 2; i*i <= num; ++i)
+    bool IsPrime(std::int64_t num)
     {
-        if (num % i == 0)
+        if (num <= 1)
             return false;
-    }
 
-    return true;
-}
-
-std::vector<std::int64_t> PrimeFactorization(std::int64_t num)
-{
-    std::vector<std::int64_t> primes;
-    for (decltype(num) i = 2; i * i <= num; ++i)
-    {
-        while (num % i == 0)
+        for (decltype(num) i = 2; i * i <= num; ++i)
         {
-            num /= i;
-            primes.push_back(i);
+            if (num % i == 0)
+                return false;
         }
+
+        return true;
     }
 
-    if(num >= 2)
-        primes.push_back(num);
+    std::vector<std::int64_t> PrimeFactorization(std::int64_t num)
+    {
+        std::vector<std::int64_t> primes;
+        for (decltype(num) i = 2; i * i <= num; ++i)
+        {
+            while (num % i == 0)
+            {
+                num /= i;
+                primes.push_back(i);
+            }
+        }
 
-    return primes;
+        if (num >= 2)
+            primes.push_back(num);
+
+        return primes;
+    }
 }
 
 int main()
@@ -39,7 +42,7 @@ int main()
     std::int64_t num;
     std::cin >> num;
 
-    auto res = PrimeFactorization(num);
+    auto res = alg::PrimeFactorization(num);
     for (auto num : res)
         std::cout << num << std::endl;
 
