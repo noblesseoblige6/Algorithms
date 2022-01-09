@@ -28,6 +28,7 @@ namespace alg
 
     std::uint64_t LCM(std::uint64_t a, std::uint64_t b)
     {
+        //Note: divide first to avoid overflow
         return (a / GCD(a, b)) * b;
     }
 
