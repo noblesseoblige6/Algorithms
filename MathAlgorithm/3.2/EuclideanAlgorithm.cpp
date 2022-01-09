@@ -6,7 +6,7 @@
 
 namespace alg
 {
-    std::uint32_t GDC(std::uint32_t a, std::uint32_t b)
+    std::uint32_t GCD(std::uint32_t a, std::uint32_t b)
     {
         if (a == 0 || b == 0)
             return std::max(a, b);
@@ -14,15 +14,15 @@ namespace alg
         auto bigger = std::max(a, b);
         auto less = std::min(a, b);
 
-        return GDC(bigger % less, less);
+        return GCD(bigger % less, less);
     }
 
-    std::uint32_t GDC(std::vector<std::uint32_t> const &values)
+    std::uint32_t GCD(std::vector<std::uint32_t> const &values)
     {
         auto res = values.front();
         for (std::int32_t i = 1; i < static_cast<std::int32_t>(values.size()); ++i)
         {
-            res = GDC(res, values[i]);
+            res = GCD(res, values[i]);
         }
 
         return res;
@@ -30,13 +30,15 @@ namespace alg
 
     std::uint32_t LCM(std::vector<std::uint32_t> const& values)
     {
-        auto gdc = values.front();
+        auto GCD = values.front();
+        auto tmp = GCD;
         for (std::int32_t i = 1; i < static_cast<std::int32_t>(values.size()); ++i)
         {
-            gdc = GDC(gdc, values[i]);
+            tmp = GCD;
+            GCD = GCD(GCD, values[i]);
         }
 
-        auto res = *(values.end()-1) * *(values.end()-2) / gdc;
+        auto res = (tmp * values.back()) / GCD;
         return res;
     }
 }
@@ -50,9 +52,9 @@ int main()
     std::copy_n(std::istream_iterator<std::uint32_t>{std::cin}, v.size(), v.begin());
 
     // 3.2.2
-    // auto res = alg::GDC(v);
+     auto res = alg::GCD(v);
     // 3.2.33
-    auto res = alg::LCM(v);
+    //auto res = alg::LCM(v);
     std::cout << res << std::endl;
 
     return 0;
