@@ -30,15 +30,15 @@ namespace alg
 
     std::uint32_t LCM(std::vector<std::uint32_t> const& values)
     {
-        auto GCD = values.front();
-        auto tmp = GCD;
+        auto gcd = values.front();
+        auto tmp = gcd;
         for (std::int32_t i = 1; i < static_cast<std::int32_t>(values.size()); ++i)
         {
-            tmp = GCD;
-            GCD = GCD(GCD, values[i]);
+            tmp = gcd;
+            gcd = GCD(gcd, values[i]);
         }
 
-        auto res = (tmp * values.back()) / GCD;
+        auto res = (tmp * values.back()) / gcd;
         return res;
     }
 }
