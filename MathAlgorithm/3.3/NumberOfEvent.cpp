@@ -28,12 +28,12 @@ namespace alg
         return Fractorial<N>()/(Fractorial<R>()*Fractorial<N-R>());
     }
 
-    std::uint64_t combi(std::uint64_t n, std::uint64_t k)
+    std::uint64_t Combination(std::uint64_t n, std::uint64_t k)
     {
         if (n == k || k == 0)
             return 1;
 
-        return combi(n - 1, k - 1) + combi(n - 1, k);
+        return Combination(n - 1, k - 1) + Combination(n - 1, k);
     }
 }
 
@@ -48,17 +48,18 @@ int main()
     constexpr std::uint64_t minVal = 1;
     constexpr std::uint64_t maxVal = 99999;
     std::vector<std::uint64_t> counts(maxVal+1, 0);
-    for(auto val : v)
+    for(auto const& val : v)
         ++counts[val];
 
     constexpr std::uint64_t total = 100000;
     std::uint64_t res = 0;
     for (auto i = minVal; i <= (minVal+maxVal)/2; ++i)
     {
-        if (i == total - i)
-            res += alg::combi(counts[i], 2);
+        auto tmp = total - i;
+        if (i == tmp)
+            res += alg::Combination(counts[i], 2);
         else
-            res += counts[i] * counts[total - i];
+            res += counts[i] * counts[tmp];
     }
 
     std::cout << res << std::endl;
