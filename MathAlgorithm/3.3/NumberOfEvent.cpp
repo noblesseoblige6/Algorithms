@@ -3,6 +3,7 @@
 #include <iterator>
 #include <numeric>
 #include <cmath>
+#include <vector>
 
 namespace alg
 {
@@ -26,24 +27,41 @@ namespace alg
     {
         return Fractorial<N>()/(Fractorial<R>()*Fractorial<N-R>());
     }
+
+    std::uint64_t combi(std::uint64_t n, std::uint64_t k)
+    {
+        if (n == k || k == 0)
+            return 1;
+
+        return combi(n - 1, k - 1) + combi(n - 1, k);
+    }
 }
 
 int main()
 {
-    std::cout << alg::Fractorial<3>() << std::endl;
-    std::cout << alg::Permutation<4, 2>() << std::endl;
-    std::cout << alg::Combination<4, 2>() << std::endl;
-    // std::uint64_t n;
-    // std::cin >> n;
+    std::uint64_t n;
+    std::cin >> n;
 
-    // std::vector<std::uint64_t> v(n);
-    // std::copy_n(std::istream_iterator<std::uint64_t>{std::cin}, v.size(), v.begin());
+    std::vector<std::uint64_t> v(n);
+    std::copy_n(std::istream_iterator<std::uint64_t>{std::cin}, v.size(), v.begin());
 
-    // // 3.2.2
-    //  auto res = alg::GCD(v);
-    // // 3.2.3
-    // // auto res = alg::LCM(v);
-    // std::cout << res << std::endl;
+    constexpr std::uint64_t minVal = 1;
+    constexpr std::uint64_t maxVal = 99999;
+    std::vector<std::uint64_t> counts(maxVal+1, 0);
+    for(auto val : v)
+        ++counts[val];
+
+    constexpr std::uint64_t total = 100000;
+    std::uint64_t res = 0;
+    for (auto i = minVal; i <= (minVal+maxVal)/2; ++i)
+    {
+        if (i == total - i)
+            res += alg::combi(counts[i], 2);
+        else
+            res += counts[i] * counts[total - i];
+    }
+
+    std::cout << res << std::endl;
 
     return 0;
 }
