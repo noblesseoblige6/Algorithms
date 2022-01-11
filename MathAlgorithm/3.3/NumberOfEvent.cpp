@@ -3,6 +3,7 @@
 #include <iterator>
 #include <numeric>
 #include <cmath>
+#include <array>
 #include <vector>
 
 namespace alg
@@ -47,20 +48,19 @@ int main()
 
     constexpr std::uint64_t minVal = 1;
     constexpr std::uint64_t maxVal = 99999;
-    std::vector<std::uint64_t> counts(maxVal+1, 0);
+    constexpr std::uint64_t total = 100000;
+
+    std::array<std::uint64_t, maxVal+1> counts = {};
     for(auto const& val : v)
         ++counts[val];
 
-    constexpr std::uint64_t total = 100000;
     std::uint64_t res = 0;
-    for (auto i = minVal; i <= (minVal+maxVal)/2; ++i)
+    for (auto i = minVal; i <= maxVal/2; ++i)
     {
         auto tmp = total - i;
-        if (i == tmp)
-            res += alg::Combination(counts[i], 2);
-        else
-            res += counts[i] * counts[tmp];
+        res += counts[i] * counts[tmp];
     }
+    res += (counts[total/2] * (counts[total/2]-1))/2;
 
     std::cout << res << std::endl;
 
