@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
 #include <iterator>
 #include <cmath>
@@ -11,9 +12,9 @@ int main()
 
     std::double_t res = 0;
     for (decltype(n) i = 0; i < n; ++i)
-        res += static_cast<double_t>(i+1)/(n-i);
+        res += static_cast<double_t>(n)/(n-i);
 
-    std::cout << res << std::endl;
+    std::cout << std::fixed << std::setprecision(12) << res << std::endl;
 
     return 0;
 }
