@@ -12,29 +12,15 @@ int main()
     std::vector<std::uint32_t> a(n+1, 0);
     std::copy_n(std::istream_iterator<std::uint32_t>{std::cin}, n, a.begin()+1);
 
-    std::vector<std::vector<std::uint64_t>> dp(n+1, std::vector<std::uint64_t>(n+1, 0));
+    std::vector<std::uint64_t> dp(n+1, 0);
 
-    for (decltype(n) i = 1; i <= n; ++i)
-        for (decltype(n) j = 0; j <= n; ++j)
-        {
-            if(j < 2)
-            {
-                dp[i][j] = std::max(dp[i-1][j], static_cast<std::uint64_t>(a[j]));
-            }
-            else
-            {
-                if(j > i)
-                {
-                    dp[i][j] = dp[i][i];
-                }
-                else
-                {
-                    dp[i][j] = std::max(dp[i-1][j], dp[i-1][j-2] + a[i]);
-                }
-            }
-        }
+    dp[1] = a[1];
+    for (decltype(n) i = 2; i <= n; ++i)
+    {
+        dp[i] = std::max(dp[i - 1], dp[i - 2] + a[i]);
+    }
 
-    std::cout << dp[n][n] << std::endl;
+    std::cout << dp[n] << std::endl;
 
     return 0;
 }
