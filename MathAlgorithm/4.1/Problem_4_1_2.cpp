@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,13 +8,13 @@ namespace alg
 {
     struct Point
     {
-        std::int32_t x;
-        std::int32_t y;
+        std::uint32_t x;
+        std::uint32_t y;
     };
 
     std::double_t FindNearestDistanceBF(std::vector<Point> const& ps)
     {
-        std::double_t dis = 0;
+        std::double_t dis = std::numeric_limits<std::double_t>::max();
         for(std::size_t i = 0; i < ps.size(); ++i)
         {
             for (std::size_t j = 0; j < ps.size(); ++j)
@@ -45,7 +46,7 @@ namespace alg
     std::double_t FindNearestDistanceDC(std::vector<Point> const& ps)
     {
         auto sorted_pos = ps;
-        std::sort(sorted_pos.begin(), sorted_pos.end(), [](Point const &lhv, Point const &rhv){return lhv.x < rhv.x});
+        std::sort(sorted_pos.begin(), sorted_pos.end(), [](Point const &lhv, Point const &rhv){ return lhv.x < rhv.x; });
 
         return FindNearestDistance(sorted_pos, 0, sorted_pos.size()-1);
     }
@@ -60,8 +61,9 @@ int main()
     for (decltype(n) i = 0; i < n; ++i)
         std::cin >> ps[i].x >> ps[i].y;
 
-    std::cout << alg::FindNearestDistanceBF(ps) << std::endl;
-    // std::cout << alg::FindNearestDistanceDC(ps) << std::endl;
+    auto res = alg::FindNearestDistanceBF(ps);
+    // auto res = alg::FindNearestDistanceDC(ps);
+    std::cout << std::fixed << std::setprecision(28) << res << std::endl;
 
     return 0;
 }
