@@ -25,7 +25,7 @@ namespace alg
         auto dis = std::numeric_limits<std::double_t>::max();
         for(std::size_t i = 0; i < ps.size(); ++i)
             for (std::size_t j = i+1; j < ps.size(); ++j)
-                dis = (i == j) ? dis : std::min(dis, FindLength(ps[i], ps[j]));
+                dis = std::min(dis, FindLength(ps[i], ps[j]));
 
         return dis;
     }
