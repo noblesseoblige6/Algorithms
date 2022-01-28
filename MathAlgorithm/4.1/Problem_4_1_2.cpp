@@ -8,39 +8,35 @@ namespace alg
 {
     struct Point
     {
-        std::uint32_t x;
-        std::uint32_t y;
+        std::int64_t x;
+        std::int64_t y;
     };
+
+    std::double_t FindLength(Point const &s, Point const &e)
+    {
+        auto const x = static_cast<std::double_t>(e.x - s.x);
+        auto const y = static_cast<std::double_t>(e.y - s.y);
+
+        return std::sqrt(x * x + y * y);
+    }
 
     std::double_t FindNearestDistanceBF(std::vector<Point> const& ps)
     {
-        std::double_t dis = std::numeric_limits<std::double_t>::max();
+        auto dis = std::numeric_limits<std::double_t>::max();
         for(std::size_t i = 0; i < ps.size(); ++i)
-        {
-            for (std::size_t j = 0; j < ps.size(); ++j)
-            {
-                if (i == j)
-                    continue;
+            for (std::size_t j = i+1; j < ps.size(); ++j)
+                dis = (i == j) ? dis : std::min(dis, FindLength(ps[i], ps[j]));
 
-                auto x = ps[j].x - ps[i].x;
-                auto y = ps[j].y - ps[i].y;
-                dis = std::min(dis, std::sqrt(x * x + y * y));
-            }
-        }
         return dis;
     }
 
     std::double_t FindNearestDistance(std::vector<Point> const& ps, std::size_t s, std::size_t e)
     {
         if (e - s == 1)
-        {
-            auto x = ps[e].x - ps[s].x;
-            auto y = ps[e].y - ps[s].y;
-            return std::sqrt(x * x + y * y);
-        }
+            return FindLength(ps[s], ps[e]);
 
         auto h = s + (e - s) / 2;
-        return std::min(FindNearestDistance(ps, s, h), FindNearestDistance(ps, h, e));
+        return std::min(std::min(FindNearestDistance(ps, s, h), FindNearestDistance(ps, h, e)), FindLength(ps[s], ps[e]));
     }
 
     std::double_t FindNearestDistanceDC(std::vector<Point> const& ps)
