@@ -24,24 +24,14 @@ int main()
     std::int32_t a, b, h, m;
     std::cin >> a >> b >> h >> m;
 
-    std::array<std::double_t, 12> hours;
-    for (auto i = 0; i < 12; ++i)
-    {
-        constexpr auto pi = -(2 * M_PI) / 12.0;
-        hours[(i + 3) % 12] = i * pi;
-    }
+    auto tmp = (2 * M_PI) / 12.0;
+    std::double_t hRad = tmp * h + (tmp / 60.0) * m;
+    std::double_t mRad = (2 * M_PI) / 60.0 * m;
 
-    std::array<std::double_t, 60> mins;
-    for (auto i = 0; i < 60; ++i)
-    {
-        constexpr auto pi = -(2 * M_PI) / 60.0;
-        mins[(i + 15) % 60] = i * pi;
-    }
+    alg::Point<std::double_t> p1 = {a * std::sin(hRad), a * std::cos(hRad)};
+    alg::Point<std::double_t> p2 = {b * std::sin(mRad), b * std::cos(mRad)};
 
-    alg::Point<std::double_t> p1 = {a * std::cos(hours[h]), a * std::sin(hours[h])};
-    alg::Point<std::double_t> p2 = {b * std::cos(mins[m]), b * std::sin(mins[m])};
-
-    std::cout << alg::FindLength(p1, p2) << std::endl;
+    std::cout << std::fixed << std::setprecision(28) << alg::FindLength(p1, p2) << std::endl;
 
     return 0;
 }
