@@ -36,13 +36,13 @@ namespace alg
             return FindLength(ps[s], ps[e]);
 
         auto h = s + (e - s) / 2;
-        return std::min(std::min(FindNearestDistance(ps, s, h), FindNearestDistance(ps, h, e)), FindLength(ps[s], ps[e]));
+        return std::min(FindNearestDistance(ps, s, h), FindNearestDistance(ps, h, e);
     }
 
     std::double_t FindNearestDistanceDC(std::vector<Point> const& ps)
     {
         auto sorted_pos = ps;
-        std::sort(sorted_pos.begin(), sorted_pos.end(), [](Point const &lhv, Point const &rhv){ return lhv.x < rhv.x; });
+        std::sort(sorted_pos.begin(), sorted_pos.end(), [](Point const &lhv, Point const &rhv){ return lhv.x == rhv.x ? lhv.y < rhv.y : lhv.x < rhv.x; });
 
         return FindNearestDistance(sorted_pos, 0, sorted_pos.size()-1);
     }
@@ -57,8 +57,8 @@ int main()
     for (decltype(n) i = 0; i < n; ++i)
         std::cin >> ps[i].x >> ps[i].y;
 
-    auto res = alg::FindNearestDistanceBF(ps);
-    // auto res = alg::FindNearestDistanceDC(ps);
+    // auto res = alg::FindNearestDistanceBF(ps);
+    auto res = alg::FindNearestDistanceDC(ps);
     std::cout << std::fixed << std::setprecision(28) << res << std::endl;
 
     return 0;
