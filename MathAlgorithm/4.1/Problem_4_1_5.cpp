@@ -60,29 +60,32 @@ namespace alg
     template <typename T>
     bool IsIntersect(Segment<T> const& s1, Segment<T> const& s2)
     {
-        auto v1 = Normalize(s1.e - s1.s);
-        auto v2 = Normalize(s2.e - s2.s);
+        auto v1 = s1.e - s1.s;
+        auto v2 = s2.e - s2.s;
 
-        auto v1_1 = Normalize(s2.s - s1.s);
-        auto v1_2 = Normalize(s2.e - s1.s);
+        auto v1_1 = s2.s - s1.s;
+        auto v1_2 = s2.e - s1.s;
 
-        auto v2_1 = Normalize(s1.s - s2.s);
-        auto v2_2 = Normalize(s1.e - s2.s);
+        auto v2_1 = s1.s - s2.s;
+        auto v2_2 = s1.e - s2.s;
 
-        if (std::fabs(1-std::fabs(Dot(v1, v1_1))) < 1e-9)
-            return true;
-
-        if (std::fabs(1 - std::fabs(Dot(v1, v1_2))) < 1e-9)
-            return true;
+        if (std::fabs(1 - Dot(Normalize(v1), Normalize(v1_1))) < 1e-9 || std::fabs(1 - Dot(Normalize(v1), Normalize(v1_2))) < 1e-9)
+        {
+            if (Length(v1) >= Length(v1_1))
+                return true;
+            else if (Length(v1) >= Length(v1_2))
+                return true;
+            else
+                return false;
+        }
 
         if(Cross(v1, v1_1) < 0 && Cross(v1, v1_2) < 0)
             return false;
-        if(Cross(v1, v1_1) >= 0 && Cross(v1, v1_2) >= 0)
+        if(Cross(v1, v1_1) > 0 && Cross(v1, v1_2) > 0)
             return false;
-
         if(Cross(v2, v2_1) < 0 && Cross(v2, v2_2) < 0)
             return false;
-        if(Cross(v2, v2_1) >= 0 && Cross(v2, v2_2) >= 0)
+        if(Cross(v2, v2_1) > 0 && Cross(v2, v2_2) > 0)
             return false;
 
         return true;
