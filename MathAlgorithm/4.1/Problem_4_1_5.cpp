@@ -61,19 +61,28 @@ namespace alg
     bool IsIntersect(Segment<T> const& s1, Segment<T> const& s2)
     {
         auto v1 = Normalize(s1.e - s1.s);
+        auto v2 = Normalize(s2.e - s2.s);
 
-        auto v2 = Normalize(s2.s - s1.s);
-        auto v3 = Normalize(s2.e - s1.s);
+        auto v1_1 = Normalize(s2.s - s1.s);
+        auto v1_2 = Normalize(s2.e - s1.s);
 
-        if (std::fabs(1-std::fabs(Dot(v1, v2))) < 1e-9)
+        auto v2_1 = Normalize(s1.s - s2.s);
+        auto v2_2 = Normalize(s1.e - s2.s);
+
+        if (std::fabs(1-std::fabs(Dot(v1, v1_1))) < 1e-9)
             return true;
 
-        if (std::fabs(1 - std::fabs(Dot(v1, v3))) < 1e-9)
+        if (std::fabs(1 - std::fabs(Dot(v1, v1_2))) < 1e-9)
             return true;
 
-        if(Cross(v1, v2) < 0 && Cross(v1, v3) < 0)
+        if(Cross(v1, v1_1) < 0 && Cross(v1, v1_2) < 0)
             return false;
-        if(Cross(v1, v2) >= 0 && Cross(v1, v3) >= 0)
+        if(Cross(v1, v1_1) >= 0 && Cross(v1, v1_2) >= 0)
+            return false;
+
+        if(Cross(v2, v2_1) < 0 && Cross(v2, v2_2) < 0)
+            return false;
+        if(Cross(v2, v2_1) >= 0 && Cross(v2, v2_2) >= 0)
             return false;
 
         return true;
