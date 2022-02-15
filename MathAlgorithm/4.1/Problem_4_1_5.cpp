@@ -10,6 +10,12 @@ namespace alg
     };
 
     template <typename T>
+    bool operator==(Point<T> const &a, Point<T> const &b)
+    {
+        return (a.x == b.x && a.y == b.y);
+    }
+
+    template <typename T>
     Point<T> operator-(Point<T> const &a, Point<T> const &b)
     {
         return {a.x - b.x, a.y - b.y};
@@ -68,6 +74,10 @@ namespace alg
 
         auto v2_1 = s1.s - s2.s;
         auto v2_2 = s1.e - s2.s;
+
+        if (s1.s == s2.s || s1.s == s2.e ||
+            s1.e == s2.s || s1.e == s2.e)
+            return true;
 
         if (std::fabs(1 - Dot(Normalize(v1), Normalize(v1_1))) < 1e-9 || std::fabs(1 - Dot(Normalize(v1), Normalize(v1_2))) < 1e-9)
         {
