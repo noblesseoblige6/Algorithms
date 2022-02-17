@@ -89,13 +89,19 @@ namespace alg
                 return false;
         }
 
-        if(Cross(v1, v1_1) < 0 && Cross(v1, v1_2) < 0)
+        auto isSameSide = [](auto const &a, auto const &b)
+        {
+            if (a < 0.0 && b < 0.0)
+                return true;
+            if (a > 0.0 && b > 0.0)
+                return true;
+
             return false;
-        if(Cross(v1, v1_1) > 0 && Cross(v1, v1_2) > 0)
+        };
+
+        if(isSameSide(Cross(v1, v1_1), Cross(v1, v1_2)))
             return false;
-        if(Cross(v2, v2_1) < 0 && Cross(v2, v2_2) < 0)
-            return false;
-        if(Cross(v2, v2_1) > 0 && Cross(v2, v2_2) > 0)
+        if(isSameSide(Cross(v2, v2_1), Cross(v2, v2_2)))
             return false;
 
         return true;
