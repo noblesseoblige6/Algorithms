@@ -13,11 +13,11 @@ int main()
     std::copy_n(std::istream_iterator<std::uint32_t>{std::cin}, m, b.begin());
 
     std::vector<std::uint32_t> cusum(n, 0);
-    for(auto i = 1; i < n; ++i)
+    for(decltype(n) i = 1; i < n; ++i)
         cusum[i] = a[i] + cusum[i - 1];
 
-    std::uint32_t res = 0;
-    for (auto i = 1; i < m; ++i)
+    std::uint64_t res = 0;
+    for (decltype(m) i = 1; i < m; ++i)
     {
         auto i_big = std::max(b[i]-1, b[i - 1]-1);
         auto i_less = std::min(b[i]-1, b[i - 1]-1);
