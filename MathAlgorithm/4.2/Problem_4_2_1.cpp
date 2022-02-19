@@ -14,7 +14,7 @@ int main()
 
     std::vector<std::uint32_t> cusum(n, 0);
     for(decltype(n) i = 1; i < n; ++i)
-        cusum[i] = a[i] + cusum[i - 1];
+        cusum[i] = cusum[i - 1] + a[i];
 
     std::uint64_t res = 0;
     for (decltype(m) i = 1; i < m; ++i)
