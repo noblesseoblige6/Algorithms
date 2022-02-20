@@ -66,6 +66,10 @@ namespace alg
     template <typename T>
     bool IsIntersect(Segment<T> const& s1, Segment<T> const& s2)
     {
+        if ((s1.s == s2.s || s1.s == s2.e) ||
+            (s1.e == s2.s || s1.e == s2.e))
+            return true;
+
         auto v1 = s1.e - s1.s;
         auto v2 = s2.e - s2.s;
 
@@ -75,36 +79,37 @@ namespace alg
         auto v2_1 = s1.s - s2.s;
         auto v2_2 = s1.e - s2.s;
 
-        if (s1.s == s2.s || s1.s == s2.e ||
-            s1.e == s2.s || s1.e == s2.e)
+        auto isOnLine = [](auto const &a, auto const &b)
+        {
+            if (1-Dot(Normalize(a), Normalize(b)) < 1e-9)
+            {
+                if (Length(b) <= Length(a))
+                    return true;
+            }
+            return false;
+        };
+
+        if (isOnLine(v1, v1_1))
             return true;
 
-        if (std::fabs(1 - Dot(Normalize(v1), Normalize(v1_1))) < 1e-9 || std::fabs(1 - Dot(Normalize(v1), Normalize(v1_2))) < 1e-9)
-        {
-            if (Length(v1) >= Length(v1_1))
-                return true;
-            else if (Length(v1) >= Length(v1_2))
-                return true;
-            else
-                return false;
-        }
+        if (isOnLine(v1, v1_2))
+            return true;
 
-        auto isSameSide = [](auto const &a, auto const &b)
+        auto isSeparated = [](auto const &a, auto const &b)
         {
-            if (a < 0.0 && b < 0.0)
+            if (a < 0.0 && b > 0.0)
                 return true;
-            if (a > 0.0 && b > 0.0)
+            if (a > 0.0 && b < 0.0)
                 return true;
 
             return false;
         };
 
-        if(isSameSide(Cross(v1, v1_1), Cross(v1, v1_2)))
-            return false;
-        if(isSameSide(Cross(v2, v2_1), Cross(v2, v2_2)))
-            return false;
+        if(isSeparated(Cross(v1, v1_1), Cross(v1, v1_2)) &&
+           isSeparated(Cross(v2, v2_1), Cross(v2, v2_2)))
+            return true;
 
-        return true;
+        return false;
     }
 }
 
