@@ -10,7 +10,6 @@ int main()
         std::cin >> time.first >> time.second;
 
     std::vector<std::int64_t> diffs(t+1, 0);
-    std::vector<std::int64_t> cusums(t+1, 0);
 
     for (decltype(n) i = 0; i < n; ++i)
     {
@@ -18,14 +17,10 @@ int main()
         diffs[times[i].second] -= 1;
     }
 
-    cusums[0] = diffs[0];
+    std::vector<std::int64_t> cusums(t+1, diffs[0]);
     for (decltype(n) i = 1; i < t; ++i)
-    {
         cusums[i] = diffs[i] + cusums[i-1];
-    }
 
     for (decltype(n) i = 0; i < t; ++i)
-    {
        std::cout << cusums[i] << std::endl;
-    }
 }
