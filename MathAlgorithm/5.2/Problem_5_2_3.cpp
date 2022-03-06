@@ -11,15 +11,36 @@ int main()
 
     std::vector<std::uint32_t> route;
     route.push_back(1);
+    std::uint32_t loopIndex = 0;
+    bool hasLoop = false;
     for (decltype(n) i = 1; i <= n; ++i)
     {
         auto dest = dests[route[i-1]];
-        if(dest == 1)
+        for(decltype(n) j = 0; j < route.size(); ++j)
+        {
+            if(route[j] == dest)
+            {
+                loopIndex = j;
+                hasLoop = true;
+                break;
+            }
+        }
+
+        if(hasLoop)
             break;
+
         route.push_back(dest);
     }
 
-    auto index = k % static_cast<std::uint64_t>(route.size());
+    auto index = k;
+    if (hasLoop)
+    {
+        if(k >= loopIndex)
+        {
+            auto length = route.size() - loopIndex;
+            index = (k + length) % route.size();
+        }
+    }
     std::cout << route[index] << std::endl;
 
     return 0;

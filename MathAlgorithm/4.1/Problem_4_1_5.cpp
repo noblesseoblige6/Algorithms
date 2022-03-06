@@ -66,10 +66,6 @@ namespace alg
     template <typename T>
     bool IsIntersect(Segment<T> const& s1, Segment<T> const& s2)
     {
-        if ((s1.s == s2.s || s1.s == s2.e) ||
-            (s1.e == s2.s || s1.e == s2.e))
-            return true;
-
         auto v1 = s1.e - s1.s;
         auto v2 = s2.e - s2.s;
 
@@ -81,18 +77,23 @@ namespace alg
 
         auto isOnLine = [](auto const &a, auto const &b)
         {
-            if (1-Dot(Normalize(a), Normalize(b)) < 1e-9)
+            auto la = Length(a);
+            auto lb = Length(b);
+
+            if (lb == 0.0f)
+                return true;
+
+            if (Dot(a, b) == la*lb)
             {
-                if (Length(b) <= Length(a))
+                if (lb <= la)
                     return true;
             }
+
             return false;
         };
 
-        if (isOnLine(v1, v1_1))
-            return true;
-
-        if (isOnLine(v1, v1_2))
+        if (isOnLine(v1, v1_1) || isOnLine(v1, v1_2) ||
+            isOnLine(v2, v2_1) || isOnLine(v2, v2_2))
             return true;
 
         auto isSeparated = [](auto const &a, auto const &b)
