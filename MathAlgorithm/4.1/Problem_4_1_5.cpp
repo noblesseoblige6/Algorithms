@@ -24,25 +24,25 @@ namespace alg
     template <typename T>
     bool operator<(Point<T> const &a, Point<T> const &b)
     {
-        return (a.x == b.x) ? a.y < b.y : a.x < b.y;
+        return (a.x == b.x) ? a.y < b.y : a.x < b.x;
     }
 
     template <typename T>
     bool operator>(Point<T> const &a, Point<T> const &b)
     {
-        return (a.x == b.x) ? a.y > b.y : a.x > b.y;
+        return b < a;
     }
 
     template <typename T>
     bool operator<=(Point<T> const &a, Point<T> const &b)
     {
-        return (a.x == b.x) ? a.y <= b.y : a.x <= b.y;
+        return !(b < a);
     }
 
     template <typename T>
     bool operator>=(Point<T> const &a, Point<T> const &b)
     {
-        return (a.x == b.x) ? a.y >= b.y : a.x >= b.y;
+        return !(a < b);
     }
 
     template <typename T>
