@@ -75,42 +75,51 @@ namespace alg
         auto v2_1 = s1.s - s2.s;
         auto v2_2 = s1.e - s2.s;
 
-        auto isOnLine = [](auto const &a, auto const &b)
+        auto isLine = [](auto a, auto b, auto c, auto d)
         {
-            auto la = Length(a);
-            auto lb = Length(b);
-
-            if (lb == 0.0f)
-                return true;
-
-            if (Dot(a, b) == la*lb)
+            if (a.x == b.x)
             {
-                if (lb <= la)
-                    return true;
+                if (a.y > b.y)
+                    std::swap(a, b);
+            }
+            else if (a.x > b.x)
+            {
+                std::swap(a, b);
             }
 
-            return false;
-        };
+            if (c.x == d.x)
+            {
+                if (c.y > d.y)
+                    std::swap(c, d);
+            }
+            else if (c.x > d.x)
+            {
+                std::swap(c, d);
+            }
 
-        if (isOnLine(v1, v1_1) || isOnLine(v1, v1_2) ||
-            isOnLine(v2, v2_1) || isOnLine(v2, v2_2))
-            return true;
+            return std::max(a.x, c.x) <= std::min(b.x, d.x) && std::max(a.y, c.y) <= std::min(b.y, d.y);
+        };
 
         auto isSeparated = [](auto const &a, auto const &b)
         {
-            if (a < 0.0 && b > 0.0)
+            if (a <= 0.0 && b >= 0.0)
                 return true;
-            if (a > 0.0 && b < 0.0)
+            if (a >= 0.0 && b <= 0.0)
                 return true;
 
             return false;
         };
 
-        if(isSeparated(Cross(v1, v1_1), Cross(v1, v1_2)) &&
-           isSeparated(Cross(v2, v2_1), Cross(v2, v2_2)))
-            return true;
+        auto a = Cross(v1, v1_1);
+        auto b = Cross(v1, v1_2);
+        auto c = Cross(v2, v2_1);
+        auto d = Cross(v2, v2_2);
 
-        return false;
+        if(a == 0 && b == 0 && c == 0 && d == 0)
+            return isLine(s1.s, s1.e, s2.s, s2.e);
+
+        return isSeparated(a, b) &&
+               isSeparated(c, d);
     }
 }
 
