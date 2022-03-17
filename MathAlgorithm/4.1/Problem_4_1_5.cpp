@@ -24,7 +24,7 @@ namespace alg
     template <typename T>
     bool operator<(Point<T> const &a, Point<T> const &b)
     {
-        return (a.x == b.x) ? a.y < b.y : a.x < b.x;
+        return (a.x != b.x) ? a.x < b.x : a.y < b.y;
     }
 
     template <typename T>
@@ -120,7 +120,10 @@ namespace alg
         auto c = Cross(v2, v2_1);
         auto d = Cross(v2, v2_2);
 
-        if(a == 0 && b == 0 && c == 0 && d == 0)
+        if(std::fabs(a) < std::numeric_limits<T>::::epsilon() &&
+           std::fabs(b) < std::numeric_limits<T>::::epsilon() &&
+           std::fabs(c) < std::numeric_limits<T>::::epsilon() &&
+           std::fabs(d) < std::numeric_limits<T>::::epsilon())
             return IsLineAligned(s1, s2);
 
         auto isSeparated = [](auto const &a, auto const &b)
