@@ -106,52 +106,41 @@ namespace alg
     template <typename T>
     bool IsIntersect(Segment<T> const& s1, Segment<T> const& s2)
     {
-        auto v1 = s1.e - s1.s;
-        auto v2 = s2.e - s2.s;
+        const auto v1 = s1.e - s1.s;
+        const auto v2 = s2.e - s2.s;
 
-        auto v1_1 = s2.s - s1.s;
-        auto v1_2 = s2.e - s1.s;
+        const auto a = Cross(v1, s2.s - s1.s);
+        const auto b = Cross(v1, s2.e - s1.s);
+        const auto c = Cross(v2, s1.s - s2.s);
+        const auto d = Cross(v2, s1.e - s2.s);
 
-        auto v2_1 = s1.s - s2.s;
-        auto v2_2 = s1.e - s2.s;
-
-        auto a = Cross(v1, v1_1);
-        auto b = Cross(v1, v1_2);
-        auto c = Cross(v2, v2_1);
-        auto d = Cross(v2, v2_2);
-
-        if(std::fabs(a) < std::numeric_limits<T>::::epsilon() &&
-           std::fabs(b) < std::numeric_limits<T>::::epsilon() &&
-           std::fabs(c) < std::numeric_limits<T>::::epsilon() &&
-           std::fabs(d) < std::numeric_limits<T>::::epsilon())
+        if(a == 0 && b == 0 && c == 0 && d == 0)
             return IsLineAligned(s1, s2);
 
         auto isSeparated = [](auto const &a, auto const &b)
         {
-            if (a <= 0.0 && b >= 0.0)
+            if (a <= 0 && b >= 0)
                 return true;
-            if (a >= 0.0 && b <= 0.0)
+            if (a >= 0 && b <= 0)
                 return true;
 
             return false;
         };
 
-        return isSeparated(a, b) &&
-               isSeparated(c, d);
+        return isSeparated(a, b) && isSeparated(c, d);
     }
 }
 
 int main()
 {
-    alg::Point<std::double_t> p1, p2, p3, p4;
+    alg::Point<std::int64_t> p1, p2, p3, p4;
     std::cin >> p1.x >> p1.y;
     std::cin >> p2.x >> p2.y;
     std::cin >> p3.x >> p3.y;
     std::cin >> p4.x >> p4.y;
 
-    alg::Segment<std::double_t> s1 = {p1, p2};
-    alg::Segment<std::double_t> s2 = {p3, p4};
-
+    alg::Segment<std::int64_t> s1 = {p1, p2};
+    alg::Segment<std::int64_t> s2 = {p3, p4};
 
     std::cout << (alg::IsIntersect(s1, s2) ? "Yes" : "No") << std::endl;
 
