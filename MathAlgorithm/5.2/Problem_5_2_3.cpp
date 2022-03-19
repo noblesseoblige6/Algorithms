@@ -9,39 +9,37 @@ int main()
     std::vector<std::uint32_t> dests(n+1, 0);
     std::copy_n(std::istream_iterator<std::uint32_t>{std::cin}, n, dests.begin()+1);
 
-    std::vector<std::uint32_t> route;
-    route.push_back(1);
-    std::uint32_t loopIndex = 0;
-    bool hasLoop = false;
-    for (decltype(n) i = 1; i <= n; ++i)
+    std::vector<std::int32_t> first(n+1, -1);
+    std::vector<std::int32_t> second(n + 1, -1);
+
+    std::uint32_t u = 1;
+    std::uint32_t count = 0;
+    while(true)
     {
-        auto dest = dests[route[i-1]];
-        for(decltype(n) j = 0; j < route.size(); ++j)
+        // no loop
+        if (count == k)
         {
-            if(route[j] == dest)
+            std::cout << u << std::endl;
+            break;
+        }
+
+        // loop
+        if (first[u] == -1)
+            first[u] = count;
+        else if (second[u] == -1)
+            second[u] = count;
+
+        if (first[u] != -1 && second[u] != -1)
+        {
+            if ((k - first[u]) % (second[u] - first[u]) == 0)
             {
-                loopIndex = j;
-                hasLoop = true;
+                std::cout << u << std::endl;
                 break;
             }
         }
 
-        if(hasLoop)
-            break;
-
-        route.push_back(dest);
+        u = dests[u];
+        count++;
     }
-
-    auto index = k;
-    if (hasLoop)
-    {
-        if(k >= loopIndex)
-        {
-            auto length = route.size() - loopIndex;
-            index = (k + length) % route.size();
-        }
-    }
-    std::cout << route[index] << std::endl;
-
     return 0;
 }
