@@ -15,7 +15,7 @@ int main()
         for (auto j = 1; j <= m; ++j)
             std::cin >> map[i][j];
 
-    std::vector<std::vector<std::int32_t>> distMap(n + 1, std::vector<std::int32_t>(m + 1, std::numeric_limits<std::int32_t>::max()));
+    std::vector<std::vector<std::int32_t>> distMap(n + 1, std::vector<std::int32_t>(m + 1, -1));
     distMap[start.first][start.second] = 0;
     std::queue<Point> queue;
     queue.push(start);
@@ -32,10 +32,10 @@ int main()
             if (map[nextPoint.first][nextPoint.second] == '#')
                 return false;
 
-            if (dm[nextPoint.first][nextPoint.second] != std::numeric_limits<std::int32_t>::max())
+            if (dm[nextPoint.first][nextPoint.second] != -1)
                 return false;
 
-            dm[nextPoint.first][nextPoint.second] = dm[curPoint.first][curPoint.first] + 1;
+            dm[nextPoint.first][nextPoint.second] = dm[curPoint.first][curPoint.second] + 1;
 
             return true;
         };
