@@ -16,19 +16,19 @@ int main()
         }
     }
 
-    std::vector<std::uint32_t> sum_h(h);
-    for (auto i = 0; i < h; ++i)
-        sum_h[i] = std::accumulate(a[i].begin(), a[i].end(), 0);
+    std::vector<std::uint32_t> sum_row(h);
+    for (auto row_i = 0; row_i < h; ++row_i)
+        sum_row[row_i] = std::accumulate(a[row_i].begin(), a[row_i].end(), 0);
 
-    std::vector<std::uint32_t> sum_w(w);
-    for (auto i = 0; i < w; ++i)
-        sum_w[i] = std::accumulate(b[i].begin(), b[i].end(), 0);
+    std::vector<std::uint32_t> sum_col(w);
+    for (auto col_i = 0; col_i < w; ++col_i)
+        sum_col[col_i] = std::accumulate(b[col_i].begin(), b[col_i].end(), 0);
 
     for (auto i = 0; i < h; ++i)
     {
         for (auto j = 0; j < w; ++j)
         {
-            std::cout<< sum_h[i] + sum_w[j] - a[i][j] << " ";
+            std::cout<< sum_row[i] + sum_col[j] - a[i][j] << " ";
         }
         std::cout << std::endl;
     }
