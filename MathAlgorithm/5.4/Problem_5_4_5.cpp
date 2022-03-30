@@ -2,7 +2,7 @@
 
 int main()
 {
-    std::uint32_t n, k;
+    std::uint64_t n, k;
     std::cin >> n >> k;
 
     std::vector<std::uint32_t> v(k);
