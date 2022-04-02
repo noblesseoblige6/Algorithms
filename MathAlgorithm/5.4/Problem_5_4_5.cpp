@@ -67,6 +67,7 @@ int main()
             lcm = (lcm == 0) ? v[j] : alg::LCM(lcm, v[j]);
         }
 
+        std::cout << lcm << std::endl;
         std::uint32_t multi =  static_cast<std::uint32_t>(n / lcm);;
         if (alg::is_pow2(i))
             res += multi;
