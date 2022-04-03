@@ -36,15 +36,6 @@ namespace alg
 
         return res;
     }
-
-    template <typename T>
-    bool is_pow2(T x)
-    {
-        if (x == 0)
-            return false;
-
-        return (x & (x - 1)) == 0;
-    }
 }
 
 int main()
@@ -52,15 +43,15 @@ int main()
     std::uint64_t n, k;
     std::cin >> n >> k;
 
-    std::vector<std::uint32_t> v(k);
+    std::vector<std::int32_t> v(k);
     std::copy_n(std::istream_iterator<std::uint64_t>{std::cin}, k, v.begin());
 
-    std::uint32_t res = 0;
-    for (std::uint32_t i = 1; i < (1 << k); ++i)
+    std::uint64_t res = 0;
+    for (std::int32_t i = 1; i < (1 << k); ++i)
     {
         std::uint32_t count = 0;
-        std::uint32_t lcm = 1;
-        for (std::uint32_t j = 0; j < k; ++j)
+        std::uint64_t lcm = 1;
+        for (std::int32_t j = 0; j < k; ++j)
         {
             if ((i & (1 << j)) == 0)
                 continue;
@@ -69,7 +60,7 @@ int main()
             lcm = alg::LCM(lcm, v[j]);
         }
 
-        std::uint32_t multi = static_cast<std::uint32_t>(n / lcm);
+        auto multi = static_cast<std::uint64_t>(n / lcm);
         if (count % 2 != 0)
             res += multi;
         else
