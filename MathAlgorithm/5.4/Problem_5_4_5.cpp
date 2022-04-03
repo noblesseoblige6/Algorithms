@@ -24,11 +24,11 @@ namespace alg
 
     std::uint64_t LCM(std::uint64_t a, std::uint64_t b)
     {
-        //Note: divide first to avoid overflow
+        // Note: divide first to avoid overflow
         return (a / GCD(a, b)) * b;
     }
 
-    std::uint64_t LCM(std::vector<std::uint64_t> const& values)
+    std::uint64_t LCM(std::vector<std::uint64_t> const &values)
     {
         auto res = LCM(values[0], values[1]);
         for (std::int32_t i = 2; i < static_cast<std::int32_t>(values.size()); ++i)
@@ -56,20 +56,21 @@ int main()
     std::copy_n(std::istream_iterator<std::uint64_t>{std::cin}, k, v.begin());
 
     std::uint32_t res = 0;
-    for(std::uint32_t i = 1; i < (1 << k); ++i)
+    for (std::uint32_t i = 1; i < (1 << k); ++i)
     {
-        std::uint32_t lcm = 0;
-        for(std::uint32_t j = 0; j < k; ++j)
+        std::uint32_t count = 0;
+        std::uint32_t lcm = 1;
+        for (std::uint32_t j = 0; j < k; ++j)
         {
             if ((i & (1 << j)) == 0)
                 continue;
 
-            lcm = (lcm == 0) ? v[j] : alg::LCM(lcm, v[j]);
+            ++count;
+            lcm = alg::LCM(lcm, v[j]);
         }
 
-        std::cout << lcm << std::endl;
-        std::uint32_t multi =  static_cast<std::uint32_t>(n / lcm);;
-        if (alg::is_pow2(i))
+        std::uint32_t multi = static_cast<std::uint32_t>(n / lcm);
+        if (count % 2 != 0)
             res += multi;
         else
             res -= multi;
