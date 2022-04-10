@@ -9,7 +9,7 @@ namespace alg
 
     Matrix Multiply(Matrix const &a, Matrix const &b)
     {
-        Matrix c;
+        Matrix c = {0};
         for (auto i = 0; i < 2; ++i)
         {
             for (auto j = 0; j < 2; ++j)
@@ -29,9 +29,9 @@ namespace alg
     {
         Matrix tmp = a;
         Matrix res = ((n & 1) != 0) ? tmp : Matrix();
-        for(decltype(n) i = 1; i < 60; ++i)
+        for(decltype(n) i = 1; i < 64; ++i)
         {
-            if ((n & (1 << i)) != 0)
+            if ((n & (1ULL << i)) != 0ULL)
                 res = Multiply(res, tmp);
 
             tmp = Multiply(tmp, tmp);
