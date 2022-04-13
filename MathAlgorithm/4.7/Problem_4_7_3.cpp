@@ -46,8 +46,13 @@ int main()
     std::cin >> n;
 
     alg::Matrix a = {1, 1, 1, 1, 0, 0, 0, 1, 0};
+#if 1
     auto res = alg::Power(a, n-3);
     std::cout << (2*res.p[0][0] + res.p[0][1] + res.p[0][2]) % 1000000007 << std::endl;
+#else
+    auto res = alg::Power(a, n-1);
+    std::cout << (2*res.p[2][0] + res.p[2][1] + res.p[2][2]) % 1000000007 << std::endl;
+#endif
 
     return 0;
 }
