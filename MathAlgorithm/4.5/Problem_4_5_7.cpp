@@ -2,15 +2,15 @@
 
 namespace alg
 {
-    struct Vertex
-    {
-        std::vector<std::uint32_t> Edges;
-        bool isVisited = false;
-    };
-
-    bool IsBinaryGraph(std::uint32_t n, std::uint32_t m, std::vector<std::pair<std::uint32_t, std::uint32_t>> const &edges)
+    bool IsBipartiteGraph(std::uint32_t n, std::uint32_t m, std::vector<std::pair<std::uint32_t, std::uint32_t>> const &edges)
     {
         std::vector<std::int32_t> dist(n + 1, -1);
+
+        struct Vertex
+        {
+            std::vector<std::uint32_t> Edges;
+            bool isVisited = false;
+        };
         std::vector<Vertex> vertices(n + 1);
         for (auto const &e : edges)
         {
@@ -19,26 +19,34 @@ namespace alg
         }
 
         std::queue<std::uint32_t> q;
-        dist[1] = 1;
-        q.push(1);
-        while (!q.empty())
+        for (decltype(n) i = 1; i <= n; ++i)
         {
-            auto v = q.front();
-            for (auto v_next : vertices[v].Edges)
+            if (dist[i] != -1)
+                continue;
+
+            dist[i] = 0;
+            q.push(i);
+
+            while (!q.empty())
             {
-                if(dist[v_next] != -1)
+                auto v = q.front();
+                q.pop();
+
+                for (const auto &v_next : vertices[v].Edges)
                 {
-                    if((dist[v] + 1 % 2) != (dist[v_next] % 2))
-                        return false;
-                }
-                else
-                {
+                    if (dist[v_next] != -1)
+                        continue;
+
                     q.push(v_next);
                     dist[v_next] = dist[v] + 1;
                 }
             }
+        }
 
-            q.pop();
+        for (auto const &edge : edges)
+        {
+            if (dist[edge.first] == dist[edge.second])
+                return false;
         }
 
         return true;
@@ -51,10 +59,10 @@ int main()
     std::cin >> n >> m;
 
     std::vector<std::pair<std::uint32_t, std::uint32_t>> edges(m);
-    for (auto i = 0; i < m; ++i)
+    for (decltype(m) i = 0; i < m; ++i)
         std::cin >> edges[i].first >> edges[i].second;
 
-    std::cout << (alg::IsBinaryGraph(n, m, edges) ? "Yes" : "No") << std::endl;
+    std::cout << (alg::IsBipartiteGraph(n, m, edges) ? "Yes" : "No") << std::endl;
 
     return 0;
 }
