@@ -19,15 +19,23 @@ namespace alg
         }
 
         std::queue<std::uint32_t> q;
-        dist[1] = 0;
+        dist[1] = 1;
         q.push(1);
         while (!q.empty())
         {
             auto v = q.front();
             for (auto v_next : vertices[v].Edges)
             {
-                q.push(v_next);
-                dist[v_next] = dist[v] + 1;
+                if(dist[v_next] != -1)
+                {
+                    if((dist[v] + 1 % 2) != (dist[v_next] % 2))
+                        return false;
+                }
+                else
+                {
+                    q.push(v_next);
+                    dist[v_next] = dist[v] + 1;
+                }
             }
 
             q.pop();
