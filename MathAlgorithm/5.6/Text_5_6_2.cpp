@@ -8,7 +8,7 @@ int main()
     std::uint32_t res = 1;
     for (decltype(a) i = 1; i <= b; ++i)
     {
-        if (std::floor(static_cast<float>(b) / i) - std::ceil(static_cast<float>(a) / i) >= 1)
+        if (std::floor(static_cast<std::float_t>(b) / i) - std::ceil(static_cast<std::float_t>(a) / i) >= 1)
         {
             res = i;
         }
